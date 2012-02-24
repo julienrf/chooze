@@ -2,7 +2,7 @@ import play.api.{Application, GlobalSettings}
 
 object Global extends GlobalSettings {
   
-  override def beforeStart(app: Application) {
+  /*override def beforeStart(app: Application) {
     import play.api.db.evolutions.Evolutions._
     import db.Db
     
@@ -11,5 +11,5 @@ object Global extends GlobalSettings {
         ups = Db.ddl.createStatements.mkString(";\n"),
         downs = Db.ddl.createStatements.mkString(";\n")
     )(app)
-  }
+  }*/
 }
