@@ -18,6 +18,8 @@ case class Poll(id: Option[Long], name: String, description: String, alternative
       (alternative, if (votes.nonEmpty) notes.sum / votes.size else 50)
     }).sortBy(_._2).reverse
   }
+  
+  def alternative(id: Long) = alternatives.find(_.id == Some(id))
 }
 
 case class Alternative(id: Option[Long], name: String)

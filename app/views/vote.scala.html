@@ -23,17 +23,20 @@
 	
 	@helper.form(action = routes.Application.votePost(poll.name)) {
 		<fieldset>
-			@poll.alternatives.map { alternative =>
-				<p>
-					<label>@alternative.name</label>
-					<input type="range" name="" value="50" min="0" max="100" step="1" />
-				</p>
-			}
+    
+            @inputText(voteForm("user"), 'label->Messages("user.name"))
+            
+            @repeat(voteForm("notes")) { note =>
+              <p>
+                <label>@poll.alternative(note("alternative")("id").value.get.toLong).get.name</label>
+                <input type="range" name="@note("value").name" value="@note("value").value" min="0" max="100" step="1" />
+                <input type="hidden" name="@note("alternative")("id").name" value="@note("alternative")("id").value" />
+              </p>
+            }
 		</fieldset>
 		
 		<div class="actions">
 			<input type="submit" class="btn primary" value="@Messages("vote")">
-			<a href="@routes.Application.votePost(poll.name)" class="btn">@Messages("cancel")</a>
 		</div>
 	}
 }

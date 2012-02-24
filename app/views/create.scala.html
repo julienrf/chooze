@@ -47,7 +47,6 @@
 		
 		<div class="actions">
 			<input type="submit" class="btn primary" value="@Messages("create")">
-			<a href="@routes.Application.createPost" class="btn">@Messages("cancel")</a>
 		</div>
 	}
 	
@@ -74,11 +73,10 @@
 			  })
 			  
 			  var renumber = function(alternatives) {
-			    $(".profile").each(function(i) {
-			      $(".alternative input", this).each(function(i) {
+			    $(".alternative input").each(function(i) {
+			        console.log(this);
 			        $(this).attr("name", $(this).attr("name").replace(/alternatives\[.+\]/g, "alternatives[" + i + "]"))
-			      })
-			    })
+                })
 			  }
 	})();
 	</script>

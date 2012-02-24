@@ -57,7 +57,7 @@ object Application extends Controller {
 	          mapping(
 	              "id" -> ignored(Option.empty[Long]),
 	              "alternative" -> mapping(
-	                  "id" -> ignored(Option.empty[Long]),
+	                  "id" -> optional(longNumber),
 	                  "name" -> ignored("")
 	              )(Alternative.apply)(Alternative.unapply),
 	              "value" -> number
@@ -67,28 +67,26 @@ object Application extends Controller {
   )
   
   def voteGet(name: String) = Action { implicit request =>
-    Logger.logger.info("Retrieve vote data for poll " + name)
     Service.findPoll(name) match {
-      case Some(poll) => Ok(views.html.vote(poll, voteForm))
+      case Some(poll) => Ok(views.html.vote(poll, voteForm.fill(Vote(None, "", poll.alternatives.map(Note(None, _, 50))))))
       case None => NotFound
     }
   }
   
-  def votePost(name: String) = Action { 
-    /*implicit request =>
-    val form = voteForm.bindFromRequest
-    form.fold(
-        errors => BadRequest(views.html.voteGet(name)),
-        vote => {
-          
-          // pollName: String, user: String, notes: Seq[(Long, Int)]
-          Service.vote(name, vote.user, vote.notes.map {
-            _.
-          })
-        }
-    )
-    */
-    Ok(views.html.mock("test"))
+  def votePost(pollName: String) = Action { implicit request =>
+    Service.findPoll(pollName) match {
+      case Some(poll) => {
+        val form = voteForm.bindFromRequest
+        form.fold(
+            errors => BadRequest(views.html.vote(poll, errors)),
+            vote => {
+              Service.vote(poll.id.get, vote.user, vote.notes map { n => (n.alternative.id.get, n.value) })
+              Redirect(routes.Application.result(pollName))
+            }
+        )
+      }
+      case None => NotFound
+    }
   }
   
   def result(name: String) = Action {
@@ -96,6 +94,5 @@ object Application extends Controller {
       case Some(poll) => Ok(views.html.result(poll))
       case None => NotFound
     }
-    Ok(views.html.result(Mock.poll))
   }
 }
