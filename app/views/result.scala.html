@@ -4,7 +4,7 @@
 
   <h1>@poll.name</h1>
   
-  <p>@Messages("poll.results", poll.name)</p>
+  <p>@Messages("poll.result", poll.name)</p>
 
   @for((alternative, score) <- poll.results) {
     <div style="font-size: @(score)px;">@alternative.name</div>

@@ -3,13 +3,13 @@
 # ~~~~
 
 # Home page
-GET     /                           controllers.Application.createGet
-POST    /                           controllers.Application.createPost
+GET     /                           controllers.Chooze.index
+POST    /                           controllers.Chooze.createPoll
 
-GET     /vote/:name                 controllers.Application.voteGet(name)
-POST    /vote/:name                 controllers.Application.votePost(name)
+GET     /:name/vote                 controllers.Chooze.showVoteForm(name)
+POST    /:name/vote                 controllers.Chooze.vote(name)
 
-GET     /result/:name               controllers.Application.result(name)
+GET     /:name/result               controllers.Chooze.result(name)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)

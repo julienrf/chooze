@@ -6,6 +6,11 @@ createPoll = Create a new poll
 description = Description
 name = Name
 page.title.create = Create Poll
-poll.create = Your poll has been created.
+poll.created = Poll “{0}” has been created
 remove = Remove
-poll.results=Poll “{0}” results
+
+user.name=Your name
+vote=Vote!
+
+page.title.result={0}
+poll.result=Poll “{0}” results

@@ -27,20 +27,3 @@ case class Alternative(id: Option[Long], name: String)
 case class Vote(id: Option[Long], user: String, notes: Seq[Note])
 
 case class Note(id: Option[Long], alternative: Alternative, value: Int)
-
-object Mock {
-  val greece = Alternative(None, "Greece")
-  val montenegro = Alternative(None, "Monte Negro")
-  val berlin = Alternative(None, "Berlin")
-  val poll = Poll(
-      None,
-      "Zen Day 2012",
-      "Where do you want to go?",
-      List(greece, montenegro, berlin),
-      List(
-          Vote(None, "jrf", List(Note(None, greece, 100), Note(None, montenegro, 40), Note(None, berlin, 10))),
-          Vote(None, "sre", List(Note(None, greece, 80), Note(None, montenegro, 50), Note(None, berlin, 100))),
-          Vote(None, "ybr", List(Note(None, greece, 50), Note(None, montenegro, 50), Note(None, berlin, 100)))
-      )
-   )
-}
