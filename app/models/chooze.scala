@@ -20,11 +20,11 @@ case class Poll(name: String, description: String, alternatives: Seq[Alternative
   }
 }
 
-case class Alternative(name: String)
+case class Alternative(id: Option[Long], name: String)
 
-case class Vote(user: String, notes: Seq[Note])
+case class Vote(id: Option[Long], user: String, choices: Seq[Note])
 
-case class Note(alternative: Alternative, value: Int)
+case class Note(id: Option[Long], alternative: Alternative, value: Int)
 
 object Mock {
   val greece = Alternative("Greece")

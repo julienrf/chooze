@@ -71,10 +71,10 @@ object Db {
       } yield poll.name ~ poll.description ~ alternative.id ~ alternative.name ~ vote.id ~ vote.user ~ note.id ~ note.voteId ~ note.value ~ note.alternativeId).list map {
         case (pName, pDescr, aId, aName, vId, vUser, nId, nVoteId, nValue, nAltId) => ((pName, pDescr), (aId, aName), (vId, vUser), (nId, nVoteId, nValue, nAltId))
       }
-      val alternatives = ((rows map { _._2 }).distinct map { a => (a._1, models.Alternative(a._2)) }).toMap
-      val notes = ((rows map { _._4 }).distinct map { n => (n._1, models.Note(alternatives(n._4), n._3)) }).toMap
+      val alternatives = ((rows map { _._2 }).distinct map { a => (a._1, models.Alternative(Some(a._1), a._2)) }).toMap
+      val notes = ((rows map { _._4 }).distinct map { n => (n._1, models.Note(Some(n._1), alternatives(n._4), n._3)) }).toMap
       val notesByVote = ((rows map { _._4 }).distinct groupBy { _._2 }).mapValues { ns => ns.map { n => notes(n._1) } }
-      val votes = ((rows map { _._3 }).distinct map { v => (v._1, models.Vote(v._2, notesByVote(v._1))) }).toMap
+      val votes = ((rows map { _._3 }).distinct map { v => (v._1, models.Vote(Some(v._1), v._2, notesByVote(v._1))) }).toMap
       val polls = (rows map { _._1 }).distinct map { p => models.Poll(p._1, p._2, alternatives.values.toSeq, votes.values.toSeq) }
       polls.headOption
     }

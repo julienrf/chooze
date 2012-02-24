@@ -17,6 +17,7 @@ object Application extends Controller {
           "description" -> nonEmptyText,
           "alternatives" -> seq(
               mapping(
+                  "id" -> ignored(None: Option[Long]),
                   "name" -> nonEmptyText
               )(Alternative.apply)(Alternative.unapply)
           ),
@@ -43,10 +44,28 @@ object Application extends Controller {
     )
   }
   
+  val voteForm: Form[Vote] = Form(
+      mapping(
+          "id" -> ignored(Option.empty[Long]),
+	      "user" -> nonEmptyText,
+	      "notes" -> seq(
+	          mapping(
+	              "id" -> ignored(Option.empty[Long]),
+	              "alternative" -> mapping(
+	                  "id" -> ignored(Option.empty[Long]),
+	                  "name" -> ignored("")
+	              )(Alternative.apply)(Alternative.unapply),
+	              "value" -> number
+	          )(Note.apply)(Note.unapply)
+	      )
+	  )(Vote.apply)(Vote.unapply)
+  )
+  
   def voteGet(name: String) = Action { implicit request =>
-    //val poll = Service.findPoll()
-    val poll = new Poll("name", "description", Nil, Nil);
-    Ok(views.html.vote(poll))
+    Service.findPoll(name) match {
+      case Some(poll) => Ok(views.html.vote(poll, voteForm))
+      case None => Redirect(routes.Application.createGet())
+    }
   }
   
   def result(name: String) = Action {

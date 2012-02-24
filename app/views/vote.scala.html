@@ -1,4 +1,6 @@
-@(poll: Poll)(implicit flash: play.api.mvc.Flash)
+@(poll: Poll, voteForm: Form[Vote])(implicit flash: play.api.mvc.Flash)
+
+@import helper._
 
 @main(Messages("page.title.vote")) {
 	@flash.get("success").map { key =>
@@ -7,5 +9,15 @@
 		</div>
 	}
 	
+	@if(voteForm.hasErrors) {
+		<div class="alert error">
+			Oops. Please fix all errors
+		</div>
+	}
 	
+	@helper.form(action = routes.Application.createPost) {
+		<fieldset>
+			<input type="range" name="" value="" min="0" max="4" step="1" />
+		</fieldset>
+	}
 }
