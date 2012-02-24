@@ -5,7 +5,7 @@
 @alternativeField(field: Field, className: String = "alternative") = {
     @input(field, '_label -> "alternatives", '_class -> className) { (id, name, value, _) =>
         <input type="text" name="@name" value="@value"> 
-        <a href="#" class="remove-alternative btn">@Messages("remove")</a>
+        <button type="button" class="remove-alternative">@Messages("remove")</button>
     }
 }
 
@@ -41,7 +41,7 @@
 	            	className = "alternative_template"
 	            )
 	            
-	            <a href="#" class="add-alternative">@Messages("addAlternative")</a>
+	            <button type="button" class="add-alternative">@Messages("addAlternative")</button>
 			</div>
 		</fieldset>
 		
@@ -52,32 +52,34 @@
 	}
 	
 	<script type="text/javascript" charset="utf-8">
-	$(".remove-alternative").live("click", function(e) {
-		var alternatives = $(this).parents(".alternatives")
+	(function () {
+		  $("form").on('click', '.remove-alternative', function(e) {
+			    var alternatives = $(this).parents(".alternatives")
 
-		if($(".alternative").size() > 2) {
-			$(this).parents(".alternative").remove()
-			renumber(altrnatives)
-		}
-		
-		return false
-	})
-	
-	$(".add-alternative").live("click", function(e) {
-		var alternatives = $(this).parents(".alternatives")
-		var template = $(".alternative_template", alternatives)
-		
-		template.before("<div class=\"clearfix alternative\">" + template.html() + "</div>")
-		renumber(alternatives)
-		return false
-	})
-	
-	var renumber = function(alternatives) {
-		$(".profile").each(function(i) {
-			$(".alternative input", this).each(function(i) {
-				$(this).attr("name", $(this).attr("name").replace(/alternatives\[.+\]/g, "alternatives[" + i + "]"))
-			})
-		})
-	}
+			    if($(".alternative").size() > 2) {
+			      $(this).parents(".alternative").remove()
+			      renumber(alternatives)
+			    }
+			    
+			    return false
+			  });
+			  
+			  $(".add-alternative").on("click", function(e) {
+			    var alternatives = $(this).parents(".alternatives")
+			    var template = $(".alternative_template", alternatives)
+			    
+			    template.before("<div class=\"clearfix alternative\">" + template.html() + "</div>")
+			    renumber(alternatives)
+			    return false
+			  })
+			  
+			  var renumber = function(alternatives) {
+			    $(".profile").each(function(i) {
+			      $(".alternative input", this).each(function(i) {
+			        $(this).attr("name", $(this).attr("name").replace(/alternatives\[.+\]/g, "alternatives[" + i + "]"))
+			      })
+			    })
+			  }
+	})();
 	</script>
 }
