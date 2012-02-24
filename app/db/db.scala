@@ -9,7 +9,7 @@ object Db {
   import org.scalaquery.ql.TypeMapper._
   import org.scalaquery.ql._
 
-  val alternatives = new Table[(Long, String, Long)]("alternatives") {
+  val Alternatives = new Table[(Long, String, Long)]("alternatives") {
     def id = column[Long]("id", O PrimaryKey, O AutoInc)
     def name = column[String]("name")
     def pollId = column[Long]("poll_id")
@@ -17,7 +17,7 @@ object Db {
     def noId = name ~ pollId
   }
   
-  val notes = new Table[(Long, Long, Int, Long)]("notes") {
+  val Notes = new Table[(Long, Long, Int, Long)]("notes") {
     def id = column[Long]("id", O PrimaryKey, O AutoInc)
     def voteId = column[Long]("vote_id")
     def value = column[Int]("value", O Default(0))
@@ -26,7 +26,7 @@ object Db {
     def noId = voteId ~ value ~ alternativeId
   }
   
-  val votes = new Table[(Long, String, Long)]("votes") {
+  val Votes = new Table[(Long, String, Long)]("votes") {
     def id = column[Long]("id", O PrimaryKey, O AutoInc)
     def user = column[String]("user")
     def pollId = column[Long]("poll_id")
@@ -34,7 +34,7 @@ object Db {
     def noId = user ~ pollId
   }
   
-  val polls = new Table[(Long, String, String)]("polls") {
+  val Polls = new Table[(Long, String, String)]("polls") {
     def id = column[Long]("id", O PrimaryKey, O AutoInc)
     def name = column[String]("name")
     def description = column[String]("description")
@@ -42,7 +42,7 @@ object Db {
     def noId = name ~ description
   }
   
-  val ddl = alternatives.ddl ++ notes.ddl ++ votes.ddl ++ polls.ddl
+  val ddl = Alternatives.ddl ++ Notes.ddl ++ Votes.ddl ++ Polls.ddl
   
   
   // --- Query helpers
@@ -53,10 +53,12 @@ object Db {
   
   val db = Database.forDataSource(DB.getDataSource())
   
+  def lastInsertedId(implicit s: Session) = Query(SimpleFunction.nullary[Long]("scope_identity")).first
+  
   object Poll {
     def create(name: String, description: String, alternatives: Seq[String]): Option[Long] = db withSession { implicit s: Session =>
-      polls.noId.insert(name, description)
-      val pollId = Query(SimpleFunction.nullary[Long]("scope_identity")).first
+      Polls.noId.insert(name, description)
+      val pollId = lastInsertedId
       for (alternative <- alternatives) {
         Alternative.create(alternative, pollId)
       }
@@ -65,10 +67,10 @@ object Db {
     
     def find(id: Long): Option[models.Poll] = db withSession { implicit s: Session =>
       val rows = (for {
-        poll <- polls if poll.id === id
-        alternative <- alternatives if alternative.pollId === poll.id
-        vote <- votes if vote.pollId === poll.id
-        note <- notes if note.voteId === vote.id
+        poll <- Polls if poll.id === id
+        alternative <- Alternatives if alternative.pollId === poll.id
+        vote <- Votes if vote.pollId === poll.id
+        note <- Notes if note.voteId === vote.id
       } yield poll.id ~ poll.name ~ poll.description ~ alternative.id ~ alternative.name ~ vote.id ~ vote.user ~ note.id ~ note.voteId ~ note.value ~ note.alternativeId).list map {
         case (pId, pName, pDescr, aId, aName, vId, vUser, nId, nVoteId, nValue, nAltId) => ((pId, pName, pDescr), (aId, aName), (vId, vUser), (nId, nVoteId, nValue, nAltId))
       }
@@ -82,9 +84,29 @@ object Db {
   }
   
   object Alternative {
-    def create(name: String, pollId: Long): Long = db withSession { implicit s: Session =>
-      alternatives.noId.insert(name, pollId)
-      Query(SimpleFunction.nullary[Long]("scope_identity")).first
+    def create(name: String, pollId: Long): Option[Long] = db withSession { implicit s: Session =>
+      Alternatives.noId.insert(name, pollId)
+      Option(lastInsertedId)
+    }
+  }
+  
+  object Vote {
+    def create(pollId: Long, user: String, notes: Seq[(Long, Int)]): Option[Long] = db withSession { implicit s: Session =>
+      Votes.noId.insert(user, pollId)
+      val voteId = lastInsertedId
+      
+      for ((alternativeId, note) <- notes) {
+        Note.create(voteId, note, alternativeId)
+      }
+      
+      Option(voteId)
+    }
+  }
+  
+  object Note {
+    def create(voteId: Long, note: Int, alternativeId: Long): Option[Long] = db withSession { implicit s: Session =>
+      Notes.noId.insert(voteId, note, alternativeId)
+      Option(lastInsertedId)
     }
   }
 }
