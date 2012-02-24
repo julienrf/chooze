@@ -56,11 +56,10 @@ object Db {
   object Poll {
     def create(name: String, description: String, alternatives: Seq[String]): Option[String] = db withSession { implicit s: Session =>
       Polls.insert(name, description)
-      val pollName = lastInsertedId[String]
       for (alternative <- alternatives) {
-        Alternative.create(alternative, pollName)
+        Alternative.create(alternative, name)
       }
-      Option(pollName)
+      Option(name)
     }
     
     def find(pollName: String): Option[models.Poll] = db withSession { implicit s: Session =>
