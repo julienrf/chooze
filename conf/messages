@@ -6,4 +6,5 @@ createPoll = Create a new poll
 description = Description
 name = Name
 page.title.create = Create Poll
+poll.create = Your poll has been created.
 remove = Remove

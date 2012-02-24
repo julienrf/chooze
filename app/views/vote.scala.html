@@ -1,0 +1,11 @@
+@(poll: Poll)(implicit flash: play.api.mvc.Flash)
+
+@main(Messages("page.title.vote")) {
+	@flash.get("success").map { key =>
+		<div class="flash success">
+			@Messages("poll.created")
+		</div>
+	}
+	
+	
+}
