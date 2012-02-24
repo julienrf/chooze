@@ -1,0 +1,13 @@
+@(poll: Poll)
+
+@main(Messages("page.title.result", poll.name)) {
+
+  <h1>@poll.name</h1>
+  
+  <p>@Messages("poll.results")</p>
+
+  @for((alternative, score) <- poll.results) {
+    <div style="font-size: @(score)px;">@alternative.name</div>
+  }
+
+}

@@ -50,6 +50,10 @@ object Application extends Controller {
   }
   
   def result(name: String) = Action {
-    Ok(views.html.mock("result " + name))
+    Service.findPoll(name) match {
+      case Some(poll) => Ok(views.html.result(poll))
+      case None => NotFound
+    }
+    Ok(views.html.result(Mock.poll))
   }
 }
