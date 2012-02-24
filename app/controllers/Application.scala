@@ -33,7 +33,7 @@ object Application extends Controller {
     form.fold(
         errors => BadRequest(views.html.create(errors)),
         poll => {
-          Service.createPoll(poll.name, poll.description, poll.alternatives.map(_.name)) match {
+          (Service.createPoll(poll.name, poll.description, poll.alternatives.map(_.name)).flatMap { Service.findPoll(_) }) match {
             case Some(poll) => {
               Redirect(routes.Application.voteGet(poll.name)).flashing("success" -> "Your poll %s has been created.".format(poll.name))
             }
