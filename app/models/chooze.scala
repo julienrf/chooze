@@ -12,10 +12,10 @@ case class Poll(id: Option[Long], name: String, description: String, alternative
     } yield {
       val notes = for {
         vote <- votes
-        note <- vote.choices
+        note <- vote.notes
         if note.alternative == alternative
       } yield note.value
-      (alternative, notes.sum / votes.size)
+      (alternative, if (votes.nonEmpty) notes.sum / votes.size else 50)
     }).sortBy(_._2).reverse
   }
 }
