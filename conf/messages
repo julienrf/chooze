@@ -8,3 +8,4 @@ name = Name
 page.title.create = Create Poll
 poll.create = Your poll has been created.
 remove = Remove
+poll.results=Poll “{0}” results

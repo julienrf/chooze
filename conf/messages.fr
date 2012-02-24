@@ -1,0 +1,2 @@
+createPoll = Create a new poll
+poll.results=Résultats du sondage « {0} »
