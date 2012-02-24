@@ -8,3 +8,5 @@ tmp
 .target/
 .settings/
 .project
+.cache
+conf/evolutions/
