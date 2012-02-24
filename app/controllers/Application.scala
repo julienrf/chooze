@@ -32,13 +32,18 @@ object Application extends Controller {
   def createPost = Action { implicit request =>
     val form = createForm.bindFromRequest
     form.fold(
-        errors => BadRequest(views.html.create(errors)),
+        errors => { Logger.logger.warn("Create poll form contains errors."); BadRequest(views.html.create(errors)) },
         poll => {
+          Logger.logger.debug("Create poll form is valid.")
           Service.createPoll(poll.name, poll.description, poll.alternatives.map(_.name)) match {
             case Some(name) => {
+              Logger.logger.debug("Poll has been persisted in database")
               Redirect(routes.Application.voteGet(name)).flashing("success" -> "Your poll %s has been created.".format(name))
             }
-            case None => BadRequest(views.html.create(form))
+            case None => {
+              Logger.logger.warn("Poll has not been persisted in database")
+              BadRequest(views.html.create(form))
+            }
           }
         }
     )
