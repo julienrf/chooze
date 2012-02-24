@@ -1,0 +1,83 @@
+@(createForm: Form[Poll])
+
+@import helper._
+	
+@alternativeField(field: Field, className: String = "alternative") = {
+    @input(field, '_label -> "alternatives", '_class -> className) { (id, name, value, _) =>
+        <input type="text" name="@name" value="@value"> 
+        <a href="#" class="remove-alternative btn">@Messages("remove")</a>
+    }
+}
+
+@main(Messages("page.title.create")) {
+	@if(createForm.hasErrors) {
+		<div class="alert error">
+			Oops. Please fix all errors
+		</div>
+	}
+	
+	@helper.form(action = routes.Application.createPost) {
+		<fieldset>
+			@inputText(
+				createForm("name"),
+				'label -> Messages("name")
+			)
+			
+			
+			@textarea(
+				createForm("description"),
+				'label -> Messages("description"),
+				'rows -> 5,
+				'cols -> 50
+			)
+			
+			<div class="alternatives">
+				@repeat(createForm("alternatives"), min = 2) { alternative =>
+					@alternativeField(alternative("name"))
+	            }
+	            
+	            @alternativeField(
+	            	createForm("alternatives[x].name"),
+	            	className = "alternative_template"
+	            )
+	            
+	            <a href="#" class="add-alternative">@Messages("addAlternative")</a>
+			</div>
+		</fieldset>
+		
+		<div class="actions">
+			<input type="submit" class="btn primary" value="@Messages("create")">
+			<a href="@routes.Application.createPost" class="btn">@Messages("cancel")</a>
+		</div>
+	}
+	
+	<script type="text/javascript" charset="utf-8">
+	$(".remove-alternative").live("click", function(e) {
+		var alternatives = $(this).parents(".alternatives")
+
+		if($(".alternative").size() > 2) {
+			$(this).parents(".alternative").remove()
+			renumber(altrnatives)
+		}
+		
+		return false
+	})
+	
+	$(".add-alternative").live("click", function(e) {
+		var alternatives = $(this).parents(".alternatives")
+		var template = $(".alternative_template", alternatives)
+		
+		template.before("<div class=\"clearfix alternative\">" + template.html() + "</div>")
+		renumber(alternatives)
+		return false
+	})
+	
+	var renumber = function(alternatives) {
+		$(".profile").each(function(i) {
+			$(".alternative input", this).each(function(i) {
+				$(this).attr("name", $(this).attr("name").replace(/alternatives\[.+\]/g, "alternatives[" + i + "]"))
+			})
+		})
+	}
+	</script>
+}
