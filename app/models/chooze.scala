@@ -1,6 +1,6 @@
 package models
 
-case class Poll(name: String, description: String, alternatives: Seq[Alternative], votes: Seq[Vote]) {
+case class Poll(id: Option[Long], name: String, description: String, alternatives: Seq[Alternative], votes: Seq[Vote]) {
   /**
    * Compute the result of a poll, according to all its votes
    * @return The alternatives and their score, sorted by score
@@ -22,7 +22,7 @@ case class Poll(name: String, description: String, alternatives: Seq[Alternative
 
 case class Alternative(id: Option[Long], name: String)
 
-case class Vote(id: Option[Long], user: String, choices: Seq[Note])
+case class Vote(id: Option[Long], user: String, notes: Seq[Note])
 
 case class Note(id: Option[Long], alternative: Alternative, value: Int)
 
@@ -31,6 +31,7 @@ object Mock {
   val montenegro = Alternative(None, "Monte Negro")
   val berlin = Alternative(None, "Berlin")
   val poll = Poll(
+      None,
       "Zen Day 2012",
       "Where do you want to go?",
       List(greece, montenegro, berlin),

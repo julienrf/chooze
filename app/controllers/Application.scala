@@ -13,6 +13,7 @@ import models.Poll
 object Application extends Controller {
   val createForm: Form[Poll] = Form(
       mapping(
+          "id" -> ignored(Option.empty[Long]),
           "name" -> nonEmptyText,
           "description" -> nonEmptyText,
           "alternatives" -> seq(
@@ -36,9 +37,8 @@ object Application extends Controller {
         poll => {
           Logger.logger.debug("Create poll form is valid.")
           Service.createPoll(poll.name, poll.description, poll.alternatives.map(_.name)) match {
-            case Some(name) => {
-              Logger.logger.debug("Poll has been persisted in database")
-              Redirect(routes.Application.voteGet(name)).flashing("success" -> "Your poll %s has been created.".format(name))
+            case Some(id) => {
+              Redirect(routes.Application.voteGet(poll.name)).flashing("success" -> "Your poll %s has been created.".format(poll.name))
             }
             case None => {
               Logger.logger.warn("Poll has not been persisted in database")

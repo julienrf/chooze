@@ -9,12 +9,12 @@ object Db {
   import org.scalaquery.ql.TypeMapper._
   import org.scalaquery.ql._
 
-  val Alternatives = new Table[(Long, String, String)]("alternatives") {
+  val Alternatives = new Table[(Long, String, Long)]("alternatives") {
     def id = column[Long]("id", O PrimaryKey, O AutoInc)
     def name = column[String]("name")
-    def pollName = column[String]("poll_id")
-    def * = id ~ name ~ pollName
-    def noId = name ~ pollName
+    def pollId = column[Long]("poll_id")
+    def * = id ~ name ~ pollId
+    def noId = name ~ pollId
   }
   
   val Notes = new Table[(Long, Long, Int, Long)]("notes") {
@@ -26,18 +26,20 @@ object Db {
     def noId = voteId ~ value ~ alternativeId
   }
   
-  val Votes = new Table[(Long, String, String)]("votes") {
+  val Votes = new Table[(Long, String, Long)]("votes") {
     def id = column[Long]("id", O PrimaryKey, O AutoInc)
     def user = column[String]("user")
-    def pollName = column[String]("poll_id")
-    def * = id ~ user ~ pollName
-    def noId = user ~ pollName
+    def pollId = column[Long]("poll_id")
+    def * = id ~ user ~ pollId
+    def noId = user ~ pollId
   }
   
-  val Polls = new Table[(String, String)]("polls") {
-    def name = column[String]("name", O PrimaryKey)
+  val Polls = new Table[(Long, String, String)]("polls") {
+    def id = column[Long]("id", O PrimaryKey, O AutoInc)
+    def name = column[String]("name")
     def description = column[String]("description")
-    def * = name ~ description
+    def * = id ~ name ~ description
+    def noId = name ~ description
   }
   
   val ddl = Alternatives.ddl ++ Notes.ddl ++ Votes.ddl ++ Polls.ddl
@@ -51,46 +53,55 @@ object Db {
   
   val db = Database.forDataSource(DB.getDataSource())
   
-  def lastInsertedId[T](implicit s: Session, tm: TypeMapper[T]) = Query(SimpleFunction.nullary[T]("scope_identity")).first
+  def lastInsertedId(implicit s: Session) = Query(SimpleFunction.nullary[Long]("scope_identity")).first
   
   object Poll {
-    def create(name: String, description: String, alternatives: Seq[String]): Option[String] = db withSession { implicit s: Session =>
-      Polls.insert(name, description)
+    def create(name: String, description: String, alternatives: Seq[String]): Option[Long] = db withSession { implicit s: Session =>
+      Polls.noId.insert(name, description)
+      val pollId = lastInsertedId
       for (alternative <- alternatives) {
-        Alternative.create(alternative, name)
+        Alternative.create(alternative, pollId)
       }
-      Option(name)
+      Option(pollId)
     }
     
     def find(pollName: String): Option[models.Poll] = db withSession { implicit s: Session =>
-      val rows = (for {
+      val poll = (for {
         poll <- Polls if poll.name === pollName
-        alternative <- Alternatives if alternative.pollName === poll.name
-        vote <- Votes if vote.pollName === poll.name
-        note <- Notes if note.voteId === vote.id
-      } yield poll.name ~ poll.description ~ alternative.id ~ alternative.name ~ vote.id ~ vote.user ~ note.id ~ note.voteId ~ note.value ~ note.alternativeId).list map {
-        case (pName, pDescr, aId, aName, vId, vUser, nId, nVoteId, nValue, nAltId) => ((pName, pDescr), (aId, aName), (vId, vUser), (nId, nVoteId, nValue, nAltId))
+      } yield {
+        poll.*
+      }).firstOption
+      poll.map { p =>
+        val alternatives = (for {
+          alternative <- Alternatives if alternative.pollId === p._1
+        } yield {
+          alternative.*
+        }).list.map { a => (a._1, models.Alternative(Some(a._1), a._2)) }.toMap
+        val rows = (for {
+          vote <- Votes if vote.pollId === p._1
+          note <- Notes if note.voteId === vote.id
+        } yield vote.id ~ vote.user ~ note.id ~ note.voteId ~ note.value ~ note.alternativeId).list map {
+          case (vId, vUser, nId, nVoteId, nValue, nAltId) => ((vId, vUser), (nId, nVoteId, nValue, nAltId))
+        }
+        val notes = ((rows map { _._2 }).distinct map { n => (n._1, models.Note(Some(n._1), alternatives(n._4), n._3)) }).toMap
+        val notesByVote = ((rows map { _._2 }).distinct groupBy { _._2 }).mapValues { ns => ns.map { n => notes(n._1) } }
+        val votes = ((rows map { _._1 }).distinct map { v => (v._1, models.Vote(Some(v._1), v._2, notesByVote(v._1))) }).toMap
+        models.Poll(Some(p._1), p._2, p._3, alternatives.values.toSeq, votes.values.toSeq)
       }
-      val alternatives = ((rows map { _._2 }).distinct map { a => (a._1, models.Alternative(Some(a._1), a._2)) }).toMap
-      val notes = ((rows map { _._4 }).distinct map { n => (n._1, models.Note(Some(n._1), alternatives(n._4), n._3)) }).toMap
-      val notesByVote = ((rows map { _._4 }).distinct groupBy { _._2 }).mapValues { ns => ns.map { n => notes(n._1) } }
-      val votes = ((rows map { _._3 }).distinct map { v => (v._1, models.Vote(Some(v._1), v._2, notesByVote(v._1))) }).toMap
-      val polls = (rows map { _._1 }).distinct map { p => models.Poll(p._1, p._2, alternatives.values.toSeq, votes.values.toSeq) }
-      polls.headOption
     }
   }
   
   object Alternative {
-    def create(name: String, pollName: String): Option[Long] = db withSession { implicit s: Session =>
-      Alternatives.noId.insert(name, pollName)
-      Option(lastInsertedId[Long])
+    def create(name: String, pollId: Long): Option[Long] = db withSession { implicit s: Session =>
+      Alternatives.noId.insert(name, pollId)
+      Option(lastInsertedId)
     }
   }
   
   object Vote {
-    def create(pollName: String, user: String, notes: Seq[(Long, Int)]): Option[Long] = db withSession { implicit s: Session =>
-      Votes.noId.insert(user, pollName)
-      val voteId = lastInsertedId[Long]
+    def create(pollId: Long, user: String, notes: Seq[(Long, Int)]): Option[Long] = db withSession { implicit s: Session =>
+      Votes.noId.insert(user, pollId)
+      val voteId = lastInsertedId
       
       for ((alternativeId, note) <- notes) {
         Note.create(voteId, note, alternativeId)
@@ -103,7 +114,7 @@ object Db {
   object Note {
     def create(voteId: Long, note: Int, alternativeId: Long): Option[Long] = db withSession { implicit s: Session =>
       Notes.noId.insert(voteId, note, alternativeId)
-      Option(lastInsertedId[Long])
+      Option(lastInsertedId)
     }
   }
 }
