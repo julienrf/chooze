@@ -3,6 +3,12 @@
 @import helper._
 
 @main(Messages("page.title.vote")) {
+	<h1>@poll.name</h1>
+	
+	<p>
+		@poll.description
+	</p>
+	
 	@flash.get("success").map { key =>
 		<div class="flash success">
 			@Messages("poll.created")
@@ -15,9 +21,19 @@
 		</div>
 	}
 	
-	@helper.form(action = routes.Application.createPost) {
+	@helper.form(action = routes.Application.votePost(poll.name)) {
 		<fieldset>
-			<input type="range" name="" value="" min="0" max="4" step="1" />
+			@poll.alternatives.map { alternative =>
+				<p>
+					<label>@alternative.name</label>
+					<input type="range" name="" value="50" min="0" max="100" step="1" />
+				</p>
+			}
 		</fieldset>
+		
+		<div class="actions">
+			<input type="submit" class="btn primary" value="@Messages("vote")">
+			<a href="@routes.Application.votePost(poll.name)" class="btn">@Messages("cancel")</a>
+		</div>
 	}
 }

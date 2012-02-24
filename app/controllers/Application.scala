@@ -67,10 +67,28 @@ object Application extends Controller {
   )
   
   def voteGet(name: String) = Action { implicit request =>
+    Logger.logger.info("Retrieve vote data for poll " + name)
     Service.findPoll(name) match {
       case Some(poll) => Ok(views.html.vote(poll, voteForm))
-      case None => Redirect(routes.Application.createGet())
+      case None => NotFound
     }
+  }
+  
+  def votePost(name: String) = Action { 
+    /*implicit request =>
+    val form = voteForm.bindFromRequest
+    form.fold(
+        errors => BadRequest(views.html.voteGet(name)),
+        vote => {
+          
+          // pollName: String, user: String, notes: Seq[(Long, Int)]
+          Service.vote(name, vote.user, vote.notes.map {
+            _.
+          })
+        }
+    )
+    */
+    Ok(views.html.mock("test"))
   }
   
   def result(name: String) = Action {
