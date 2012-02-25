@@ -1,63 +1,76 @@
-@(form: Form[Poll])
+@(poll: Form[Poll])
 
-@alternativeField(field: Field, className: String = "alternative") = {
-  @helper.input(field, '_label -> "alternatives", '_class -> className) { (id, name, value, _) =>
-    <input type="text" name="@name" value="@value">
-    <button type="button" class="remove-alternative">@Messages("remove")</button>
-  }
+@moreHead = {
+  <link rel="stylesheet" href="@routes.Assets.at("stylesheets/create.min.css")" />
 }
 
-@main(Messages("page.title.create")) {
+@alternativeField(alternative: Field) = {
+  <div class="alternative">
+    @form.inputText(alternative, Messages("poll.alternative"))
+    <span class="button remove-alternative" title="@Messages("remove")">X</span>
+    @form.errors(alternative)
+  </div>
+}
 
-  @if(form.hasErrors) {
-    <div>Oops. Please fix all errors</div>
-  }
+@main(Messages("create.page.title"), None, moreHead) {
+
+  <h1>@Messages("poll.create")</h1>
 
   @helper.form(action = routes.Chooze.createPoll()) {
 
-    @helper.inputText( form("name"), 'label -> Messages("name"))
-    @helper.textarea(form("description"), 'label -> Messages("description"), 'rows -> 5, 'cols -> 50)
+    @if(poll.hasErrors) {
+      <div class="error">@Messages("form.fix.errors")</div>
+    }
 
-    <div class="alternatives">
-      @helper.repeat(form("alternatives"), min = 2) { alternative =>
-        @alternativeField(alternative("name"))
-      }
+    @form.field(poll("name"), Messages("poll.name.hint")) { name =>
+      @form.inputText(name, Messages("poll.name"))
+      @form.errors(name)
+    }
+    
+    @form.field(poll("description"), Messages("poll.description.hint")) { description =>
+      @form.textarea(description, Messages("poll.description"), 'rows->5, 'cols->50)
+      @form.errors(description)
+    }
+    
+    @form.field(poll("alternatives"), Messages("poll.alternatives.hint")) { alternatives =>
+      <div class="alternatives">
+        @helper.repeat(alternatives, min = 2) { alternative =>
+          @alternativeField(alternative("name"))
+        }
+      </div>
+      <button type=button class="add-alternative">@Messages("poll.alternatives.add")</button>
+      @form.errors(alternatives)
+    }
 
-      @alternativeField(form("alternatives[x].name"), className = "alternative_template")
-
-      <button type="button" class="add-alternative">@Messages("addAlternative")</button>
+    <div class="alternative-template">
+      @alternativeField(poll("alternatives[x].name"))
     </div>
 
-    <div>
+    <div class="submit">
       <input type="submit" value="@Messages("create")">
     </div>
   }
 
   <script type="text/javascript" charset="utf-8">
     (function() {
-      $("form").on('click', '.remove-alternative', function (e) {
-        var alternatives = $(this).parents(".alternatives")
-  
-        if ($(".alternative").size() > 2) {
-          $(this).parents(".alternative").remove()
-          renumber(alternatives)
-        }
-  
+      var alternatives = $('.alternatives'),
+          alternativeTmpl = $('.alternative-template');
+      
+      $('form').on('click', '.button.remove-alternative', function (e) {
+        $(this).closest('.alternative').remove()
+        renumber()
         return false
       });
   
-      $(".add-alternative").on("click", function (e) {
-        var alternatives = $(this).parents(".alternatives");
-        var template = $(".alternative_template", alternatives);
-
-        template.before("<div class=\"clearfix alternative\">" + template.html() + "</div>");
-        renumber(alternatives);
+      $('.add-alternative').on('click', function (e) {
+        alternatives.append(alternativeTmpl.html());
+        renumber();
         return false
       })
   
-      var renumber = function (alternatives) {
-        $(".alternative input").each(function (i) {
-          $(this).attr("name", $(this).attr("name").replace(/alternatives\[.+\]/g, "alternatives[" + i + "]"))
+      var renumber = function () {
+        alternatives.find('input').each(function (i) {
+          $(this).attr('name', $(this).attr('name').replace(/alternatives\[.+\]/g, 'alternatives[' + i + ']'))
         })
       };
     })();

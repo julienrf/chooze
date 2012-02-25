@@ -1,0 +1,6 @@
+@(field: Field)
+@if(field.hasErrors) {
+  <div class="error">
+  @field.errors.map(e => Messages(e.message)).mkString(", ")
+  </div>
+}

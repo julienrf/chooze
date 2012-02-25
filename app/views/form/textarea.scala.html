@@ -1,0 +1,2 @@
+@(field: Field, placeholder: String, args: (Symbol,Any)*)
+<textarea name="@field.name" placeholder="@placeholder" @if(field.constraints.find(_._1 == "constraint.required")) { class="required" } @toHtmlArgs(args.toMap)>@field.value</textarea>

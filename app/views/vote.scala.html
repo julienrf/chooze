@@ -1,6 +1,12 @@
-@(poll: Poll, form: Form[Vote])(implicit flash: play.api.mvc.Flash)
+@(poll: Poll, voteForm: Form[Vote])(implicit flash: play.api.mvc.Flash, request: play.api.mvc.RequestHeader)
 
-@main(Messages("page.title.vote")) {
+@moreHead = {
+  <link rel="stylesheet" href="@routes.Assets.at("stylesheets/vote.min.css")" />
+}
+
+@main(Messages("page.title.vote", poll.name), None, moreHead) {
+
+  <div>@Messages("poll.share") : <a href="@routes.Chooze.vote(poll.slug)">@routes.Chooze.vote(poll.slug).absoluteURL()</a></div>
 
   <h1>@poll.name</h1>
 
@@ -10,26 +16,30 @@
     <div class="flash success">@message</div>
   }
 
-  @if(form.hasErrors) {
-    <div>Oops. Please fix all errors</div>
-  }
-
   @helper.form(action = routes.Chooze.vote(poll.slug)) {
 
-    @helper.inputText(form("user"), '_label->Messages("user.name"))
-
-    @helper.repeat(form("notes")) { note =>
-      <p>
-        <label>
-          @poll.alternative(note("alternative")("id").value.get.toLong).get.name
-          <input type="range" name="@note("value").name" value="@note("value").value" min="0" max="100" step="1" />
-        </label>
-        <input type="hidden" name="@note("alternative")("id").name" value="@note("alternative")("id").value" />
-      </p>
+    @if(voteForm.hasErrors) {
+      <div>Oops. Please fix all errors</div>
     }
 
-    <div>
-      <input type="submit" value="@Messages("vote")">
+    @form.field(voteForm("notes"), Messages("notes.hint")) { notes =>
+
+      @helper.repeat(notes) { note =>
+        <div class="alternative">
+          <span class="name">@poll.alternative(note("alternative")("id").value.get.toLong).get.name</span>
+          <input type="range" name="@note("value").name" value="@note("value").value" min="0" max="100" step="1" />
+          <input type="hidden" name="@note("alternative")("id").name" value="@note("alternative")("id").value" />
+        </div>
+      }
+    }
+    
+    @form.field(voteForm("user"), Messages("user.name.hint")) { user =>
+      @form.inputText(user, Messages("user.name"))
+      @form.errors(user)
+    }
+
+    <div class="submit">
+      <input type="submit" value="@Messages("vote")"> @Messages("or") <a href="@routes.Chooze.result(poll.slug)">@Messages("see.current.result")</a>
     </div>
 
   }

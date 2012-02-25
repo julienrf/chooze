@@ -60,7 +60,7 @@ object Chooze extends Controller {
     }
   }
   
-  def result(slug: String) = Action {
+  def result(slug: String) = Action { implicit request =>
     Service.findPoll(slug) match {
       case Some(poll) => Ok(views.html.result(poll))
       case None => NotFound
@@ -80,7 +80,7 @@ object Chooze extends Controller {
                   "id" -> ignored(None: Option[Long]),
                   "name" -> nonEmptyText
               )(Alternative.apply)(Alternative.unapply)
-          ),
+          ).verifying("two.alternatives.min", _.length >= 2),
           "votes" -> ignored(Seq.empty[Vote])
       )(Poll.apply)(Poll.unapply)
   )

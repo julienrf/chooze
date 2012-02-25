@@ -1,22 +1,87 @@
 @import "_normalize.less";
 
-// General layout
+
+// --- Common layout
+
 body {
   margin: 0;
 }
 
 body > header {
   padding: 1em;
+  background-color: whitesmoke;
 }
 
 body > article {
-  padding: 2em;
-  background-color: whitesmoke;
+  padding: 1em 2em;
 }
 
 body > footer {
   padding: 1em;
+  background-color: whitesmoke;
   font-size: small;
   text-align: center;
 }
 
+
+// --- Common styles
+
+a {
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+.button {
+  cursor: pointer;
+  background-color: #AAA;
+  border: black thin solid;
+  padding: 2px;
+}
+
+form {
+  .field {
+  
+    border: 1px solid #888;
+    border-radius: 5px;
+    margin: 0.5em;
+    padding: 1em;
+    background-color: #EEE;
+    max-width: 40em;
+  
+    > .hint {
+      float: left;
+      width: 12em;
+      color: #444;
+    }
+    
+    > .input {
+      padding-left: 13em;
+      
+      input[type=text], textarea {
+        width: 24em;
+      }
+      
+      // Pourquoi ça marche pas ?
+      .required::before {
+        content: "*";
+      }
+      
+    }
+    
+    > .input:after {
+      content: " ";
+      clear: both;
+    }
+  }
+  
+  .submit {
+    padding: 1em 5em;
+  }
+}
+
+.error {
+  font-weight: bold;
+  color: red;
+}

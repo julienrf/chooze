@@ -1,33 +1,47 @@
-@(poll: Poll)
+@(poll: Poll)(implicit request: play.api.mvc.RequestHeader)
 
-@main(Messages("page.title.result", poll.name)) {
+@moreHead = {
+  <link rel="stylesheet" href="@routes.Assets.at("stylesheets/result.min.css")" />
+}
+
+@main(Messages("result.page.title", poll.name), None, moreHead) {
+
+  <div>@Messages("poll.share") : <a href="@routes.Chooze.vote(poll.slug)">@routes.Chooze.vote(poll.slug).absoluteURL()</a></div>
 
   <h1>@poll.name</h1>
-  
-  <p>@Messages("result", poll.name)</p>
 
-  <h2>@Messages("result.summary")</h2>
+  <div class="tab-widget">
+    <div class="tabs">
+      <label><input type="radio" name="result-view" />@Messages("result.summary")</label>
+      <label><input type="radio" name="result-view" />@Messages("result.details")</label>
+    </div>
+    <div class="containers">
+      <div>
+        @for((alternative, score) <- poll.results) {
+          <div style="font-size: @(score)px;">@alternative.name</div>
+        }
+      </div>
+      <div>
+        @if(!poll.votes) {
+          <p>@Messages("poll.votes.empty")</p>
+        } else {
+          <table>
+            <tr><th>@Messages("person")</th>@for(a <- poll.alternatives) { <th>@a.name</th> }</tr>
+            @for(vote <- poll.votes) {
+              <tr>
+                <td>@vote.user</td>
+                @for(note <- vote.notes) {
+                  <td>@(note.value)%</td>
+                }
+              </tr>
+            }
+          </table>
+        }
+      </div>
+    </div>
+    
+  </div>
 
-  @for((alternative, score) <- poll.results) {
-    <div style="font-size: @(score)px;">@alternative.name</div>
-  }
-  
-  <h2>@Messages("result.details")</h2>
-  
-  @if(!poll.votes) {
-    <p>@Messages("poll.votes.empty")</p>
-  } else {
-    <table>
-      <tr><th>@Messages("person")</th>@for(a <- poll.alternatives) { <th>@a.name</th> }</tr>
-      @for(vote <- poll.votes) {
-        <tr>
-          <td>@vote.user</td>
-          @for(note <- vote.notes) {
-            <td>@(note.value)%</td>
-          }
-        </tr>
-      }
-    </table>
-  }
 
+  <script type="text/javascript" src="@routes.Assets.at("javascripts/tabwidget.min.js")"></script>
 }

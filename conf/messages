@@ -1,19 +1,36 @@
-addAlternative = Add an alternative
-alternatives = Alternatives
 cancel = Cancel
 create = Create
-createPoll = Create a new poll
-description = Description
-name = Name
-page.title.create = Create Poll
-poll.created = Poll “{0}” has been created
 remove = Remove
+or = or
 
+form.fix.errors=Oops. Please fix all errors
+
+poll.created = Poll “{0}” has been created
+
+index.page.title=Chooze
+index.teaser=Chooze is an amazing tool to create polls
+tell.me.more=Tell me more…
+index.poll.create=Create a poll!
+
+create.page.title=Create a poll - Chooze
+poll.create=Create a poll
+poll.name=Name
+poll.name.hint=Enter a name for your poll
+poll.description=Description
+poll.description.hint=Give additional information
+poll.alternative=Choice
+poll.alternatives.hint=Add as many choices as you want, but there has to be at least two choices!
+poll.alternatives.add=Add another choice
+
+vote.page.title={0} - Chooze
+poll.share=Share this poll
+notes.hint=Move the slider according to your position for each available choice
 user.name=Your name
+user.name.hint=Type your name to be able to submit your vote
 vote=Vote!
+see.current.result=See the current result
 
-page.title.result={0}
-result=Poll “{0}” results
+result.page.title={0} - Chooze
 result.summary=Summary
 result.details=Detailed results
 

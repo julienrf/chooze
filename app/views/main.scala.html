@@ -1,24 +1,5 @@
-@(title: String)(content: Html)
+@(title: String, notification: Option[Html], moreHead: Html = Html(""))(content: Html)
 
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>@title - Chooze</title>
-        <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/style.min.css")">
-        <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
-        <script src="@routes.Assets.at("javascripts/jquery-1.7.1.min.js")" type="text/javascript"></script>
-    </head>
-    <body>
-        <header>
-            <a href="@routes.Chooze.index()">Chooze</a>
-        </header>
-        
-        <article>
-          @content
-        </article>
-        
-        <footer>
-          © Zenexity 2012 — Yohann Bredoux, Julien Richard-Foy, Gwenaëlle Georget
-        </footer>
-    </body>
-</html>
+@layout(title, notification, moreHead) {
+  <article>@content</article>
+}

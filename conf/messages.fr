@@ -1,2 +1,39 @@
-createPoll = Create a new poll
-poll.results=Résultats du sondage « {0} »
+cancel = Annuler
+create = Enregistrer
+remove = Supprimer
+or = ou
+
+form.fix.errors = Aïe. Veuillez corriger les erreurs de saisie
+
+poll.created = Le sondage « {0} » a été créé
+
+index.page.title = Chooze
+index.teaser = Chooze est un outil génial pour créer des sondages
+tell.me.more = En savoir plus…
+index.poll.create = Créer un sondage !
+
+create.page.title = Créer un sondage - Chooze
+poll.create = Créer un sondage
+poll.name = Nom
+poll.name.hint = Donnez un nom à votre sondage
+poll.description = Description
+poll.description.hint = Ajoutez toute indication qui vous semble utile
+poll.alternative = Choix
+poll.alternatives.hint = Ajoutez autant de choix que vous le souhaitez, mais il doit y en avoir au moins deux au total !
+poll.alternatives.add = Ajouter un choix
+
+vote.page.title = {0} - Chooze
+poll.share = Parter ce sondage
+notes.hint = Positionnez le curseur correspondant à chaque choix en fonction de votre position
+user.name = Votre nom
+user.name.hint = Vous devez indiquer votre nom pour enregistrer votre vote
+vote=Voter !
+see.current.result = Voir le résultat du sondage
+
+result.page.title = {0} - Chooze
+result.summary = Synthèse
+result.details = Détails
+
+poll.votes.empty = Pas encore de vote pour ce sondage !
+
+person = Choozer

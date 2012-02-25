@@ -1,5 +1,28 @@
-@main("Welcome") {
-  <h1>Chooze</h1>
-  <p>Chooze is an amazing tool to create polls.</p>
-  <a href="@routes.Chooze.showPollForm()">Create a poll!</a>
+@moreHead = {
+  <link rel="stylesheet" href="@routes.Assets.at("stylesheets/index.min.css")" />
+}
+
+@layout(Messages("index.page.title"), None, moreHead) {
+
+  <div id="index-teaser">
+
+    <span class="teaser">@Messages("index.teaser")</span>
+    <a href="#index-features">@Messages("tell.me.more")</a>
+
+    <div>
+      <a id="create-poll" href="@routes.Chooze.showPollForm()">@Messages("index.poll.create")</a>
+    </div>
+
+  </div>
+
+
+  <div id="index-features">
+
+    <h2>Chooze is simple</h2>
+
+    <p>Describe your poll choices</p>
+    <p>Let people vote</p>
+    <p>See immediately the results</p>
+
+  </div>
 }
