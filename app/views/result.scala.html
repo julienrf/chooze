@@ -4,10 +4,30 @@
 
   <h1>@poll.name</h1>
   
-  <p>@Messages("poll.result", poll.name)</p>
+  <p>@Messages("result", poll.name)</p>
+
+  <h2>@Messages("result.summary")</h2>
 
   @for((alternative, score) <- poll.results) {
     <div style="font-size: @(score)px;">@alternative.name</div>
+  }
+  
+  <h2>@Messages("result.details")</h2>
+  
+  @if(!poll.votes) {
+    <p>@Messages("poll.votes.empty")</p>
+  } else {
+    <table>
+      <tr><th>@Messages("person")</th>@for(a <- poll.alternatives) { <th>@a.name</th> }</tr>
+      @for(vote <- poll.votes) {
+        <tr>
+          <td>@vote.user</td>
+          @for(note <- vote.notes) {
+            <td>@(note.value)%</td>
+          }
+        </tr>
+      }
+    </table>
   }
 
 }

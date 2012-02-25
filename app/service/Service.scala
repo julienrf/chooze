@@ -20,6 +20,7 @@ object Service {
         }
       }
     }
+    // FIXME There is no code checking that all alternatives of the poll have been scored
     Db.Poll.create(name, generateUniqueSlug(Util.slugify(name.take(42)), Db.Poll.slugs), description, alternatives)
   }
   

@@ -13,4 +13,10 @@ user.name=Your name
 vote=Vote!
 
 page.title.result={0}
-poll.result=Poll “{0}” results
+result=Poll “{0}” results
+result.summary=Summary
+result.details=Detailed results
+
+poll.votes.empty=No vote yet!
+
+person=Choozer
