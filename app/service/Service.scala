@@ -20,7 +20,7 @@ object Service {
         }
       }
     }
-    Db.Poll.create(name, generateUniqueSlug(Util.slugify(name.take(32)), Db.Poll.slugs), description, alternatives)
+    Db.Poll.create(name, generateUniqueSlug(Util.slugify(name.take(42)), Db.Poll.slugs), description, alternatives)
   }
   
   def findPoll(slug: String): Option[Poll] = Db.Poll.find(slug)
