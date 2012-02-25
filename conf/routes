@@ -1,15 +1,10 @@
-# Routes
-# This file defines all application routes (Higher priority routes first)
-# ~~~~
-
-# Home page
 GET     /                           controllers.Chooze.index
-POST    /                           controllers.Chooze.createPoll
+GET     /create                     controllers.Chooze.showPollForm
+POST    /create                     controllers.Chooze.createPoll
 
 GET     /:slug                      controllers.Chooze.showVoteForm(slug)
 POST    /:slug                      controllers.Chooze.vote(slug)
 
 GET     /:slug/result               controllers.Chooze.result(slug)
 
-# Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)

@@ -12,13 +12,17 @@ import service._
 object Chooze extends Controller {
   
   def index = Action {
-    Ok(views.html.index(pollForm))
+    Ok(views.html.index())
+  }
+  
+  def showPollForm = Action {
+    Ok(views.html.pollForm(pollForm))
   }
   
   def createPoll = Action { implicit request =>
     val form = pollForm.bindFromRequest
     form.fold(
-        errors => BadRequest(views.html.index(errors)),
+        errors => BadRequest(views.html.pollForm(errors)),
         poll => {
           (for {
             id <- Service.createPoll(poll.name, poll.description, poll.alternatives.map(_.name))
@@ -26,7 +30,7 @@ object Chooze extends Controller {
           } yield {
             Redirect(routes.Chooze.showVoteForm(slug)).flashing("success" -> Messages("poll.created", poll.name))
           }) getOrElse {
-            BadRequest(views.html.index(form))
+            BadRequest(views.html.pollForm(form))
           }
         }
     )

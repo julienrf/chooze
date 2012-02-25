@@ -6,8 +6,8 @@
 
   <p>@poll.description</p>
 
-  @flash.get("success").map { key =>
-    <div class="flash success">@Messages("poll.created")</div>
+  @for(message <- flash.get("success")) {
+    <div class="flash success">@message</div>
   }
 
   @if(form.hasErrors) {
