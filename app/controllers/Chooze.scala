@@ -37,6 +37,7 @@ object Chooze extends Controller {
   }
   
   def showVoteForm(slug: String) = Action { implicit request =>
+    // TODO fetch only description and alternatives (don’t fetch the votes)
     Service.findPoll(slug) match {
       case Some(poll) => Ok(views.html.vote(poll, voteForm.fill(Vote(None, "", poll.alternatives.map(Note(None, _, 50))))))
       case None => NotFound
@@ -67,6 +68,7 @@ object Chooze extends Controller {
   }
   
   
+  // TODO use a tuple mapping
   val pollForm: Form[Poll] = Form(
       mapping(
           "id" -> ignored(Option.empty[Long]),
@@ -83,6 +85,7 @@ object Chooze extends Controller {
       )(Poll.apply)(Poll.unapply)
   )
   
+  // TODO use a tuple mapping
   val voteForm: Form[Vote] = Form(
       mapping(
           "id" -> ignored(Option.empty[Long]),
