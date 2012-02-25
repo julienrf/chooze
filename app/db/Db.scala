@@ -1,69 +1,30 @@
 package db
 
 object Db {
-
-  // --- Schema definition
-
-  import org.scalaquery.ql.extended.{ExtendedTable => Table}
-  import org.scalaquery.ql.extended.H2Driver.Implicit._
-  import org.scalaquery.ql.TypeMapper._
-  import org.scalaquery.ql._
-
-  val Alternatives = new Table[(Long, String, Long)]("alternatives") {
-    def id = column[Long]("id", O PrimaryKey, O AutoInc)
-    def name = column[String]("name")
-    def pollId = column[Long]("poll_id")
-    def * = id ~ name ~ pollId
-    def noId = name ~ pollId
-  }
-  
-  val Notes = new Table[(Long, Long, Int, Long)]("notes") {
-    def id = column[Long]("id", O PrimaryKey, O AutoInc)
-    def voteId = column[Long]("vote_id")
-    def value = column[Int]("value", O Default(0))
-    def alternativeId = column[Long]("alternative_id")
-    def * = id ~ voteId ~ value ~ alternativeId
-    def noId = voteId ~ value ~ alternativeId
-  }
-  
-  val Votes = new Table[(Long, String, Long)]("votes") {
-    def id = column[Long]("id", O PrimaryKey, O AutoInc)
-    def user = column[String]("user")
-    def pollId = column[Long]("poll_id")
-    def * = id ~ user ~ pollId
-    def noId = user ~ pollId
-  }
-  
-  val Polls = new Table[(Long, String, String, String)]("polls") {
-    def id = column[Long]("id", O PrimaryKey, O AutoInc)
-    def name = column[String]("name")
-    def slug = column[String]("slug")
-    def description = column[String]("description")
-    def * = id ~ name ~ slug ~ description
-    def noId = name ~ slug ~ description
-  }
-  
-  val ddl = Alternatives.ddl ++ Notes.ddl ++ Votes.ddl ++ Polls.ddl
-  
-  
-  // --- Query helpers
   
   import play.api.db.DB
   import org.scalaquery.session.{Session, Database}
   import play.api.Play.current
+  import org.scalaquery.ql.extended.H2Driver.Implicit._
+  import org.scalaquery.ql.TypeMapper._
+  import org.scalaquery.ql._
+  import Schema._
   
   val db = Database.forDataSource(DB.getDataSource())
   
-  def lastInsertedId(implicit s: Session) = Query(SimpleFunction.nullary[Long]("scope_identity")).first
+  def lastInsertedId(implicit s: Session) = Query(SimpleFunction.nullary[Long]("scope_identity")).firstOption
   
   object Poll {
     def create(name: String, slug: String, description: String, alternatives: Seq[String]): Option[Long] = db withSession { implicit s: Session =>
       Polls.noId.insert(name, slug, description)
-      val pollId = lastInsertedId
-      for (alternative <- alternatives) {
+      val maybePollId = lastInsertedId
+      for {
+        pollId <- maybePollId
+        alternative <- alternatives
+      } {
         Alternative.create(alternative, pollId)
       }
-      Option(pollId)
+      maybePollId
     }
     
     def find(slug: String): Option[models.Poll] = db withSession { implicit s: Session =>
@@ -103,27 +64,30 @@ object Db {
   object Alternative {
     def create(name: String, pollId: Long): Option[Long] = db withSession { implicit s: Session =>
       Alternatives.noId.insert(name, pollId)
-      Option(lastInsertedId)
+      lastInsertedId
     }
   }
   
   object Vote {
     def create(pollId: Long, user: String, notes: Seq[(Long, Int)]): Option[Long] = db withSession { implicit s: Session =>
       Votes.noId.insert(user, pollId)
-      val voteId = lastInsertedId
+      val maybeVoteId = lastInsertedId
       
-      for ((alternativeId, note) <- notes) {
+      for {
+        voteId <- maybeVoteId
+        (alternativeId, note) <- notes
+      } {
         Note.create(voteId, note, alternativeId)
       }
       
-      Option(voteId)
+      maybeVoteId
     }
   }
   
   object Note {
     def create(voteId: Long, note: Int, alternativeId: Long): Option[Long] = db withSession { implicit s: Session =>
       Notes.noId.insert(voteId, note, alternativeId)
-      Option(lastInsertedId)
+      lastInsertedId
     }
   }
 }

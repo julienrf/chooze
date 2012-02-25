@@ -1,14 +1,13 @@
 import play.api.{Application, GlobalSettings}
 
 object Global extends GlobalSettings {
-  /*override def beforeStart(app: Application) {
+  override def beforeStart(app: Application) {
     import play.api.db.evolutions.Evolutions._
-    import db.Db
+    import db.Schema
     
-    // TODO remove
     updateEvolutionScript(
-        ups = Db.ddl.createStatements.mkString(";\n"),
-        downs = Db.ddl.createStatements.mkString(";\n")
+        ups = Schema.ddl.createStatements.mkString(";\n"),
+        downs = Schema.ddl.dropStatements.mkString(";\n")
     )(app)
-  }*/
+  }
 }
