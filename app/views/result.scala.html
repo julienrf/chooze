@@ -1,10 +1,10 @@
-@(poll: Poll)(implicit request: play.api.mvc.RequestHeader)
+@(poll: Poll)(implicit request: play.api.mvc.RequestHeader, notification: Option[Notification])
 
 @moreHead = {
   <link rel="stylesheet" href="@routes.Assets.at("stylesheets/result.min.css")" />
 }
 
-@main(Messages("result.page.title", poll.name), None, moreHead) {
+@main(Messages("result.page.title", poll.name), moreHead) {
 
   <div>@Messages("poll.share") : <a href="@routes.Chooze.vote(poll.slug)">@routes.Chooze.vote(poll.slug).absoluteURL()</a></div>
 

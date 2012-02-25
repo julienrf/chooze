@@ -1,13 +1,15 @@
+@()(implicit notification: Option[Notification])
+
 @moreHead = {
   <link rel="stylesheet" href="@routes.Assets.at("stylesheets/index.min.css")" />
 }
 
-@layout(Messages("index.page.title"), None, moreHead) {
+@layout(Messages("index.page.title"), moreHead) {
 
   <div id="index-teaser">
 
     <span class="teaser">@Messages("index.teaser")</span>
-    <a href="#index-features">@Messages("tell.me.more")</a>
+    <a href="#features">@Messages("tell.me.more")</a>
 
     <div>
       <a id="create-poll" href="@routes.Chooze.showPollForm()">@Messages("index.poll.create")</a>
@@ -16,7 +18,7 @@
   </div>
 
 
-  <div id="index-features">
+  <div id="features">
 
     <h2>Chooze is simple</h2>
 

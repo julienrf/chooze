@@ -29,6 +29,7 @@ user.name=Your name
 user.name.hint=Type your name to be able to submit your vote
 vote=Vote!
 see.current.result=See the current result
+vote.registered=Your vote has been taken into account
 
 result.page.title={0} - Chooze
 result.summary=Summary

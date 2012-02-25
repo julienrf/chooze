@@ -1,5 +1,5 @@
-@(title: String, notification: Option[Html], moreHead: Html = Html(""))(content: Html)
+@(title: String, moreHead: Html = Html(""))(content: Html)(implicit notification: Option[Notification])
 
-@layout(title, notification, moreHead) {
+@layout(title, moreHead) {
   <article>@content</article>
 }

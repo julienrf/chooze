@@ -1,4 +1,4 @@
-@(poll: Form[Poll])
+@(poll: Form[Poll])(implicit notification: Option[Notification])
 
 @moreHead = {
   <link rel="stylesheet" href="@routes.Assets.at("stylesheets/create.min.css")" />
@@ -12,7 +12,7 @@
   </div>
 }
 
-@main(Messages("create.page.title"), None, moreHead) {
+@main(Messages("create.page.title"), moreHead) {
 
   <h1>@Messages("poll.create")</h1>
 

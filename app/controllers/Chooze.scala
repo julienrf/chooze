@@ -9,13 +9,13 @@ import play.api.i18n.Messages
 import models._
 import service._
 
-object Chooze extends Controller {
+object Chooze extends Controller with Notifications {
   
-  def index = Action {
+  def index = Action { implicit request =>
     Ok(views.html.index())
   }
   
-  def showPollForm = Action {
+  def showPollForm = Action { implicit request =>
     Ok(views.html.pollForm(pollForm))
   }
   
@@ -28,7 +28,7 @@ object Chooze extends Controller {
             id <- Service.createPoll(poll.name, poll.description, poll.alternatives.map(_.name))
             slug <- Service.pollSlug(id)
           } yield {
-            Redirect(routes.Chooze.showVoteForm(slug)).flashing("success" -> Messages("poll.created", poll.name))
+            Redirect(routes.Chooze.showVoteForm(slug)).flashing("notification" -> Messages("poll.created", poll.name))
           }) getOrElse {
             BadRequest(views.html.pollForm(form))
           }
@@ -52,7 +52,7 @@ object Chooze extends Controller {
             errors => BadRequest(views.html.vote(poll, errors)),
             vote => {
               Service.vote(poll.id.get, vote.user, vote.notes map { n => (n.alternative.id.get, n.value) })
-              Redirect(routes.Chooze.result(slug))
+              Redirect(routes.Chooze.result(slug)).flashing("notification" -> Messages("vote.registered"))
             }
         )
       }

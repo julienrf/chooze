@@ -1,4 +1,4 @@
-@(title: String, notification: Option[Html], moreHead: Html = Html(""))(content: Html)
+@(title: String, moreHead: Html = Html(""))(content: Html)(implicit notification: Option[Notification])
 
 <!DOCTYPE html>
 <html>
@@ -12,8 +12,8 @@
     <body>
         <header>
             <a href="@routes.Chooze.index()">Chooze</a>
-            @for(message <- notification) {
-              <span class="notification">@message</span>
+            @for(Notification(message) <- notification) {
+              <span class="notification"> — @message</span>
             }
         </header>
         

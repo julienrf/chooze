@@ -29,6 +29,7 @@ user.name = Votre nom
 user.name.hint = Vous devez indiquer votre nom pour enregistrer votre vote
 vote=Voter !
 see.current.result = Voir le résultat du sondage
+vote.registered=Votre vote a bien été pris en compte
 
 result.page.title = {0} - Chooze
 result.summary = Synthèse

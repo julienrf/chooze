@@ -1,20 +1,16 @@
-@(poll: Poll, voteForm: Form[Vote])(implicit flash: play.api.mvc.Flash, request: play.api.mvc.RequestHeader)
+@(poll: Poll, voteForm: Form[Vote])(implicit notification: Option[Notification], request: play.api.mvc.RequestHeader)
 
 @moreHead = {
   <link rel="stylesheet" href="@routes.Assets.at("stylesheets/vote.min.css")" />
 }
 
-@main(Messages("page.title.vote", poll.name), None, moreHead) {
+@main(Messages("vote.page.title", poll.name), moreHead) {
 
   <div>@Messages("poll.share") : <a href="@routes.Chooze.vote(poll.slug)">@routes.Chooze.vote(poll.slug).absoluteURL()</a></div>
 
   <h1>@poll.name</h1>
 
   <p>@poll.description</p>
-
-  @for(message <- flash.get("success")) {
-    <div class="flash success">@message</div>
-  }
 
   @helper.form(action = routes.Chooze.vote(poll.slug)) {
 
