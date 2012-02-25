@@ -14,7 +14,7 @@
     <div>Oops. Please fix all errors</div>
   }
 
-  @helper.form(action = routes.Chooze.vote(poll.name)) {
+  @helper.form(action = routes.Chooze.vote(poll.slug)) {
 
     @helper.inputText(form("user"), '_label->Messages("user.name"))
 

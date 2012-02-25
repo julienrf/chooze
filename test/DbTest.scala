@@ -11,7 +11,7 @@ class DbTest extends Specification {
   "a Db" can {
     "create a poll" >> {
       running(FakeApplication(additionalConfiguration = inMemoryDatabase())) {
-        val maybeId = Db.Poll.create("Summer holidays", "Where do we go this summer?", List("Greece", "Monte Negro"))
+        val maybeId = Db.Poll.create("Summer holidays", "summer-holidays", "Where do we go this summer?", List("Greece", "Monte Negro"))
         maybeId match {
           case Some(id) => {
             Db.Poll.find("Summer holidays") match {

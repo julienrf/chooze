@@ -34,12 +34,13 @@ object Db {
     def noId = user ~ pollId
   }
   
-  val Polls = new Table[(Long, String, String)]("polls") {
+  val Polls = new Table[(Long, String, String, String)]("polls") {
     def id = column[Long]("id", O PrimaryKey, O AutoInc)
     def name = column[String]("name")
+    def slug = column[String]("slug")
     def description = column[String]("description")
-    def * = id ~ name ~ description
-    def noId = name ~ description
+    def * = id ~ name ~ slug ~ description
+    def noId = name ~ slug ~ description
   }
   
   val ddl = Alternatives.ddl ++ Notes.ddl ++ Votes.ddl ++ Polls.ddl
@@ -56,8 +57,8 @@ object Db {
   def lastInsertedId(implicit s: Session) = Query(SimpleFunction.nullary[Long]("scope_identity")).first
   
   object Poll {
-    def create(name: String, description: String, alternatives: Seq[String]): Option[Long] = db withSession { implicit s: Session =>
-      Polls.noId.insert(name, description)
+    def create(name: String, slug: String, description: String, alternatives: Seq[String]): Option[Long] = db withSession { implicit s: Session =>
+      Polls.noId.insert(name, slug, description)
       val pollId = lastInsertedId
       for (alternative <- alternatives) {
         Alternative.create(alternative, pollId)
@@ -65,9 +66,9 @@ object Db {
       Option(pollId)
     }
     
-    def find(pollName: String): Option[models.Poll] = db withSession { implicit s: Session =>
+    def find(slug: String): Option[models.Poll] = db withSession { implicit s: Session =>
       val poll = (for {
-        poll <- Polls if poll.name === pollName
+        poll <- Polls if poll.slug === slug
       } yield {
         poll.*
       }).firstOption
@@ -86,8 +87,16 @@ object Db {
         val notes = ((rows map { _._2 }).distinct map { n => (n._1, models.Note(Some(n._1), alternatives(n._4), n._3)) }).toMap
         val notesByVote = ((rows map { _._2 }).distinct groupBy { _._2 }).mapValues { ns => ns.map { n => notes(n._1) } }
         val votes = ((rows map { _._1 }).distinct map { v => (v._1, models.Vote(Some(v._1), v._2, notesByVote(v._1))) }).toMap
-        models.Poll(Some(p._1), p._2, p._3, alternatives.values.toSeq, votes.values.toSeq)
+        models.Poll(Some(p._1), p._2, p._3, p._4, alternatives.values.toSeq, votes.values.toSeq)
       }
+    }
+    
+    def slugs: Seq[String] = db withSession { implicit s: Session =>
+      (for (poll <- Polls) yield poll.slug).list
+    }
+    
+    def slug(id: Long): Option[String] = db withSession { implicit s: Session =>
+      (for (poll <- Polls if poll.id === id) yield poll.slug).firstOption
     }
   }
   

@@ -20,30 +20,34 @@ object Chooze extends Controller {
     form.fold(
         errors => BadRequest(views.html.index(errors)),
         poll => {
-          Service.createPoll(poll.name, poll.description, poll.alternatives.map(_.name)) match {
-            case Some(id) => Redirect(routes.Chooze.showVoteForm(poll.name)).flashing("success" -> Messages("poll.created", poll.name))
-            case None => BadRequest(views.html.index(form))
+          (for {
+            id <- Service.createPoll(poll.name, poll.description, poll.alternatives.map(_.name))
+            slug <- Service.pollSlug(id)
+          } yield {
+            Redirect(routes.Chooze.showVoteForm(slug)).flashing("success" -> Messages("poll.created", poll.name))
+          }) getOrElse {
+            BadRequest(views.html.index(form))
           }
         }
     )
   }
   
-  def showVoteForm(name: String) = Action { implicit request =>
-    Service.findPoll(name) match {
+  def showVoteForm(slug: String) = Action { implicit request =>
+    Service.findPoll(slug) match {
       case Some(poll) => Ok(views.html.vote(poll, voteForm.fill(Vote(None, "", poll.alternatives.map(Note(None, _, 50))))))
       case None => NotFound
     }
   }
   
-  def vote(pollName: String) = Action { implicit request =>
-    Service.findPoll(pollName) match {
+  def vote(slug: String) = Action { implicit request =>
+    Service.findPoll(slug) match {
       case Some(poll) => {
         val form = voteForm.bindFromRequest
         form.fold(
             errors => BadRequest(views.html.vote(poll, errors)),
             vote => {
               Service.vote(poll.id.get, vote.user, vote.notes map { n => (n.alternative.id.get, n.value) })
-              Redirect(routes.Chooze.result(pollName))
+              Redirect(routes.Chooze.result(slug))
             }
         )
       }
@@ -51,8 +55,8 @@ object Chooze extends Controller {
     }
   }
   
-  def result(name: String) = Action {
-    Service.findPoll(name) match {
+  def result(slug: String) = Action {
+    Service.findPoll(slug) match {
       case Some(poll) => Ok(views.html.result(poll))
       case None => NotFound
     }
@@ -63,6 +67,7 @@ object Chooze extends Controller {
       mapping(
           "id" -> ignored(Option.empty[Long]),
           "name" -> nonEmptyText,
+          "slug" -> ignored(""),
           "description" -> nonEmptyText,
           "alternatives" -> seq(
               mapping(
