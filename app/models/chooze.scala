@@ -1,6 +1,6 @@
 package models
 
-case class Poll(id: Option[Long], name: String, slug: String, description: String, alternatives: Seq[Alternative], votes: Seq[Vote]) {
+case class Poll(id: Long, name: String, slug: String, description: String, alternatives: Seq[Alternative], votes: Seq[Vote]) {
   /**
    * Compute the result of a poll, according to all its votes
    * @return The alternatives and their score, sorted by score
@@ -19,11 +19,11 @@ case class Poll(id: Option[Long], name: String, slug: String, description: Strin
     }).sortBy(_._2).reverse
   }
   
-  def alternative(id: Long) = alternatives.find(_.id == Some(id))
+  def alternative(id: Long) = alternatives.find(_.id == id)
 }
 
-case class Alternative(id: Option[Long], name: String)
+case class Alternative(id: Long, name: String)
 
-case class Vote(id: Option[Long], user: String, notes: Seq[Note])
+case class Vote(id: Long, user: String, notes: Seq[Note])
 
-case class Note(id: Option[Long], alternative: Alternative, value: Int)
+case class Note(id: Long, alternative: Alternative, value: Int)
