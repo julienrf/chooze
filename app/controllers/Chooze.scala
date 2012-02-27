@@ -25,10 +25,10 @@ object Chooze extends Controller with Notifications {
         errors => BadRequest(views.html.pollForm(errors)),
         poll => {
           (for {
-            id <- Service.createPoll(poll.name, poll.description, poll.alternatives.map(_.name))
+            id <- (Service.createPoll _).tupled(poll)
             slug <- Service.pollSlug(id)
           } yield {
-            Redirect(routes.Chooze.showVoteForm(slug)).flashing("notification" -> Messages("poll.created", poll.name))
+            Redirect(routes.Chooze.showVoteForm(slug)).flashing("notification" -> Messages("poll.created", poll._1))
           }) getOrElse {
             BadRequest(views.html.pollForm(form))
           }
@@ -39,7 +39,7 @@ object Chooze extends Controller with Notifications {
   def showVoteForm(slug: String) = Action { implicit request =>
     // TODO fetch only description and alternatives (don’t fetch the votes)
     Service.findPoll(slug) match {
-      case Some(poll) => Ok(views.html.vote(poll, voteForm.fill(Vote(None, "", poll.alternatives.map(Note(None, _, 50))))))
+      case Some(poll) => Ok(views.html.vote(poll, voteForm.fill(("", poll.alternatives.map(_.id.get -> 50)))))
       case None => NotFound
     }
   }
@@ -51,7 +51,7 @@ object Chooze extends Controller with Notifications {
         form.fold(
             errors => BadRequest(views.html.vote(poll, errors)),
             vote => {
-              Service.vote(poll.id.get, vote.user, vote.notes map { n => (n.alternative.id.get, n.value) })
+              Service.vote(poll.id.get, vote._1, vote._2)
               Redirect(routes.Chooze.result(slug)).flashing("notification" -> Messages("vote.registered"))
             }
         )
@@ -68,38 +68,23 @@ object Chooze extends Controller with Notifications {
   }
   
   
-  // TODO use a tuple mapping
-  val pollForm: Form[Poll] = Form(
-      mapping(
-          "id" -> ignored(Option.empty[Long]),
-          "name" -> nonEmptyText,
-          "slug" -> ignored(""),
-          "description" -> nonEmptyText,
-          "alternatives" -> seq(
-              mapping(
-                  "id" -> ignored(None: Option[Long]),
-                  "name" -> nonEmptyText
-              )(Alternative.apply)(Alternative.unapply)
-          ).verifying("two.alternatives.min", _.length >= 2),
-          "votes" -> ignored(Seq.empty[Vote])
-      )(Poll.apply)(Poll.unapply)
+  val pollForm = Form(
+      tuple(
+        "name" -> nonEmptyText,
+        "description" -> nonEmptyText,
+        "alternatives" -> seq(nonEmptyText).verifying("two.alternatives.min", _.length >= 2) // TODO fix that
+      )
   )
   
-  // TODO use a tuple mapping
-  val voteForm: Form[Vote] = Form(
-      mapping(
-          "id" -> ignored(Option.empty[Long]),
+  val voteForm = Form(
+      tuple(
           "user" -> nonEmptyText,
           "notes" -> seq(
-              mapping(
-                  "id" -> ignored(Option.empty[Long]),
-                  "alternative" -> mapping(
-                      "id" -> optional(longNumber),
-                      "name" -> ignored("")
-                  )(Alternative.apply)(Alternative.unapply),
+              tuple(
+                  "alternative" -> longNumber,
                   "value" -> number
-              )(Note.apply)(Note.unapply)
+              )
           )
-      )(Vote.apply)(Vote.unapply)
+      )
   )
 }

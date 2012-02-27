@@ -1,4 +1,4 @@
-@(poll: Poll, voteForm: Form[Vote])(implicit notification: Option[Notification], request: play.api.mvc.RequestHeader)
+@(poll: Poll, voteForm: Form[(String, Seq[(Long, Int)])])(implicit notification: Option[Notification], request: play.api.mvc.RequestHeader)
 
 @moreHead = {
   <link rel="stylesheet" href="@routes.Assets.at("stylesheets/vote.min.css")" />
@@ -22,9 +22,9 @@
 
       @helper.repeat(notes) { note =>
         <div class="alternative">
-          <span class="name">@poll.alternative(note("alternative")("id").value.get.toLong).get.name</span>
+          <span class="name">@poll.alternative(note("alternative").value.get.toLong).get.name</span>
           <input type="range" name="@note("value").name" value="@note("value").value" min="0" max="100" step="1" />
-          <input type="hidden" name="@note("alternative")("id").name" value="@note("alternative")("id").value" />
+          <input type="hidden" name="@note("alternative").name" value="@note("alternative").value" />
         </div>
       }
     }

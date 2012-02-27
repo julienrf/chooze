@@ -1,4 +1,4 @@
-@(poll: Form[Poll])(implicit notification: Option[Notification])
+@(poll: Form[(String, String, Seq[String])])(implicit notification: Option[Notification])
 
 @moreHead = {
   <link rel="stylesheet" href="@routes.Assets.at("stylesheets/create.min.css")" />
@@ -35,7 +35,7 @@
     @form.field(poll("alternatives"), Messages("poll.alternatives.hint")) { alternatives =>
       <div class="alternatives">
         @helper.repeat(alternatives, min = 2) { alternative =>
-          @alternativeField(alternative("name"))
+          @alternativeField(alternative)
         }
       </div>
       <button type=button class="add-alternative">@Messages("poll.alternatives.add")</button>
@@ -43,7 +43,7 @@
     }
 
     <div class="alternative-template">
-      @alternativeField(poll("alternatives[x].name"))
+      @alternativeField(poll("alternatives[x]"))
     </div>
 
     <div class="submit">
