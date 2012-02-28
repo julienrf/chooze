@@ -66,6 +66,18 @@ object Db {
       Alternatives.noId.insert(name, pollId)
       lastInsertedId
     }
+
+    def findAll(pollId: Long): Option[Seq[models.Alternative]] = db withSession { implicit s: Session =>
+      (for { poll <- Polls if poll.id === pollId } yield poll.id).firstOption map { _ =>
+        (for {
+          poll <- Polls if poll.id === pollId
+          alternative <- Alternatives if alternative.pollId === poll.id
+        } yield alternative.*).list map {
+          case (id, name, _) => models.Alternative(id, name)
+        }
+      }
+    }
+
   }
   
   object Vote {

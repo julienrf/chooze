@@ -20,7 +20,7 @@ object Service {
         }
       }
     }
-    // FIXME There is no code checking that all alternatives of the poll have been scored
+    // TODO Do not fetch all the slugs until necessary
     Db.Poll.create(name, generateUniqueSlug(Util.slugify(name.take(42)), Db.Poll.slugs), description, alternatives)
   }
   
@@ -29,6 +29,10 @@ object Service {
   def pollSlug(id: Long): Option[String] = Db.Poll.slug(id)
   
   def vote(pollId: Long, user: String, notes: Seq[(Long, Int)]): Option[Long] = {
-    Db.Vote.create(pollId, user, notes)
+    for {
+      alternatives <- Db.Alternative.findAll(pollId)
+      if alternatives.size == notes.size
+      voteId <- Db.Vote.create(pollId, user, notes)
+    } yield voteId
   }
 }
