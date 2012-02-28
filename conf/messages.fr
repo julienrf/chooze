@@ -2,6 +2,7 @@ cancel = Annuler
 create = Enregistrer
 remove = Supprimer
 or = ou
+hide = Cacher
 
 form.fix.errors = Aïe. Veuillez corriger les erreurs de saisie
 

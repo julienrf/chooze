@@ -13,7 +13,7 @@
         <header>
             <a href="@routes.Chooze.index()">Chooze</a>
             @for(Notification(message) <- notification) {
-              <span class="notification"> — @message</span><span class="button" title="@Messages("hide")">X</span>
+              <span class="notification"> — @message <span class="button" title="@Messages("hide")">X</span></span>
             }
         </header>
         
@@ -22,5 +22,7 @@
         <footer>
           © Zenexity 2012 — Yohann Bredoux, Julien Richard-Foy, Gwenaëlle Georget
         </footer>
+
+        <script src="@routes.Assets.at("javascripts/notification.js")" type="text/javascript"></script>
     </body>
 </html>

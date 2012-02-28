@@ -2,6 +2,7 @@ cancel = Cancel
 create = Create
 remove = Remove
 or = or
+hide = Hide
 
 form.fix.errors=Oops. Please fix all errors
 
