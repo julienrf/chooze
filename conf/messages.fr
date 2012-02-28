@@ -39,3 +39,8 @@ result.details = Détails
 poll.votes.empty = Pas encore de vote pour ce sondage !
 
 person = Choozer
+
+internal.error = Erreur interne. Il n’y a rien à faire…
+
+
+constraint.required = Ce champ est obligatoire

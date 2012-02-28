@@ -18,10 +18,6 @@
 
   @helper.form(action = routes.Chooze.createPoll()) {
 
-    @if(poll.hasErrors) {
-      <div class="error">@Messages("form.fix.errors")</div>
-    }
-
     @form.field(poll("name"), Messages("poll.name.hint")) { name =>
       @form.inputText(name, Messages("poll.name"))
       @form.errors(name)

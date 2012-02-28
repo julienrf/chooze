@@ -22,14 +22,19 @@ object Chooze extends Controller with Notifications {
   def createPoll = Action { implicit request =>
     val form = pollForm.bindFromRequest
     form.fold(
-        errors => BadRequest(views.html.pollForm(errors)),
+        errors => {
+          implicit val formErrors = notify(Messages("form.fix.errors"))
+          BadRequest(views.html.pollForm(errors))
+        },
         poll => {
           (for {
             id <- (Service.createPoll _).tupled(poll)
             slug <- Service.pollSlug(id)
           } yield {
-            Redirect(routes.Chooze.showVoteForm(slug)).flashing("notification" -> Messages("poll.created", poll._1))
+            Redirect(routes.Chooze.showVoteForm(slug))
+              .notifying(Messages("poll.created", poll._1))
           }) getOrElse {
+            implicit val error = notify(Messages("internal.error"))
             BadRequest(views.html.pollForm(form))
           }
         }
@@ -55,11 +60,15 @@ object Chooze extends Controller with Notifications {
       case Some(poll) => {
         val form = voteForm.bindFromRequest
         form.fold(
-            errors => BadRequest(views.html.vote(poll, errors)),
+            errors => {
+              implicit val formErrors = notify(Messages("form.fix.errors"))
+              BadRequest(views.html.vote(poll, errors))
+            },
             vote => {
+              // TODO handle failure
               Service.vote(poll.id, vote._1, vote._2)
               Redirect(routes.Chooze.result(slug))
-                .flashing("notification" -> Messages("vote.registered"))
+                .notifying(Messages("vote.registered"))
                 .withCookies(Cookie("username", vote._1))
             }
         )

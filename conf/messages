@@ -39,3 +39,5 @@ result.details=Detailed results
 poll.votes.empty=No vote yet!
 
 person=Choozer
+
+internal.error=Internal error. Nothing to do…

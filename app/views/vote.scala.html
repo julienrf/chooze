@@ -14,10 +14,6 @@
 
   @helper.form(action = routes.Chooze.vote(poll.slug)) {
 
-    @if(voteForm.hasErrors) {
-      <div>Oops. Please fix all errors</div>
-    }
-
     @form.field(voteForm("notes"), Messages("notes.hint")) { notes =>
 
       @helper.repeat(notes) { note =>
