@@ -1,4 +1,4 @@
-@(title: String, moreHead: Html = Html(""))(content: Html)(implicit notification: Option[Notification], lang: Lang)
+@(title: String, moreHead: Html = Html(""))(content: Html)(implicit n: Option[notifications.Notification], l: Lang)
 
 @layout(title, moreHead) {
   <article>@content</article>

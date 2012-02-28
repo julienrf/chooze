@@ -8,6 +8,7 @@ import play.api.data.validation.Constraints._
 import play.api.i18n.Messages
 import models._
 import service._
+import notifications.Notifications
 
 object Chooze extends Controller with Notifications {
   
@@ -23,7 +24,7 @@ object Chooze extends Controller with Notifications {
     val form = pollForm.bindFromRequest
     form.fold(
         errors => {
-          implicit val formErrors = notify(Messages("form.fix.errors"))
+          implicit val formErrors = notify(Messages("form.fix.errors"), notifications.Error)
           BadRequest(views.html.pollForm(errors))
         },
         poll => {
@@ -32,9 +33,9 @@ object Chooze extends Controller with Notifications {
             slug <- Service.pollSlug(id)
           } yield {
             Redirect(routes.Chooze.showVoteForm(slug))
-              .notifying(Messages("poll.created", poll._1))
+              .notifying(Messages("poll.created", poll._1), notifications.Success)
           }) getOrElse {
-            implicit val error = notify(Messages("internal.error"))
+            implicit val error = notify(Messages("internal.error"), notifications.Error)
             BadRequest(views.html.pollForm(form))
           }
         }
@@ -61,14 +62,14 @@ object Chooze extends Controller with Notifications {
         val form = voteForm.bindFromRequest
         form.fold(
             errors => {
-              implicit val formErrors = notify(Messages("form.fix.errors"))
+              implicit val formErrors = notify(Messages("form.fix.errors"), notifications.Error)
               BadRequest(views.html.vote(poll, errors))
             },
             vote => {
               // TODO handle failure
               Service.vote(poll.id, vote._1, vote._2)
               Redirect(routes.Chooze.result(slug))
-                .notifying(Messages("vote.registered"))
+                .notifying(Messages("vote.registered"), notifications.Success)
                 .withCookies(Cookie("username", vote._1))
             }
         )

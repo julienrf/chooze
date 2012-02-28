@@ -1,4 +1,4 @@
-@(poll: Poll)(implicit lang: Lang, notification: Option[Notification], request: RequestHeader)
+@(poll: Poll)(implicit lang: Lang, n: Option[notifications.Notification], r: RequestHeader)
 
 @moreHead = {
   <link rel="stylesheet" href="@routes.Assets.at("stylesheets/result.min.css")" />
@@ -11,16 +11,23 @@
   <h1>@poll.name</h1>
 
   <div class="tab-widget">
+
     <div class="tabs">
       <label><input type="radio" name="result-view" />@Messages("result.summary")</label>
       <label><input type="radio" name="result-view" />@Messages("result.details")</label>
     </div>
+
     <div class="containers">
+
       <div>
         @for((alternative, score) <- poll.results) {
-          <div style="font-size: @(score)px;">@alternative.name</div>
+          @* TODO Compute a progress bar as the background of the outer div *@
+          <div stle="">
+            <div style="font-size: @(score)px;">@alternative.name</div>
+          </div>
         }
       </div>
+
       <div>
         @if(!poll.votes) {
           <p>@Messages("poll.votes.empty")</p>
@@ -38,8 +45,9 @@
           </table>
         }
       </div>
+
     </div>
-    
+
   </div>
 
 
