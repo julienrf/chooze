@@ -1,5 +1,8 @@
 package db
 
+/**
+ * Business logic *and* persistence
+ */
 object Db {
   
   import play.api.db.DB
@@ -15,16 +18,22 @@ object Db {
   def lastInsertedId(implicit s: Session) = Query(SimpleFunction.nullary[Long]("scope_identity")).firstOption
   
   object Poll {
+
+    // FIXME Use Validation instead of Option? We definitely have two distinct kinds of errors: persistence and logic errors. I’d like to not mix them.
     def create(name: String, slug: String, description: String, alternatives: Seq[String]): Option[Long] = db withSession { implicit s: Session =>
-      Polls.noId.insert(name, slug, description)
-      val maybePollId = lastInsertedId
-      for {
-        pollId <- maybePollId
-        alternative <- alternatives
-      } {
-        Alternative.create(alternative, pollId)
+      if (alternatives.size < 2) {
+        None
+      } else {
+        Polls.noId.insert(name, slug, description)
+        val maybePollId = lastInsertedId
+        for {
+          pollId <- maybePollId
+          alternative <- alternatives
+        } {
+          Alternative.create(alternative, pollId)
+        }
+        maybePollId
       }
-      maybePollId
     }
     
     def find(slug: String): Option[models.Poll] = db withSession { implicit s: Session =>
