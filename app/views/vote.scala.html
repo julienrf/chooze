@@ -1,4 +1,4 @@
-@(poll: Poll, voteForm: Form[(String, Seq[(Long, Int)])])(implicit notification: Option[Notification], request: play.api.mvc.RequestHeader)
+@(poll: Poll, voteForm: Form[(String, Seq[(Long, Int)])])(implicit notification: Option[Notification], lang: Lang, request: RequestHeader)
 
 @moreHead = {
   <link rel="stylesheet" href="@routes.Assets.at("stylesheets/vote.min.css")" />

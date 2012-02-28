@@ -1,4 +1,4 @@
-@(poll: Poll)(implicit request: play.api.mvc.RequestHeader, notification: Option[Notification])
+@(poll: Poll)(implicit lang: Lang, notification: Option[Notification], request: RequestHeader)
 
 @moreHead = {
   <link rel="stylesheet" href="@routes.Assets.at("stylesheets/result.min.css")" />

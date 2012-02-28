@@ -23,7 +23,7 @@ poll.alternatives.hint = Ajoutez autant de choix que vous le souhaitez, mais il 
 poll.alternatives.add = Ajouter un choix
 
 vote.page.title = {0} - Chooze
-poll.share = Parter ce sondage
+poll.share = Partager ce sondage
 notes.hint = Positionnez le curseur correspondant à chaque choix en fonction de votre position
 user.name = Votre nom
 user.name.hint = Vous devez indiquer votre nom pour enregistrer votre vote
