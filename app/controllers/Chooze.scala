@@ -39,7 +39,13 @@ object Chooze extends Controller with Notifications {
   def showVoteForm(slug: String) = Action { implicit request =>
     // TODO fetch only description and alternatives (don’t fetch the votes)
     Service.findPoll(slug) match {
-      case Some(poll) => Ok(views.html.vote(poll, voteForm.fill(("", poll.alternatives.map(_.id -> 50)))))
+      case Some(poll) => {
+        val username = (for {
+          cookie <- request.cookies.get("username")
+          username = cookie.value
+        } yield username) getOrElse ("")
+        Ok(views.html.vote(poll, voteForm.fill((username, poll.alternatives.map(_.id -> 50)))))
+      }
       case None => NotFound
     }
   }
@@ -52,7 +58,9 @@ object Chooze extends Controller with Notifications {
             errors => BadRequest(views.html.vote(poll, errors)),
             vote => {
               Service.vote(poll.id, vote._1, vote._2)
-              Redirect(routes.Chooze.result(slug)).flashing("notification" -> Messages("vote.registered"))
+              Redirect(routes.Chooze.result(slug))
+                .flashing("notification" -> Messages("vote.registered"))
+                .withCookies(Cookie("username", vote._1))
             }
         )
       }

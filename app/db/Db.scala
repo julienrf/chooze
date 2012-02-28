@@ -37,6 +37,7 @@ object Db {
     }
     
     def find(slug: String): Option[models.Poll] = db withSession { implicit s: Session =>
+      // TODO simplify processing since models now have ids
       val poll = (for {
         poll <- Polls if poll.slug === slug
       } yield {
