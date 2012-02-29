@@ -61,8 +61,10 @@
       });
   
       $('.add-alternative').on('click', function (e) {
-        alternatives.append(alternativeTmpl.html());
+        var alternative = $(alternativeTmpl.html());
+        alternatives.append(alternative);
         renumber();
+        alternative.children('input').focus();
         return false
       })
   
