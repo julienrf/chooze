@@ -13,6 +13,8 @@ body > header {
 }
 
 body > article {
+  max-width: 50em;
+  margin: 0 auto;
   padding: 1em 2em;
 }
 
@@ -48,7 +50,6 @@ form {
     margin: 0.5em;
     padding: 1em;
     background-color: #EEE;
-    max-width: 40em;
   
     > .hint {
       float: left;
@@ -60,7 +61,7 @@ form {
       padding-left: 13em;
       
       input[type=text], textarea {
-        width: 24em;
+        width: 100%;
       }
       
       // Pourquoi ça marche pas ?
