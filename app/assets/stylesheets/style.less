@@ -79,9 +79,18 @@ form {
   .submit {
     padding: 1em 5em;
   }
+
+  .error {
+    font-weight: bold;
+    color: red;
+  }
 }
 
-.error {
-  font-weight: bold;
-  color: red;
+.notification {
+  &.success {
+    background-color: #7DB827;
+  }
+  &.error {
+    background-color: #DEA666;
+  }
 }

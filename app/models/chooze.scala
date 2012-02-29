@@ -7,7 +7,7 @@ case class Poll(id: Long, name: String, slug: String, description: String, alter
    * Compute the result of a poll, according to all its votes
    * @return The alternatives and their score, sorted by score
    */
-  def results: Seq[(Alternative, Int)] = {
+  lazy val results: Seq[(Alternative, Int)] = {
     // Current implementation: range voting. In the future we may add more voting strategies
     (for {
       alternative <- alternatives
