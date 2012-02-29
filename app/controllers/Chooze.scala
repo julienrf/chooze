@@ -8,7 +8,7 @@ import play.api.data.validation.Constraints._
 import play.api.i18n.Messages
 import models._
 import service._
-import notifications.Notifications
+import notifications.{Notifications, Success, Error}
 
 object Chooze extends Controller with Cache with Notifications with CacheNotifications with AuthenticationToken {
 
@@ -28,7 +28,7 @@ object Chooze extends Controller with Cache with Notifications with CacheNotific
     val form = pollForm.bindFromRequest
     form.fold(
         errors => {
-          implicit val formErrors = notify(Messages("form.fix.errors"), notifications.Error)
+          implicit val formErrors = notify(Messages("form.fix.errors"), Error)
           BadRequest(views.html.pollForm(errors))
         },
         {
@@ -72,19 +72,19 @@ object Chooze extends Controller with Cache with Notifications with CacheNotific
         val form = voteForm.bindFromRequest
         form.fold(
             errors => {
-              implicit val formErrors = notify(Messages("form.fix.errors"), notifications.Error)
+              implicit val formErrors = notify(Messages("form.fix.errors"), Error)
               BadRequest(views.html.vote(poll, errors))
             },
             {
               case (token, user, notes) => {
                 checkAuthenticity(token) {
-                  // TODO handle failure
-                  Service.vote(poll.id, user, notes)
-                  Some(Redirect(routes.Chooze.result(slug))
-                    .notifying(Messages("vote.registered"), notifications.Success)
-                    .withCookies(Cookie("username", user)))
+                  for (_ <- Service.vote(poll.id, user, notes)) yield {
+                    Redirect(routes.Chooze.result(slug))
+                      .notifying(Messages("vote.registered"), Success)
+                      .withCookies(Cookie("username", user))
+                  }
                 } getOrElse {
-                  implicit val error = notify(Messages("internal.error"), notifications.Error)
+                  implicit val error = notify(Messages("internal.error"), Error)
                   BadRequest(views.html.vote(poll, form))
                 }
               }
