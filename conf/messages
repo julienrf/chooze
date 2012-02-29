@@ -29,6 +29,7 @@ poll.description.hint=Give additional information
 poll.alternative=Choice
 poll.alternatives.hint=Add as many choices as you want, but there has to be at least two choices!
 poll.alternatives.add=Add another choice
+two.alternatives.min=Provide at least two choices
 
 vote.page.title={0} - Chooze
 poll.share=Share this poll

@@ -113,7 +113,7 @@ object Chooze extends Controller with Cache with Notifications with CacheNotific
         "auth-token" -> text,
         "name" -> nonEmptyText,
         "description" -> nonEmptyText,
-        "alternatives" -> seq(nonEmptyText).verifying("two.alternatives.min", _.length >= 2) // TODO fix that
+        "alternatives" -> list(nonEmptyText).verifying("two.alternatives.min", _.length >= 2)
       )
   )
 

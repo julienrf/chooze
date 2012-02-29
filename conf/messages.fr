@@ -29,6 +29,7 @@ poll.description.hint = Ajoutez toute indication qui vous semble utile
 poll.alternative = Choix
 poll.alternatives.hint = Ajoutez autant de choix que vous le souhaitez, mais il doit y en avoir au moins deux au total !
 poll.alternatives.add = Ajouter un choix
+two.alternatives.min = Proposez au moins deux choix
 
 vote.page.title = {0} - Chooze
 poll.share = Partager ce sondage
