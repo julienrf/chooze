@@ -1,6 +1,8 @@
 package models
 
-case class Poll(id: Long, name: String, slug: String, description: String, alternatives: Seq[Alternative], votes: Seq[Vote]) {
+import java.util.Date
+
+case class Poll(id: Long, name: String, slug: String, description: String, alternatives: Seq[Alternative], votes: Seq[Vote], lastModified: Date) {
   /**
    * Compute the result of a poll, according to all its votes
    * @return The alternatives and their score, sorted by score

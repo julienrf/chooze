@@ -12,10 +12,14 @@ object Db {
   import org.scalaquery.ql.TypeMapper._
   import org.scalaquery.ql._
   import Schema._
+  import java.sql.Timestamp
+  import java.util.Date
   
   val db = Database.forDataSource(DB.getDataSource())
   
   def lastInsertedId(implicit s: Session) = Query(SimpleFunction.nullary[Long]("scope_identity")).firstOption
+  
+  def NOW = new Timestamp(new Date().getTime)
   
   object Poll {
 
@@ -24,7 +28,7 @@ object Db {
       if (alternatives.size < 2) {
         None
       } else {
-        Polls.noId.insert(name, slug, description)
+        Polls.noId.insert(name, slug, description, NOW)
         val maybePollId = lastInsertedId
         for {
           pollId <- maybePollId
@@ -58,7 +62,7 @@ object Db {
         val notes = ((rows map { _._2 }).distinct map { n => (n._1, models.Note(n._1, alternatives(n._4), n._3)) }).toMap
         val notesByVote = ((rows map { _._2 }).distinct groupBy { _._2 }).mapValues { ns => ns.map { n => notes(n._1) } }
         val votes = ((rows map { _._1 }).distinct map { v => (v._1, models.Vote(v._1, v._2, notesByVote(v._1))) }).toMap
-        models.Poll(p._1, p._2, p._3, p._4, alternatives.values.toSeq, votes.values.toSeq)
+        models.Poll(p._1, p._2, p._3, p._4, alternatives.values.toSeq, votes.values.toSeq, p._5)
       }
     }
     
@@ -68,6 +72,14 @@ object Db {
     
     def slug(id: Long): Option[String] = db withSession { implicit s: Session =>
       (for (poll <- Polls if poll.id === id) yield poll.slug).firstOption
+    }
+    
+    def lastModified(slug: String): Option[Date] = db withSession { implicit s: Session =>
+      (for (poll <- Polls if poll.slug === slug) yield poll.lastModified).firstOption
+    }
+    
+    def modified(id: Long, lastModified: Timestamp) = db withSession { implicit s: Session =>
+      (for (poll <- Polls if poll.id === id) yield poll.lastModified).update(lastModified)
     }
   }
   
@@ -95,11 +107,11 @@ object Db {
       Votes.noId.insert(user, pollId)
       val maybeVoteId = lastInsertedId
       
-      for {
-        voteId <- maybeVoteId
-        (alternativeId, note) <- notes
-      } {
-        Note.create(voteId, note, alternativeId)
+      for (voteId <- maybeVoteId) {
+        for ((alternativeId, note) <- notes) {
+          Note.create(voteId, note, alternativeId)
+        }
+        Poll.modified(pollId, NOW)
       }
       
       maybeVoteId
@@ -109,6 +121,8 @@ object Db {
   object Note {
     def create(voteId: Long, note: Int, alternativeId: Long): Option[Long] = db withSession { implicit s: Session =>
       Notes.noId.insert(voteId, note, alternativeId)
+      // I should mark the poll as modified but I *know* this Note.create method will only be called from Vote.create, which calls Poll.modified.
+      // Nevertheless, I’d like to not entangle persistence and business rules…
       lastInsertedId
     }
   }

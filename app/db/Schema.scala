@@ -5,6 +5,7 @@ object Schema {
   import org.scalaquery.ql.extended.H2Driver.Implicit._
   import org.scalaquery.ql.TypeMapper._
   import org.scalaquery.ql._
+  import java.sql.Timestamp
 
   val Alternatives = new Table[(Long, String, Long)]("alternatives") {
     def id = column[Long]("id", O PrimaryKey, O AutoInc)
@@ -17,7 +18,7 @@ object Schema {
   val Notes = new Table[(Long, Long, Int, Long)]("notes") {
     def id = column[Long]("id", O PrimaryKey, O AutoInc)
     def voteId = column[Long]("vote_id")
-    def value = column[Int]("value", O Default(0))
+    def value = column[Int]("value", O Default(50))
     def alternativeId = column[Long]("alternative_id")
     def * = id ~ voteId ~ value ~ alternativeId
     def noId = voteId ~ value ~ alternativeId
@@ -31,13 +32,14 @@ object Schema {
     def noId = user ~ pollId
   }
   
-  val Polls = new Table[(Long, String, String, String)]("polls") {
+  val Polls = new Table[(Long, String, String, String, Timestamp)]("polls") {
     def id = column[Long]("id", O PrimaryKey, O AutoInc)
     def name = column[String]("name")
     def slug = column[String]("slug")
     def description = column[String]("description")
-    def * = id ~ name ~ slug ~ description
-    def noId = name ~ slug ~ description
+    def lastModified = column[Timestamp]("last_modified")
+    def * = id ~ name ~ slug ~ description ~ lastModified
+    def noId = name ~ slug ~ description ~ lastModified
   }
   
   val ddl = Alternatives.ddl ++ Notes.ddl ++ Votes.ddl ++ Polls.ddl

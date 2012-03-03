@@ -10,16 +10,20 @@ import models._
 import service._
 import notifications.Notifications
 
-object Chooze extends Controller with Notifications {
-  
+object Chooze extends Controller with BrowserCache with Notifications with BrowserCacheNotifications {
+
   def index = Action { implicit request =>
-    Ok(views.html.index())
+    browserCached {
+      Ok(views.html.index())
+    }
   }
-  
+
   def showPollForm = Action { implicit request =>
-    Ok(views.html.pollForm(pollForm))
+    browserCached {
+      Ok(views.html.pollForm(pollForm))
+    }
   }
-  
+
   def createPoll = Action { implicit request =>
     val form = pollForm.bindFromRequest
     form.fold(
@@ -41,7 +45,7 @@ object Chooze extends Controller with Notifications {
         }
     )
   }
-  
+
   def showVoteForm(slug: String) = Action { implicit request =>
     // TODO fetch only description and alternatives (don’t fetch the votes)
     Service.findPoll(slug) match {
@@ -55,7 +59,7 @@ object Chooze extends Controller with Notifications {
       case None => NotFound
     }
   }
-  
+
   def vote(slug: String) = Action { implicit request =>
     Service.findPoll(slug) match {
       case Some(poll) => {
@@ -77,15 +81,20 @@ object Chooze extends Controller with Notifications {
       case None => NotFound
     }
   }
-  
+
   def result(slug: String) = Action { implicit request =>
-    Service.findPoll(slug) match {
-      case Some(poll) => Ok(views.html.result(poll))
+    Service.pollLastModified(slug) match {
+      case Some(lastModified) => browserCached(lastModified) {
+        Service.findPoll(slug) match {
+          case Some(poll) => Ok(views.html.result(poll))
+          case None       => NotFound
+        }
+      }
       case None => NotFound
     }
   }
-  
-  
+
+
   val pollForm = Form(
       tuple(
         "name" -> nonEmptyText,
@@ -93,7 +102,7 @@ object Chooze extends Controller with Notifications {
         "alternatives" -> seq(nonEmptyText).verifying("two.alternatives.min", _.length >= 2) // TODO fix that
       )
   )
-  
+
   val voteForm = Form(
       tuple(
           "user" -> nonEmptyText,
