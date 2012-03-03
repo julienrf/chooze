@@ -65,19 +65,34 @@ object Db {
         models.Poll(p._1, p._2, p._3, p._4, alternatives.values.toSeq, votes.values.toSeq, p._5)
       }
     }
-    
+
+    /**
+     * List all Polls slugs of the application
+     */
     def slugs: Seq[String] = db withSession { implicit s: Session =>
       (for (poll <- Polls) yield poll.slug).list
     }
-    
+
+    /**
+     * Find a slug from a Poll id
+     */
     def slug(id: Long): Option[String] = db withSession { implicit s: Session =>
       (for (poll <- Polls if poll.id === id) yield poll.slug).firstOption
     }
-    
+
+    /**
+     * @param slug Slug of the Poll to find
+     * @return the last modification date of the Poll
+     */
     def lastModified(slug: String): Option[Date] = db withSession { implicit s: Session =>
       (for (poll <- Polls if poll.slug === slug) yield poll.lastModified).firstOption
     }
-    
+
+    /**
+     * Update the last modified date of a Poll
+     * @param id Poll id
+     * @param lastModified New lastModified value
+     */
     def modified(id: Long, lastModified: Timestamp) = db withSession { implicit s: Session =>
       (for (poll <- Polls if poll.id === id) yield poll.lastModified).update(lastModified)
     }
@@ -103,6 +118,9 @@ object Db {
   }
   
   object Vote {
+    /**
+     * Register a vote and update the last modified time of the corresponding poll
+     */
     def create(pollId: Long, user: String, notes: Seq[(Long, Int)]): Option[Long] = db withSession { implicit s: Session =>
       Votes.noId.insert(user, pollId)
       val maybeVoteId = lastInsertedId
