@@ -38,7 +38,7 @@
               <tr>
                 <td>@vote.user</td>
                 @for(note <- vote.notes) {
-                  <td style="font-weight: @((1 + note.value * (9 - 1) / 100) * 100)">@(note.value)%</td>
+                  <td style="font-weight: @((1 + note.value * (9 - 1) / 100) * 100); background-color: hsla(211, 18.8%, @(47.8 + (100 - note.value) * (100 - 47.8) / 100)%, 0.4)">@(note.value)%</td>
                 }
               </tr>
             }
