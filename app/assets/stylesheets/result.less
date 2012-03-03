@@ -3,19 +3,18 @@
 
   > .tabs {
     font-size: 2em;
-    
-    input[type=radio] {
-      margin: 3px;
-    }
-    
   }
   
   > .containers > div {
     display: none;
+    
+    &:target {
+      display: block;
+    }
   }
 }
 
-.detailed-results {
+#detailed {
 
   th, td {
     padding: .5em;

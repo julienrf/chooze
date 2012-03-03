@@ -13,13 +13,13 @@
   <div class="tab-widget">
 
     <div class="tabs">
-      <label><input type="radio" name="result-view" />@Messages("result.summary")</label>
-      <label><input type="radio" name="result-view" />@Messages("result.details")</label>
+      <a href="#summary">@Messages("result.summary")</a>
+      <a href="#detailed">@Messages("result.details")</a>
     </div>
 
     <div class="containers">
 
-      <div>
+      <div id="summary">
         @for((alternative, score) <- poll.results) {
           @* TODO Compute a progress bar as the background of the outer div *@
           <div stle="">
@@ -28,7 +28,7 @@
         }
       </div>
 
-      <div class="detailed-results">
+      <div id="detailed">
         @if(!poll.votes) {
           <p>@Messages("poll.votes.empty")</p>
         } else {
@@ -50,6 +50,9 @@
 
   </div>
 
-
-  <script type="text/javascript" src="@routes.Assets.at("javascripts/tabwidget.min.js")"></script>
+  <script type="text/javascript">
+    if (location.hash === '') {
+      location.hash = 'summary';
+    }
+  </script>
 }
