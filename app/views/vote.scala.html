@@ -35,4 +35,10 @@
     </div>
 
   }
+  
+  <script type="text/javascript">
+    $('form').on('change', '.alternative > input[type=range]', function () {
+      $(this).prev('.name').css('font-weight', (1 + this.value * (9 - 1) / 100) * 100);
+    });
+  </script>
 }
