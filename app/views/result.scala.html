@@ -23,7 +23,7 @@
         @for((alternative, score) <- poll.results) {
           @* TODO Compute a progress bar as the background of the outer div *@
           <div stle="">
-            <div style="font-size: @(score)px;">@alternative.name</div>
+            <div style="font-size: @(8 + score * (64 - 8) / 100)px;">@alternative.name</div>
           </div>
         }
       </div>
