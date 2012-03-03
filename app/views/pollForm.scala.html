@@ -1,4 +1,4 @@
-@(poll: Form[(String, String, Seq[String])])(implicit n: Option[notifications.Notification], l: Lang)
+@(poll: Form[(String, String, String, Seq[String])])(implicit n: Option[notifications.Notification], l: Lang)
 
 @moreHead = {
   <link rel="stylesheet" href="@routes.Assets.at("stylesheets/create.min.css")" />
@@ -17,6 +17,8 @@
   <h1>@Messages("poll.create")</h1>
 
   @helper.form(action = routes.Chooze.createPoll()) {
+
+    <input type="hidden" name="@poll("auth-token").name" value="@poll("auth-token").value" />
 
     @form.field(poll("name"), Messages("poll.name.hint")) { name =>
       @form.inputText(name, Messages("poll.name"))
