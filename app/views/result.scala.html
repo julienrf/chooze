@@ -28,7 +28,7 @@
         }
       </div>
 
-      <div>
+      <div class="detailed-results">
         @if(!poll.votes) {
           <p>@Messages("poll.votes.empty")</p>
         } else {
@@ -38,7 +38,7 @@
               <tr>
                 <td>@vote.user</td>
                 @for(note <- vote.notes) {
-                  <td>@(note.value)%</td>
+                  <td style="font-weight: @((1 + note.value * (9 - 1) / 100) * 100)">@(note.value)%</td>
                 }
               </tr>
             }
