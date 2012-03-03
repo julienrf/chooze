@@ -56,7 +56,7 @@ object Chooze extends Controller with Cache with Notifications with CacheNotific
         } yield username) getOrElse ("")
         Ok(views.html.vote(poll, voteForm.fill((username, poll.alternatives.map(_.id -> 50)))))
       }
-      case None => NotFound
+      case None => NotFound(views.html.notFound())
     }
   }
 
@@ -78,7 +78,7 @@ object Chooze extends Controller with Cache with Notifications with CacheNotific
             }
         )
       }
-      case None => NotFound
+      case None => NotFound(views.html.notFound())
     }
   }
 
@@ -87,10 +87,10 @@ object Chooze extends Controller with Cache with Notifications with CacheNotific
       case Some(lastModified) => cached(lastModified) {
         Service.findPoll(slug) match {
           case Some(poll) => Ok(views.html.result(poll))
-          case None       => NotFound
+          case None       => NotFound(views.html.notFound())
         }
       }
-      case None => NotFound
+      case None => NotFound(views.html.notFound())
     }
   }
 
