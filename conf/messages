@@ -12,6 +12,13 @@ index.page.title=Chooze
 index.teaser=Chooze is an amazing tool to create polls
 tell.me.more=Tell me more…
 index.poll.create=Create a poll!
+chooze.is.simple = Chooze is simple
+feature.poll = Create polls
+feature.poll.content = Describe your poll choices
+feature.vote = Let people vote
+feature.vote.content = Voting conists in giving a note to a choice, by sliding a cursor
+feature.result = Get the results
+feature.result.content = No need to calculate anything, just see
 
 create.page.title=Create a poll - Chooze
 poll.create=Create a poll

@@ -12,6 +12,13 @@ index.page.title = Chooze
 index.teaser = Chooze est un outil génial pour créer des sondages
 tell.me.more = En savoir plus…
 index.poll.create = Créer un sondage !
+chooze.is.simple = Chooze est simple
+feature.poll = Créez des sondages
+feature.poll.content = Indiquez les différents choix possibles
+feature.vote = Laissez les internautes voter
+feature.vote.content = Il suffit de donner une appréciation en face de chaque choix
+feature.result = Obtenez les résultats
+feature.result.content = Pas besoin de calculer quoi que ce soit
 
 create.page.title = Créer un sondage - Chooze
 poll.create = Créer un sondage

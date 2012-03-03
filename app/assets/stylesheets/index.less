@@ -1,13 +1,13 @@
 #index-teaser {
   margin: 3em 0;
   text-align: center;
-  
+
   > .teaser {
     font-size: 2.5em;
     margin: 1em 0;
     display: inline-block;
   }
-  
+
   // “Create poll” link
   #create-poll {
     font-size: 1.5em
@@ -17,4 +17,21 @@
 #features {
   background-color: #BBB;
   padding: 2em;
+
+  > .feature {
+
+    > .content {
+      float: left;
+    }
+
+    > img {
+      float: right;
+    }
+
+    &::after {
+      content: ' ';
+      clear: both;
+      display: block;
+    }
+  }
 }

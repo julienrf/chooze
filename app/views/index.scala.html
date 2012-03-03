@@ -4,6 +4,16 @@
   <link rel="stylesheet" href="@routes.Assets.at("stylesheets/index.min.css")" />
 }
 
+@feature(name: String) = {
+  <div class="feature">
+    <div class="content">
+      <h3>@Messages("feature." + name)</h3>
+      <p>@Messages("feature." + name + ".content")</p>
+    </div>
+    <img src="@routes.Assets.at("images/" + name + ".png")" alt="@Messages("feature" + name)" />
+  </div>
+}
+
 @layout(Messages("index.page.title"), moreHead) {
 
   <div id="index-teaser">
@@ -20,11 +30,13 @@
 
   <div id="features">
 
-    <h2>Chooze is simple</h2>
+    <h2>@Messages("chooze.is.simple")</h2>
 
-    <p>Describe your poll choices</p>
-    <p>Let people vote</p>
-    <p>See immediately the results</p>
+    @feature("poll")
+
+    @feature("vote")
+    
+    @feature("result")
 
   </div>
 }
