@@ -22,12 +22,17 @@ trait AuthenticationToken {
 
   /**
    * Check the authenticity of a given token against the token found in the session
-   * @return Some(token) if there is a token in the session and it has the same value as the token param, otherwise None
+   * @param token The token to check the authenticity
+   * @param result The result to return
+   * @return Some(result) if there is a token in the session and it has the same value as the token param, otherwise None
    */
-  def checkAuthenticity(token: String)(implicit request: RequestHeader): Option[String] = {
+  def checkAuthenticity(token: String)(maybeResult: => Option[PlainResult])(implicit request: RequestHeader): Option[PlainResult] = {
     for {
       authToken <- session.get(AUTH_TOKEN)
       if token == authToken
-    } yield token
+      result <- maybeResult
+    } yield {
+      result.withSession(session - AUTH_TOKEN)
+    }
   }
 }

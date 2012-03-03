@@ -33,18 +33,19 @@ object Chooze extends Controller with Cache with Notifications with CacheNotific
         },
         {
           case (token, name, descr, alts) => {
-            (for {
-              _ <- checkAuthenticity(token)
-              id <- Service.createPoll(name, descr, alts)
-              slug <- Service.pollSlug(id)
-            } yield {
-              Redirect(routes.Chooze.showVoteForm(slug))
-                .notifying(Messages("poll.created", name), notifications.Success)
-            }) getOrElse {
-              implicit val error = notify(Messages("internal.error"), notifications.Error)
-              BadRequest(views.html.pollForm(form))
+            checkAuthenticity(token) {
+              (for {
+                id <- Service.createPoll(name, descr, alts)
+                slug <- Service.pollSlug(id)
+              } yield {
+                Redirect(routes.Chooze.showVoteForm(slug))
+                  .notifying(Messages("poll.created", name), notifications.Success)
+              })
+            } getOrElse {
+                implicit val error = notify(Messages("internal.error"), notifications.Error)
+                BadRequest(views.html.pollForm(form))
+              }
             }
-          }
         }
     )
   }
@@ -76,15 +77,13 @@ object Chooze extends Controller with Cache with Notifications with CacheNotific
             },
             {
               case (token, user, notes) => {
-                (for {
-                  _ <- checkAuthenticity(token)
-                } yield {
+                checkAuthenticity(token) {
                   // TODO handle failure
                   Service.vote(poll.id, user, notes)
-                  Redirect(routes.Chooze.result(slug))
+                  Some(Redirect(routes.Chooze.result(slug))
                     .notifying(Messages("vote.registered"), notifications.Success)
-                    .withCookies(Cookie("username", user))
-                }) getOrElse {
+                    .withCookies(Cookie("username", user)))
+                } getOrElse {
                   implicit val error = notify(Messages("internal.error"), notifications.Error)
                   BadRequest(views.html.vote(poll, form))
                 }
