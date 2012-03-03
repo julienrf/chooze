@@ -10,16 +10,16 @@ import models._
 import service._
 import notifications.Notifications
 
-object Chooze extends Controller with BrowserCache with Notifications with BrowserCacheNotifications {
+object Chooze extends Controller with Cache with Notifications with CacheNotifications {
 
   def index = Action { implicit request =>
-    browserCached {
+    cached {
       Ok(views.html.index())
     }
   }
 
   def showPollForm = Action { implicit request =>
-    browserCached {
+    cached {
       Ok(views.html.pollForm(pollForm))
     }
   }
@@ -84,7 +84,7 @@ object Chooze extends Controller with BrowserCache with Notifications with Brows
 
   def result(slug: String) = Action { implicit request =>
     Service.pollLastModified(slug) match {
-      case Some(lastModified) => browserCached(lastModified) {
+      case Some(lastModified) => cached(lastModified) {
         Service.findPoll(slug) match {
           case Some(poll) => Ok(views.html.result(poll))
           case None       => NotFound
