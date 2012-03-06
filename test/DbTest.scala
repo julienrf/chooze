@@ -14,11 +14,11 @@ class DbTest extends Specification {
         val maybeId = Db.Poll.create("Summer holidays", "summer-holidays", "Where do we go this summer?", List("Greece", "Monte Negro"))
         maybeId match {
           case Some(id) => {
-            Db.Poll.find("Summer holidays") match {
+            Db.Poll.find("summer-holidays") match {
               case Some(poll) => {
                 poll.name must be equalTo ("Summer holidays")
                 poll.description must be equalTo ("Where do we go this summer?")
-                poll.alternatives must contain ("Greece")
+                poll.alternatives.find(_.name == "Greece") must beSome
                 poll.votes must beEmpty
               }
               case None => failure("No poll found")
