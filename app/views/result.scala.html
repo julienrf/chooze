@@ -44,7 +44,7 @@
             <tr>
               <td>@Messages("mean")</td>
               @for(a <- poll.alternatives; (aa, score) <- poll.results if aa == a) {
-                <td>@(score)%</td>
+                <td style="font-weight: @((1 + score * (9 - 1) / 100) * 100); background-color: hsla(211, 18.8%, @(47.8 + (100 - score) * (100 - 47.8) / 100)%, 0.4)">@(score)%</td>
               }
             </tr>
           </table>
