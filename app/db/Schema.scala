@@ -8,7 +8,7 @@ object Schema {
   import java.sql.Timestamp
 
   val Alternatives = new Table[(Long, String, Long)]("alternatives") {
-    def id = column[Long]("id", O PrimaryKey, O AutoInc)
+    def id = column[Long]("id")
     def name = column[String]("name")
     def pollId = column[Long]("poll_id")
     def * = id ~ name ~ pollId
@@ -16,16 +16,16 @@ object Schema {
   }
   
   val Notes = new Table[(Long, Long, Int, Long)]("notes") {
-    def id = column[Long]("id", O PrimaryKey, O AutoInc)
+    def id = column[Long]("id")
     def voteId = column[Long]("vote_id")
-    def value = column[Int]("value", O Default(50))
+    def value = column[Int]("value")
     def alternativeId = column[Long]("alternative_id")
     def * = id ~ voteId ~ value ~ alternativeId
     def noId = voteId ~ value ~ alternativeId
   }
   
   val Votes = new Table[(Long, String, Long)]("votes") {
-    def id = column[Long]("id", O PrimaryKey, O AutoInc)
+    def id = column[Long]("id")
     def user = column[String]("user")
     def pollId = column[Long]("poll_id")
     def * = id ~ user ~ pollId
@@ -33,7 +33,7 @@ object Schema {
   }
   
   val Polls = new Table[(Long, String, String, String, Timestamp)]("polls") {
-    def id = column[Long]("id", O PrimaryKey, O AutoInc)
+    def id = column[Long]("id")
     def name = column[String]("name")
     def slug = column[String]("slug")
     def description = column[String]("description")
@@ -41,6 +41,4 @@ object Schema {
     def * = id ~ name ~ slug ~ description ~ lastModified
     def noId = name ~ slug ~ description ~ lastModified
   }
-  
-  val ddl = Alternatives.ddl ++ Notes.ddl ++ Votes.ddl ++ Polls.ddl
 }
