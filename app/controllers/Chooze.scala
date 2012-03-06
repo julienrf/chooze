@@ -19,8 +19,8 @@ object Chooze extends Controller with Cache with Notifications with CacheNotific
   }
 
   def showPollForm = Action { implicit request =>
-    authenticationToken(pollForm, "auth-token") { form =>
-      Ok(views.html.pollForm(form))
+    authenticationToken { implicit token =>
+      Ok(views.html.pollForm(pollForm))
     }
   }
 
@@ -29,23 +29,26 @@ object Chooze extends Controller with Cache with Notifications with CacheNotific
     form.fold(
         errors => {
           implicit val formErrors = notify(Messages("form.fix.errors"), Error)
-          BadRequest(views.html.pollForm(errors))
+          authenticationToken { implicit token =>
+            BadRequest(views.html.pollForm(errors))
+          }
         },
         {
-          case (token, name, descr, alts) => {
-            checkAuthenticity(token) {
-              (for {
-                id <- Service.createPoll(name, descr, alts)
-                slug <- Service.pollSlug(id)
-              } yield {
-                Redirect(routes.Chooze.showVoteForm(slug))
-                  .notifying(Messages("poll.created", name), notifications.Success)
-              })
-            } getOrElse {
-                implicit val error = notify(Messages("internal.error"), notifications.Error)
+          case (name, descr, alts) => {
+            for {
+              _ <- checkAuthenticity
+              id <- Service.createPoll(name, descr, alts)
+              slug <- Service.pollSlug(id)
+            } yield {
+              Redirect(routes.Chooze.showVoteForm(slug))
+                .notifying(Messages("poll.created", name), notifications.Success)
+            }
+          } getOrElse {
+              implicit val error = notify(Messages("internal.error"), notifications.Error)
+              authenticationToken { implicit token =>
                 BadRequest(views.html.pollForm(form))
               }
-            }
+          }
         }
     )
   }
@@ -58,8 +61,8 @@ object Chooze extends Controller with Cache with Notifications with CacheNotific
           cookie <- request.cookies.get("username")
           username = cookie.value
         } yield username) getOrElse ("")
-        authenticationToken(voteForm, "auth-token") { form =>
-          Ok(views.html.vote(poll, form.fill((form("auth-token").value.get, username, poll.alternatives.map(_.id -> 50)))))
+        authenticationToken { implicit token =>
+          Ok(views.html.vote(poll, voteForm.fill((username, poll.alternatives.map(_.id -> 50)))))
         }
       }
       case None => NotFound(views.html.notFound())
@@ -73,18 +76,23 @@ object Chooze extends Controller with Cache with Notifications with CacheNotific
         form.fold(
             errors => {
               implicit val formErrors = notify(Messages("form.fix.errors"), Error)
-              BadRequest(views.html.vote(poll, errors))
+              authenticationToken { implicit token =>
+                BadRequest(views.html.vote(poll, errors))
+              }
             },
             {
-              case (token, user, notes) => {
-                checkAuthenticity(token) {
-                  for (_ <- Service.vote(poll.id, user, notes)) yield {
-                    Redirect(routes.Chooze.result(slug))
-                      .notifying(Messages("vote.registered"), Success)
-                      .withCookies(Cookie("username", user))
-                  }
-                } getOrElse {
-                  implicit val error = notify(Messages("internal.error"), Error)
+              case (user, notes) => {
+                for {
+                  _ <- checkAuthenticity
+                  _ <- Service.vote(poll.id, user, notes)
+                } yield {
+                  Redirect(routes.Chooze.result(slug))
+                    .notifying(Messages("vote.registered"), Success)
+                    .withCookies(Cookie("username", user))
+                }
+              } getOrElse {
+                implicit val error = notify(Messages("internal.error"), Error)
+                authenticationToken { implicit token =>
                   BadRequest(views.html.vote(poll, form))
                 }
               }
@@ -110,7 +118,6 @@ object Chooze extends Controller with Cache with Notifications with CacheNotific
 
   val pollForm = Form(
       tuple(
-        "auth-token" -> text,
         "name" -> nonEmptyText,
         "description" -> nonEmptyText,
         "alternatives" -> list(nonEmptyText).verifying("two.alternatives.min", _.length >= 2)
@@ -119,7 +126,6 @@ object Chooze extends Controller with Cache with Notifications with CacheNotific
 
   val voteForm = Form(
       tuple(
-          "auth-token" -> text,
           "user" -> nonEmptyText,
           "notes" -> seq(
               tuple(

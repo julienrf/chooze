@@ -12,7 +12,7 @@ object notification {
     }
     Html(
         """<span class="notification %s"> - %s <span class="button" title="%s">X</span></span>"""
-            .format(kindClass, notification.message, Messages("hide"))
+            .format(kindClass, HtmlFormat.escape(notification.message), Messages("hide"))
     )
   }
 }
