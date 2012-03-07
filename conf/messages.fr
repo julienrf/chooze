@@ -56,3 +56,6 @@ error.required = Ce champ est obligatoire
 
 not.found = Page non trouvée
 page.not.found = La page demandée n’a pas pu être trouvée.
+
+lang.en = Anglais
+lang.fr = Français

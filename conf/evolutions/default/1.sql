@@ -1,5 +1,4 @@
 # --- !Ups
-
 CREATE TABLE "polls" (
   "id" BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   "name" VARCHAR NOT NULL,

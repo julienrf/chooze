@@ -2,6 +2,8 @@ GET     /                           controllers.Chooze.index
 GET     /create                     controllers.Chooze.showPollForm
 POST    /create                     controllers.Chooze.createPoll
 
+POST	/locale						controllers.Chooze.changeLocale
+
 GET     /:slug                      controllers.Chooze.showVoteForm(slug)
 POST    /:slug                      controllers.Chooze.vote(slug)
 
