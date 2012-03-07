@@ -2,10 +2,10 @@ package views.html
 
 import controllers.notifications._
 import play.api.templates._
-import play.api.i18n.Messages
+import play.api.i18n.{Messages, Lang}
 
 object notification {
-  def apply(notification: Notification): Html = {
+  def apply(notification: Notification)(implicit lang: Lang): Html = {
     val kindClass = notification.kind match {
       case Success => "success"
       case Error => "error"

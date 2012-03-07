@@ -1,4 +1,4 @@
-@(field: Field)
+@(field: Field)(implicit lang: Lang)
 @if(field.hasErrors) {
   <div class="error">
   @field.errors.map(e => Messages(e.message)).mkString(", ")

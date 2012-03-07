@@ -52,7 +52,7 @@ mean = Moyenne
 internal.error = Erreur interne. Il n’y a rien à faire…
 
 
-constraint.required = Ce champ est obligatoire
+error.required = Ce champ est obligatoire
 
 not.found = Page non trouvée
 page.not.found = La page demandée n’a pas pu être trouvée.
