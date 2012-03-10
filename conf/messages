@@ -54,6 +54,6 @@ internal.error=Internal error. Nothing to do…
 not.found = Page not found
 page.not.found = The requested page could not be found.
 
-languages = Languages
+languages = Language
 lang.en = English
 lang.fr = French

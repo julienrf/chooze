@@ -9,9 +9,10 @@ import play.api.i18n.Messages
 import models._
 import service._
 import notifications.{Notifications, Success, Error}
-import commons.CookieLang
 
 object Chooze extends Controller with Cache with Notifications with CacheNotifications with AuthenticationToken with CookieLang {
+
+  override val HOME_URL = routes.Chooze.index().url
 
   def index = Action { implicit request =>
     cached {

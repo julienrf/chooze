@@ -7,7 +7,6 @@
         <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/style.min.css")">
         <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
         <script src="@routes.Assets.at("javascripts/jquery-1.7.1.min.js")" type="text/javascript"></script>
-        <script src="@routes.Assets.at("javascripts/locale.min.js")" type="text/javascript"></script>
         @moreHead
     </head>
     <body>
@@ -21,15 +20,16 @@
         @content
         
         <footer>
-        	© Zenexity 2012 — Yohann Bredoux, Julien Richard-Foy, Gwenaëlle Georget —
-			<form action="@routes.Chooze.changeLocale" method="post">
-				<label for="locale">@Messages("languages")</label>
-				<select id="locale" name="locale">
-				@play.api.i18n.Lang.availables(play.api.Play.current).map { lang =>
-					<option value="@lang.code" @(if(l.code == lang.code) "selected" else "")>@Messages("lang." + lang.code)</option>
-				}
-				</select>
-			</form>
+          © Zenexity 2012 — Yohann Bredoux, Julien Richard-Foy, Gwenaëlle Georget —
+          @helper.form(action = routes.Chooze.changeLocale(), 'class -> "change-locale") {
+            <label>@Messages("languages")
+              <select name="locale">
+                @play.api.i18n.Lang.availables(play.api.Play.current).map { lang =>
+                  <option value="@lang.code" @(if(l.code == lang.code) "selected")>@Messages("lang." + lang.code)</option>
+                }
+              </select>
+            </label>
+          }
         </footer>
 
         <script src="@routes.Assets.at("javascripts/chooze.min.js")" type="text/javascript"></script>

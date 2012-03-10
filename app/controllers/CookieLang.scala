@@ -1,4 +1,4 @@
-package commons
+package controllers
 
 import play.api.mvc.{Action, Controller, Cookie, RequestHeader}
 import play.api.i18n.Lang
@@ -8,25 +8,29 @@ import play.api.data.Forms._
 import play.api.Logger
 
 trait CookieLang extends Controller {
-  val localeForm = Form("locale" -> text)
+
+  val localeForm = Form("locale" -> nonEmptyText)
 
   def changeLocale = Action { implicit request =>
-    val referer = request.headers.get(REFERER).get
+    val referrer = request.headers.get(REFERER).getOrElse(HOME_URL)
     localeForm.bindFromRequest.fold(
       errors => {
         Logger.logger.debug("The locale can not be change to : " + errors.get)
-        BadRequest(referer)
+        BadRequest(referrer)
       },
       locale => {
         Logger.logger.debug("Change user lang to : " + locale)
-        Redirect(referer).withCookies(Cookie("LANG", locale))
+        Redirect(referrer).withCookies(Cookie(LANG, locale))
       })
   }
 
   override implicit def lang(implicit request: RequestHeader) = {
-    request.cookies.get("LANG") match {
+    request.cookies.get(LANG) match {
       case None => super.lang(request)
       case Some(cookie) => Lang(cookie.value)
     }
   }
+
+  private val LANG = "lang"
+  protected val HOME_URL = "/"
 }
