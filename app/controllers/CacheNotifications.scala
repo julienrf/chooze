@@ -7,10 +7,10 @@ import java.util.Date
 trait CacheNotifications extends Cache {
   this: Notifications =>
   
-  abstract override def cached(lastModified: Date)(result: => PlainResult)(implicit request: RequestHeader) = {
+  abstract override def Cached(lastModified: Date)(result: => PlainResult)(implicit request: RequestHeader) = {
     flashNotifications match {
       case Some(_) => result
-      case None    => super.cached(lastModified)(result)
+      case None    => super.Cached(lastModified)(result)
     }
   }
 }

@@ -21,7 +21,7 @@ trait Cache {
     }
   }
 
-  def cached(lastModified: Date)(result: => PlainResult)(implicit request: RequestHeader): Result = {
+  def Cached(lastModified: Date)(result: => PlainResult)(implicit request: RequestHeader): Result = {
     if (current.mode == Mode.Dev) {
       result
     } else {
@@ -35,7 +35,7 @@ trait Cache {
     }
   }
 
-  def cached(result: => PlainResult)(implicit request: RequestHeader): Result = {
-    cached(new Date(0))(result)
+  def Cached(result: => PlainResult)(implicit request: RequestHeader): Result = {
+    Cached(new Date(0))(result)
   }
 }

@@ -15,7 +15,7 @@ object Chooze extends Controller with Cache with Notifications with CacheNotific
   override val HOME_URL = routes.Chooze.index().url
 
   def index = Action { implicit request =>
-    cached {
+    Cached {
       Ok(views.html.index())
     }
   }
@@ -107,7 +107,7 @@ object Chooze extends Controller with Cache with Notifications with CacheNotific
 
   def result(slug: String) = Action { implicit request =>
     Service.pollLastModified(slug) match {
-      case Some(lastModified) => cached(lastModified) {
+      case Some(lastModified) => Cached(lastModified) {
         Service.findPoll(slug) match {
           case Some(poll) => Ok(views.html.result(poll))
           case None       => NotFound(views.html.notFound())
