@@ -1,6 +1,5 @@
 package controllers
 
-import notifications.Notifications
 import play.api.mvc.{RequestHeader, PlainResult}
 import play.api.i18n.Lang
 import java.util.Date

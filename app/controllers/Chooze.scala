@@ -8,7 +8,6 @@ import play.api.data.validation.Constraints._
 import play.api.i18n.Messages
 import models._
 import service._
-import notifications.{Notifications, Success, Error}
 
 object Chooze extends Controller with Cache with Notifications with CacheNotifications with AuthenticationToken with CookieLang {
 
@@ -30,7 +29,7 @@ object Chooze extends Controller with Cache with Notifications with CacheNotific
     val form = pollForm.bindFromRequest
     form.fold(
         errors => {
-          implicit val formErrors = notify(Messages("form.fix.errors"), Error)
+          implicit val formErrors = notify(Messages("form.fix.errors"), Notification.Error)
           authenticationToken { implicit token =>
             BadRequest(views.html.pollForm(errors))
           }
@@ -43,10 +42,10 @@ object Chooze extends Controller with Cache with Notifications with CacheNotific
               slug <- Service.pollSlug(id)
             } yield {
               Redirect(routes.Chooze.showVoteForm(slug))
-                .notifying(Messages("poll.created", name), notifications.Success)
+                .notifying(Messages("poll.created", name), Notification.Success)
             }
           } getOrElse {
-              implicit val error = notify(Messages("internal.error"), notifications.Error)
+              implicit val error = notify(Messages("internal.error"), Notification.Error)
               authenticationToken { implicit token =>
                 BadRequest(views.html.pollForm(form))
               }
@@ -77,7 +76,7 @@ object Chooze extends Controller with Cache with Notifications with CacheNotific
         val form = voteForm.bindFromRequest
         form.fold(
             errors => {
-              implicit val formErrors = notify(Messages("form.fix.errors"), Error)
+              implicit val formErrors = notify(Messages("form.fix.errors"), Notification.Error)
               authenticationToken { implicit token =>
                 BadRequest(views.html.vote(poll, errors))
               }
@@ -89,11 +88,11 @@ object Chooze extends Controller with Cache with Notifications with CacheNotific
                   _ <- Service.vote(poll.id, user, notes)
                 } yield {
                   Redirect(routes.Chooze.result(slug))
-                    .notifying(Messages("vote.registered"), Success)
+                    .notifying(Messages("vote.registered"), Notification.Success)
                     .withCookies(Cookie("username", user))
                 }
               } getOrElse {
-                implicit val error = notify(Messages("internal.error"), Error)
+                implicit val error = notify(Messages("internal.error"), Notification.Error)
                 authenticationToken { implicit token =>
                   BadRequest(views.html.vote(poll, form))
                 }

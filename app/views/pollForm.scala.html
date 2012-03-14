@@ -1,4 +1,4 @@
-@(poll: Form[(String, String, List[String])])(implicit n: Option[notifications.Notification], l: Lang, t: AuthToken)
+@(poll: Form[(String, String, List[String])])(implicit n: Option[Notification], l: Lang, t: AuthToken)
 
 @moreHead = {
   <link rel="stylesheet" href="@routes.Assets.at("stylesheets/create.min.css")" />
