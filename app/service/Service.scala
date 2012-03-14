@@ -15,8 +15,6 @@ object Service {
 
   def pollSlug(id: Long): Option[String] = Db.Poll.slug(id)
 
-  def pollLastModified(slug: String): Option[Date] = Db.Poll.lastModified(slug)
-  
   def vote(pollId: Long, user: String, notes: Seq[(Long, Int)]): Option[Long] = {
     for {
       alternatives <- Db.Alternative.findAll(pollId)

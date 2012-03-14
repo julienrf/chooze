@@ -3,9 +3,7 @@ CREATE TABLE "polls" (
   "id" BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   "name" VARCHAR NOT NULL,
   "slug" VARCHAR NOT NULL UNIQUE,
-  "description" VARCHAR NOT NULL,
-  "last_modified" TIMESTAMP NOT NULL
-);
+  "description" VARCHAR NOT NULL);
 
 CREATE INDEX ON "polls"("slug");
 

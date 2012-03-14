@@ -32,13 +32,12 @@ object Schema {
     def noId = user ~ pollId
   }
   
-  val Polls = new Table[(Long, String, String, String, Timestamp)]("polls") {
+  val Polls = new Table[(Long, String, String, String)]("polls") {
     def id = column[Long]("id")
     def name = column[String]("name")
     def slug = column[String]("slug")
     def description = column[String]("description")
-    def lastModified = column[Timestamp]("last_modified")
-    def * = id ~ name ~ slug ~ description ~ lastModified
-    def noId = name ~ slug ~ description ~ lastModified
+    def * = id ~ name ~ slug ~ description
+    def noId = name ~ slug ~ description
   }
 }

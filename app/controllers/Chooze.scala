@@ -87,6 +87,7 @@ object Chooze extends Controller with Cache with Notifications with CacheNotific
                   _ <- checkAuthenticity
                   _ <- Service.vote(poll.id, user, notes)
                 } yield {
+                  clearEtag(slug)
                   Redirect(routes.Chooze.result(slug))
                     .notifying(Messages("vote.registered"), Notification.Success)
                     .withCookies(Cookie("username", user))
@@ -105,14 +106,11 @@ object Chooze extends Controller with Cache with Notifications with CacheNotific
   }
 
   def result(slug: String) = Action { implicit request =>
-    Service.pollLastModified(slug) match {
-      case Some(lastModified) => Cached(lastModified) {
-        Service.findPoll(slug) match {
-          case Some(poll) => Ok(views.html.result(poll))
-          case None       => NotFound(views.html.notFound())
-        }
+    Cached(slug) {
+      Service.findPoll(slug) match {
+        case Some(poll) => Ok(views.html.result(poll))
+        case None       => NotFound(views.html.notFound())
       }
-      case None => NotFound(views.html.notFound())
     }
   }
 

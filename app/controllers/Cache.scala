@@ -9,24 +9,22 @@ import play.api.Mode
 import java.util.Date
 import play.api.Logger
 import play.api.i18n.Lang
+import java.util.UUID
 
 trait Cache {
 
-  def Cached(lastModified: Date)(result: => PlainResult)(implicit request: RequestHeader, lang: Lang): Result = {
+  def Cached(identifier: String)(result: => PlainResult)(implicit request: RequestHeader, lang: Lang): Result = {
     if (current.mode == Mode.Dev) { // Chuis deg.
       result
     } else {
-      val resourceEtag = etagFor(request.uri + "-" + lang + "-" + lastModified.getTime)
+      val resourceEtag = etag(identifier)
       request.headers.get(IF_NONE_MATCH) match {
         case Some(etag) if etag == resourceEtag => {
-          Logger.debug("'%s' Not Modified")
+          Logger.debug("'%s' Not Modified".format(request.uri))
           NotModified
         }
         case _ => {
-          play.api.cache.Cache.getOrElse {
-            Logger.debug("Get '%s' from cache".format(request.uri))
-            resourceEtag
-          } {
+          play.api.cache.Cache.getOrElse (resourceEtag) {
             Logger.debug("Compute '%s'".format(request.uri))
             result.withHeaders(ETAG -> resourceEtag)
           }
@@ -36,16 +34,16 @@ trait Cache {
   }
 
   def Cached(result: => PlainResult)(implicit request: RequestHeader, lang: Lang): Result = {
-    Cached(new Date(0))(result)
+    Cached(request.uri)(result)
   }
 
-  private val etags = collection.mutable.Map.empty[String, String]
-
-  private def etagFor(identifier: String): String = {
-    etags.get(identifier).getOrElse {
-      val etag = Codecs.sha1(identifier)
-      etags += identifier -> etag
-      etag
-    }
+  def clearEtag(identifier: String)(implicit lang: Lang) = {
+    play.api.cache.Cache.set(etagKey(identifier), null, 1)
   }
+
+  private def etag(identifier: String)(implicit lang: Lang): String = {
+    play.api.cache.Cache.getOrElse(etagKey(identifier))(Codecs.sha1(new Date().toString))
+  }
+
+  private def etagKey(identifier: String)(implicit lang: Lang) = "cache-key:" + identifier + "-" + lang
 }

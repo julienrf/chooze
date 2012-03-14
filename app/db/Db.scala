@@ -19,8 +19,6 @@ object Db {
   
   def lastInsertedId(implicit s: Session) = Query(SimpleFunction.nullary[Long]("scope_identity")).firstOption
   
-  def NOW = new Timestamp(new Date().getTime)
-  
   object Poll {
 
     // FIXME Use Validation instead of Option? We definitely have two distinct kinds of errors: persistence and logic errors. I’d like to not mix them.
@@ -28,7 +26,7 @@ object Db {
       if (alternatives.size < 2) {
         None
       } else {
-        Polls.noId.insert(name, slug, description, NOW)
+        Polls.noId.insert(name, slug, description)
         val maybePollId = lastInsertedId
         for {
           pollId <- maybePollId
@@ -45,9 +43,9 @@ object Db {
         poll <- Polls if poll.slug === slug
         alternative <- Alternatives if alternative.pollId === poll.id
       } yield {
-        poll.id ~ poll.name ~ poll.slug ~ poll.description ~ poll.lastModified ~ alternative.id ~ alternative.name
+        poll.id ~ poll.name ~ poll.slug ~ poll.description ~ alternative.id ~ alternative.name
       }).list map {
-        case (pId, pName, pSlug, pDescr, pLastModif, aId, aName) => ((pId, pName, pSlug, pDescr, pLastModif), (aId, aName))
+        case (pId, pName, pSlug, pDescr, aId, aName) => ((pId, pName, pSlug, pDescr), (aId, aName))
       }
       rows.groupBy(_._1).mapValues { r => r.map(_._2) }.headOption map { case (p, as) =>
         val alternatives = as map { a => models.Alternative(a._1, a._2) }
@@ -61,7 +59,7 @@ object Db {
           val notes = ns map { n => models.Note(n._1, alternatives.find(_.id == n._4).get, n._3) }
           models.Vote(v._1, v._2, notes)
         }.toSeq
-        models.Poll(p._1, p._2, p._3, p._4, alternatives, votes, p._5)
+        models.Poll(p._1, p._2, p._3, p._4, alternatives, votes)
       }
     }
 
@@ -77,23 +75,6 @@ object Db {
      */
     def slug(id: Long): Option[String] = db withSession { implicit s: Session =>
       (for (poll <- Polls if poll.id === id) yield poll.slug).firstOption
-    }
-
-    /**
-     * @param slug Slug of the Poll to find
-     * @return the last modification date of the Poll
-     */
-    def lastModified(slug: String): Option[Date] = db withSession { implicit s: Session =>
-      (for (poll <- Polls if poll.slug === slug) yield poll.lastModified).firstOption
-    }
-
-    /**
-     * Update the last modified date of a Poll
-     * @param id Poll id
-     * @param lastModified New lastModified value
-     */
-    def modified(id: Long, lastModified: Timestamp) = db withSession { implicit s: Session =>
-      (for (poll <- Polls if poll.id === id) yield poll.lastModified).update(lastModified)
     }
   }
   
@@ -125,11 +106,11 @@ object Db {
       Votes.noId.insert(user, pollId)
       val maybeVoteId = lastInsertedId
       
-      for (voteId <- maybeVoteId) {
-        for ((alternativeId, note) <- notes) {
-          Note.create(voteId, note, alternativeId)
-        }
-        Poll.modified(pollId, NOW)
+      for {
+        voteId <- maybeVoteId
+        (alternativeId, note) <- notes
+      } {
+        Note.create(voteId, note, alternativeId)
       }
       
       maybeVoteId
@@ -139,8 +120,6 @@ object Db {
   object Note {
     def create(voteId: Long, note: Int, alternativeId: Long): Option[Long] = db withSession { implicit s: Session =>
       Notes.noId.insert(voteId, note, alternativeId)
-      // I should mark the poll as modified but I *know* this Note.create method will only be called from Vote.create, which calls Poll.modified.
-      // Nevertheless, I’d like to not entangle persistence and business rules…
       lastInsertedId
     }
   }
