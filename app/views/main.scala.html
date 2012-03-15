@@ -1,5 +1,5 @@
 @(title: String, moreHead: Html = Html(""))(content: Html)(implicit n: Option[Notification], l: Lang)
 
 @layout(title, moreHead) {
-  <article>@content</article>
+  <div class="content">@content</div>
 }
