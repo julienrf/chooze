@@ -21,7 +21,7 @@
 
       <div id="summary">
         @for((alternative, score) <- poll.results) {
-          <div style="background: -webkit-linear-gradient(left, #F7F8F8, #627992 @(score)%, #FFF @(score)%, #FFF); max-width: 40em;">
+          <div style="background: -webkit-linear-gradient(left, #F2F2F2, #36B6BD @(score)%, #FFF @(score)%, #FFF); max-width: 40em;">
             <div style="font-size: @(8 + score * (64 - 8) / 100)px;">@alternative.name</div>
           </div>
         }
@@ -37,14 +37,14 @@
               <tr>
                 <td>@vote.user</td>
                 @for(note <- vote.notes) {
-                  <td style="font-weight: @((1 + note.value * (9 - 1) / 100) * 100); background-color: hsla(211, 18.8%, @(47.8 + (100 - note.value) * (100 - 47.8) / 100)%, 0.4)">@(note.value)%</td>
+                  <td style="font-weight: @((1 + note.value * (9 - 1) / 100) * 100); background-color: hsla(183, 56%, @(48 + (100 - note.value) * (100 - 48) / 100)%, 0.4)">@(note.value)%</td>
                 }
               </tr>
             }
             <tr>
               <td>@Messages("mean")</td>
               @for(a <- poll.alternatives; (aa, score) <- poll.results if aa == a) {
-                <td style="font-weight: @((1 + score * (9 - 1) / 100) * 100); background-color: hsla(211, 18.8%, @(47.8 + (100 - score) * (100 - 47.8) / 100)%, 0.4)">@(score)%</td>
+                <td style="font-weight: @((1 + score * (9 - 1) / 100) * 100); background-color: hsla(183, 56%, @(48 + (100 - score) * (100 - 48) / 100)%, 0.4)">@(score)%</td>
               }
             </tr>
           </table>
