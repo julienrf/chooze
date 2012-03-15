@@ -8,12 +8,14 @@ object Db {
   import play.api.db.DB
   import org.scalaquery.session.{Session, Database}
   import play.api.Play.current
-  import org.scalaquery.ql.extended.H2Driver.Implicit._
   import org.scalaquery.ql.TypeMapper._
   import org.scalaquery.ql._
   import Schema._
   import java.sql.Timestamp
   import java.util.Date
+
+  val driver = if (play.Play.isDev()) extended.H2Driver.Implicit else extended.PostgresDriver.Implicit
+  import driver._
   
   val db = Database.forDataSource(DB.getDataSource())
   

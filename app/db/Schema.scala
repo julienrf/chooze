@@ -2,7 +2,6 @@ package db
 
 object Schema {
   import org.scalaquery.ql.extended.{ExtendedTable => Table}
-  import org.scalaquery.ql.extended.H2Driver.Implicit._
   import org.scalaquery.ql.TypeMapper._
   import org.scalaquery.ql._
   import java.sql.Timestamp
