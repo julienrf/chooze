@@ -14,7 +14,7 @@ object Db {
   import java.sql.Timestamp
   import java.util.Date
 
-  val driver = if (play.Play.isDev()) extended.H2Driver.Implicit else extended.PostgresDriver.Implicit
+  val driver = if (play.Play.isDev()) extended.H2Driver.Implicit else extended.MySQLDriver.Implicit
   import driver._
   
   val db = Database.forDataSource(DB.getDataSource())
