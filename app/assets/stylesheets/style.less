@@ -1,25 +1,26 @@
 @import "_normalize.less";
+@import "_colors.less";
 
 
 // --- Common layout
 
 body {
   margin: 0;
-  color: #31302D;
+  color: @black;
 }
 
 body > header {
   padding: 1em;
-  background-color: #31302D;
-  color: #F2F2F2;
+  background-color: @black;
+  color: @white;
   
   a {
-    color: #F2F2F2;
+    color: @white;
   }
 }
 
 body > article {
-  background-color: #F2F2F2;
+  background-color: @white;
 }
 
 body > article > div.content {
@@ -30,7 +31,7 @@ body > article > div.content {
 
 body > footer {
   padding: 1em;
-  background-color: #F2F2F2;
+  background-color: @white;
   font-size: small;
   text-align: center;
 }
@@ -93,16 +94,16 @@ form {
 
   .error {
     font-weight: bold;
-    color: #BD4C36;
+    color: saturate(@red, 15%);
   }
 }
 
 .notification {
   > .success {
-    background-color: #36B6BD;
+    background-color: @blue;
   }
   > .error {
-    background-color: #BD4C36;
+    background-color: @red;
   }
 }
 

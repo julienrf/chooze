@@ -1,3 +1,4 @@
+@import "_colors.less";
 
 .tab-widget {
 
@@ -21,12 +22,12 @@
     text-align: center;
     
     &:nth-child(odd) {
-      background-color: rgba(54, 182, 189, 0.1)
+      background-color: hsla(hue(@blue), saturation(@blue), lightness(@blue), 0.1);
     }
   }
   
   tr:nth-child(odd) {
-    background-color: rgba(54, 182, 189, 0.05);
+    background-color: hsla(hue(@blue), saturation(@blue), lightness(@blue), 0.05);
   }
   
   td:first-child {
