@@ -106,7 +106,7 @@ object Chooze extends Controller with Cache with Notifications with CacheNotific
   }
 
   def result(slug: String) = Action { implicit request =>
-    Cached(slug) {
+    Cached {
       Service.findPoll(slug) match {
         case Some(poll) => Ok(views.html.result(poll))
         case None       => NotFound(views.html.notFound())
