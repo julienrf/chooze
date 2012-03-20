@@ -21,7 +21,7 @@
 
       <div id="summary">
         @for((alternative, score) <- poll.results) {
-          <div style="background: -webkit-linear-gradient(left, #F2F2F2, #36B6BD @(score)%, #FFF @(score)%, #FFF); max-width: 40em;">
+          <div style="background: -webkit-linear-gradient(left, #F2F2F0, #36B6BD @(score)%, #F2F2F0 @(score)%, #F2F2F0); max-width: 40em;">
             <div style="font-size: @(8 + score * (64 - 8) / 100)px;">@alternative.name</div>
           </div>
         }

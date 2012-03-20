@@ -7,15 +7,17 @@
 body {
   margin: 0;
   color: @black;
+  background-color: darken(@white, 15%);
 }
 
 body > header {
-  padding: 1em;
+  padding: .5em 1em;
   background-color: @black;
   color: @white;
   
   a {
     color: @white;
+    text-shadow: none;
   }
 }
 
@@ -31,7 +33,7 @@ body > article > div.content {
 
 body > footer {
   padding: 1em;
-  background-color: @white;
+  background-color: darken(@white, 15%);
   font-size: small;
   text-align: center;
 }
@@ -41,6 +43,9 @@ body > footer {
 
 a {
   text-decoration: none;
+  color: @blue;
+  font-weight: bold;
+  text-shadow: 1px 1px 0 white;
 }
 a:hover {
   text-decoration: underline;
@@ -48,43 +53,43 @@ a:hover {
 
 .button {
   cursor: pointer;
-  background-color: #AAA;
-  border: black thin solid;
-  padding: 2px;
+  background-color: @black;
+  padding: 0px 2px;
+  color: @white;
 }
 
 form {
   .field {
   
-    border: 1px solid #888;
-    border-radius: 5px;
-    margin: 0.5em;
-    padding: 1em;
-    background-color: #EEE;
+    border-radius: 4px;
+    margin: 0.8em;
+    padding: .8em;
+    background-color: darken(@white, 3%);
   
-    > .hint {
-      float: left;
-      width: 12em;
-      color: #444;
-    }
-    
-    > .input {
-      padding-left: 13em;
-      
-      input[type=text], textarea {
-        width: 100%;
+    > table {
+      width: 100%;
+      > tbody > tr {
+        > .hint {
+          width: 25%;
+          color: lighten(@black, 10%);
+        }
+        
+        > .input {
+        
+          padding-left: 1em;
+          
+          input[type=text], textarea {
+            width: 100%;
+          }
+          
+          // Pourquoi ça marche pas ?
+          .required::before {
+            content: "*";
+            color: @red;
+          }
+        
+        }
       }
-      
-      // Pourquoi ça marche pas ?
-      .required::before {
-        content: "*";
-      }
-      
-    }
-    
-    > .input:after {
-      content: " ";
-      clear: both;
     }
   }
   
@@ -99,11 +104,14 @@ form {
 }
 
 .notification {
-  > .success {
-    background-color: @blue;
-  }
-  > .error {
-    background-color: @red;
+  > .content {
+    padding: .2em;
+    &.success {
+      background-color: @blue;
+    }
+    &.error {
+      background-color: @red;
+    }
   }
 }
 

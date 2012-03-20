@@ -6,8 +6,10 @@
 
 @alternativeField(alternative: Field) = {
   <div class="alternative">
-    @form.inputText(alternative, Messages("poll.alternative"))
-    <span class="button remove-alternative" title="@Messages("remove")">X</span>
+    <div style="display: inline-block; width: 95%">
+      @form.inputText(alternative, Messages("poll.alternative"))
+    </div>
+    <span class="button remove-alternative" title="@Messages("remove")">×</span>
     @form.errors(alternative)
   </div>
 }
@@ -64,7 +66,7 @@
         var alternative = $(alternativeTmpl.html());
         alternatives.append(alternative);
         renumber();
-        alternative.children('input').focus();
+        alternative.find('input').focus();
         return false
       })
   

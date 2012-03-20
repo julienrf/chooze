@@ -1,5 +1,11 @@
 @(field: Field, hint: String)(f: Field => Html)
 <div class="field">
-  <div class="hint">@hint</div>
-  <div class="input">@f(field)</div>
+  <table>
+    <tbody>
+      <tr>
+        <td class="hint">@hint</td>
+        <td class="input">@f(field)</td>
+      </tr>
+    </tbody>
+  </table>
 </div>

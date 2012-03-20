@@ -12,7 +12,7 @@ object notification {
       case Error => "error"
     }
     Html(
-        """<span class="notification"> - <span class="%s">%s <span class="button" title="%s">×</span></span></span>"""
+        """<span class="notification"> - <span class="content %s">%s <span class="button" title="%s">×</span></span></span>"""
             .format(kindClass, HtmlFormat.escape(notification.message), Messages("hide"))
     )
   }
