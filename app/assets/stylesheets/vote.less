@@ -1,3 +1,5 @@
+@import "_colors.less";
+
 form .input .alternative {
   margin-bottom: 1em;
   > .name {
@@ -6,6 +8,10 @@ form .input .alternative {
   }
   > input[type=range] {
     display: inline-block;
-    width: 16em;
+    width: 52%;
+  }
+  
+  > .value {
+    color: lighten(@black, 50%);
   }
 }

@@ -49,6 +49,7 @@ a {
 }
 a:hover {
   text-decoration: underline;
+  color: @red;
 }
 
 .button {
@@ -58,13 +59,17 @@ a:hover {
   color: @white;
 }
 
+.overlay {
+  background-color: @overlay;
+  border-radius: 4px;
+  padding: .8em;
+}
+
 form {
   .field {
   
-    border-radius: 4px;
+    .overlay;
     margin: 0.8em;
-    padding: .8em;
-    background-color: darken(@white, 3%);
   
     > table {
       width: 100%;
@@ -117,4 +122,39 @@ form {
 
 form.change-locale {
   display: inline;
+}
+
+.tab-widget {
+
+  > .tabs {
+    font-size: 1.4em;
+    > a {
+      background-color: @overlay;
+      border-top-left-radius: 4px;
+      border-top-right-radius: 4px;
+      padding: 5px;
+      color: lighten(@black, 10%);
+      font-weight: normal;
+      
+      &:hover {
+        color: @red;
+      }
+    }
+  }
+
+  > .containers {
+
+    .overlay;
+
+    > div {
+      display: none;
+
+      &:target {
+        display: block;
+      }
+    }
+  }
+}
+
+.tab-widget {
 }

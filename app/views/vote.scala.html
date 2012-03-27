@@ -21,7 +21,9 @@
       @helper.repeat(notes) { note =>
         <div class="alternative">
           <span class="name">@poll.alternative(note("alternative").value.get.toLong).get.name</span>
+          <span class="value">@Messages("no")</span>
           <input type="range" name="@note("value").name" value="@note("value").value" min="0" max="100" step="1" />
+          <span class="value">@Messages("yes")</span>
           <input type="hidden" name="@note("alternative").name" value="@note("alternative").value" />
         </div>
       }
