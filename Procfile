@@ -1,1 +1,1 @@
-web: target/start -Dhttp.port=$PORT -DapplyEvolutions.default=true -Ddb.default.driver=org.gjt.mm.mysql.Driver -Ddb.default.url=$CLEARDB_DATABASE_URL -Ddb.default.pool=10
+web: target/start -Dhttp.port=$PORT -DapplyEvolutions.default=true
