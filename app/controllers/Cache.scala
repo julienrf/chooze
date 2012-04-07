@@ -45,7 +45,7 @@ trait Cache {
     }
   }
 
-  private def getOrCreateEtag(identifier: String)(implicit lang: Lang): String = {
+  private def getOrCreateEtag(identifier: String)(implicit lang: Lang): String = synchronized {
     PlayCache.getOrElse(etagKey(identifier))(Codecs.sha1(UUID.randomUUID().toString))
   }
 
