@@ -39,24 +39,20 @@ object Db {
         maybePollId
       }
     }
-    
+
     def find(slug: String): Option[models.Poll] = db withSession { implicit s: Session =>
       val rows = (for {
         poll <- Polls if poll.slug === slug
         alternative <- Alternatives if alternative.pollId === poll.id
       } yield {
-        poll.id ~ poll.name ~ poll.slug ~ poll.description ~ alternative.id ~ alternative.name
-      }).list map {
-        case (pId, pName, pSlug, pDescr, aId, aName) => ((pId, pName, pSlug, pDescr), (aId, aName))
-      }
+        (poll.*, (alternative.id, alternative.name))
+      }).list
       rows.groupBy(_._1).mapValues { r => r.map(_._2) }.headOption map { case (p, as) =>
         val alternatives = as map { a => models.Alternative(a._1, a._2) }
         val rows = (for {
           vote <- Votes if vote.pollId === p._1
           note <- Notes if note.voteId === vote.id
-        } yield vote.id ~ vote.user ~ note.id ~ note.voteId ~ note.value ~ note.alternativeId).list map {
-          case (vId, vUser, nId, nVoteId, nValue, nAltId) => ((vId, vUser), (nId, nVoteId, nValue, nAltId))
-        }
+        } yield ((vote.id, vote.user), note.*)).list
         val votes = rows.groupBy(_._1).mapValues { r => r.map (_._2) }.map { case (v, ns) =>
           val notes = ns map { n => models.Note(n._1, alternatives.find(_.id == n._4).get, n._3) }
           models.Vote(v._1, v._2, notes)
