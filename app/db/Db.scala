@@ -13,10 +13,8 @@ object Db {
   import Schema._
   import java.sql.Timestamp
   import java.util.Date
+  import extended.PostgresDriver.Implicit._
 
-  val driver = if (true/*play.Play.isDev()*/) extended.H2Driver.Implicit else extended.MySQLDriver.Implicit
-  import driver._
-  
   val db = Database.forDataSource(DB.getDataSource())
   
   def lastInsertedId(implicit s: Session) = Query(SimpleFunction.nullary[Long]("scope_identity")).firstOption
