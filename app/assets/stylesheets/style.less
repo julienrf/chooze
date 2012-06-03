@@ -82,15 +82,17 @@ form {
         > .input {
         
           padding-left: 1em;
+          position: relative;
           
           input[type=text], textarea {
             width: 100%;
           }
           
-          // Pourquoi ça marche pas ?
           .required::before {
             content: "*";
             color: @red;
+            position: absolute;
+            left: .4em;
           }
         
         }
