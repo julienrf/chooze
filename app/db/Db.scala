@@ -17,7 +17,7 @@ object Db {
 
   val db = Database.forDataSource(DB.getDataSource())
   
-  def lastInsertedId(implicit s: Session) = Query(SimpleFunction.nullary[Long]("scope_identity")).firstOption
+  def lastInsertedId(implicit s: Session) = Query(SimpleFunction.nullary[Long]("LASTVAL")).firstOption
   
   object Poll {
 

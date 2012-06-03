@@ -6,36 +6,36 @@ object Schema {
   import org.scalaquery.ql._
   import java.sql.Timestamp
 
-  val Alternatives = new Table[(Long, String, Long)]("ALTERNATIVES") {
-    def id =     column[Long  ]("ID")
-    def name =   column[String]("NAME")
-    def pollId = column[Long  ]("POLL_ID")
+  val Alternatives = new Table[(Long, String, Long)]("alternatives") {
+    def id =     column[Long  ]("id")
+    def name =   column[String]("name")
+    def pollId = column[Long  ]("poll_id")
     def * = id ~ name ~ pollId
     def noId = name ~ pollId
   }
 
-  val Notes = new Table[(Long, Long, Int, Long)]("NOTES") {
-    def id =            column[Long]("ID")
-    def voteId =        column[Long]("VOTE_ID")
-    def value =         column[Int ]("VALUE")
-    def alternativeId = column[Long]("ALTERNATIVE_ID")
+  val Notes = new Table[(Long, Long, Int, Long)]("notes") {
+    def id =            column[Long]("id")
+    def voteId =        column[Long]("vote_id")
+    def value =         column[Int ]("value")
+    def alternativeId = column[Long]("alternative_id")
     def * = id ~ voteId ~ value ~ alternativeId
     def noId = voteId ~ value ~ alternativeId
   }
 
-  val Votes = new Table[(Long, String, Long)]("VOTES") {
-    def id =     column[Long  ]("ID")
-    def user =   column[String]("USER")
-    def pollId = column[Long  ]("POLL_ID")
+  val Votes = new Table[(Long, String, Long)]("votes") {
+    def id =     column[Long  ]("id")
+    def user =   column[String]("username")
+    def pollId = column[Long  ]("poll_id")
     def * = id ~ user ~ pollId
     def noId = user ~ pollId
   }
 
-  val Polls = new Table[(Long, String, String, String)]("POLLS") {
-    def id =          column[Long  ]("ID")
-    def name =        column[String]("NAME")
-    def slug =        column[String]("SLUG")
-    def description = column[String]("DESCRIPTION")
+  val Polls = new Table[(Long, String, String, String)]("polls") {
+    def id =          column[Long  ]("id")
+    def name =        column[String]("name")
+    def slug =        column[String]("slug")
+    def description = column[String]("description")
     def * = id ~ name ~ slug ~ description
     def noId = name ~ slug ~ description
   }
