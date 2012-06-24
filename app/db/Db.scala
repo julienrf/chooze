@@ -6,6 +6,7 @@ package db
 object Db {
   
   import play.api.db.DB
+  import play.api.Logger
   import org.scalaquery.session.{Session, Database}
   import play.api.Play.current
   import org.scalaquery.ql.TypeMapper._
@@ -26,6 +27,7 @@ object Db {
       if (alternatives.size < 2) {
         None
       } else {
+        Logger.info("Creating poll “%s”".format(name))
         Polls.noId.insert(name, slug, description)
         val maybePollId = lastInsertedId
         for {
@@ -99,6 +101,7 @@ object Db {
      */
     // TODO Check that referenced alternatives do exist and belong to the poll
     def create(pollId: Long, user: String, notes: Seq[(Long, Int)]): Option[Long] = db withSession { implicit s: Session =>
+      Logger.info("Creating vote from user “%s” for poll [%s]".format(user, pollId))
       Votes.noId.insert(user, pollId)
       val maybeVoteId = lastInsertedId
       
