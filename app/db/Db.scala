@@ -7,14 +7,9 @@ object Db {
   
   import play.api.db.DB
   import play.api.Logger
-  import org.scalaquery.session.{Session, Database}
   import play.api.Play.current
-  import org.scalaquery.ql.TypeMapper._
-  import org.scalaquery.ql._
   import Schema._
-  import java.sql.Timestamp
-  import java.util.Date
-  import extended.PostgresDriver.Implicit._
+  import scala.slick.driver.PostgresDriver.simple._
 
   val db = Database.forDataSource(DB.getDataSource())
   

@@ -3,9 +3,5 @@ project/project
 project/target
 target
 tmp
-.history
-.classpath
-.target/
-.settings/
-.project
-.cache
+.idea/
+.idea_modules/

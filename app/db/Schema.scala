@@ -1,12 +1,9 @@
 package db
 
 object Schema {
-  import org.scalaquery.ql.extended.{ExtendedTable => Table}
-  import org.scalaquery.ql.TypeMapper._
-  import org.scalaquery.ql._
-  import java.sql.Timestamp
+  import scala.slick.driver.PostgresDriver.simple._
 
-  val Alternatives = new Table[(Long, String, Long)]("alternatives") {
+  object Alternatives extends Table[(Long, String, Long)]("alternatives") {
     def id =     column[Long  ]("id")
     def name =   column[String]("name")
     def pollId = column[Long  ]("poll_id")
@@ -14,7 +11,7 @@ object Schema {
     def noId = name ~ pollId
   }
 
-  val Notes = new Table[(Long, Long, Int, Long)]("notes") {
+  object Notes extends Table[(Long, Long, Int, Long)]("notes") {
     def id =            column[Long]("id")
     def voteId =        column[Long]("vote_id")
     def value =         column[Int ]("value")
@@ -23,7 +20,7 @@ object Schema {
     def noId = voteId ~ value ~ alternativeId
   }
 
-  val Votes = new Table[(Long, String, Long)]("votes") {
+  object Votes extends Table[(Long, String, Long)]("votes") {
     def id =     column[Long  ]("id")
     def user =   column[String]("username")
     def pollId = column[Long  ]("poll_id")
@@ -31,7 +28,7 @@ object Schema {
     def noId = user ~ pollId
   }
 
-  val Polls = new Table[(Long, String, String, String)]("polls") {
+  object Polls extends Table[(Long, String, String, String)]("polls") {
     def id =          column[Long  ]("id")
     def name =        column[String]("name")
     def slug =        column[String]("slug")

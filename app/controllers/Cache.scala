@@ -6,7 +6,6 @@ import play.api.http.HeaderNames.{IF_NONE_MATCH, ETAG}
 import play.api.libs.Codecs
 import play.api.Play.current
 import play.api.Mode
-import java.util.Date
 import play.api.Logger
 import play.api.i18n.Lang
 import play.api.cache.{Cache => PlayCache}

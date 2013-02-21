@@ -1,6 +1,6 @@
 import sbt._
 import Keys._
-import PlayProject._
+import play.Project._
 
 object ApplicationBuild extends Build {
 
@@ -8,12 +8,14 @@ object ApplicationBuild extends Build {
     val appVersion      = "1.0"
 
     val appDependencies = Seq(
-      "org.scalaquery" % "scalaquery_2.9.1-1" % "0.10.0-M1",
-      "postgresql" % "postgresql" % "9.1-901-1.jdbc4"
+      "com.typesafe.slick" %% "slick" % "1.0.0",
+      "org.slf4j" % "slf4j-nop" % "1.6.4",
+      "postgresql" % "postgresql" % "9.1-901-1.jdbc4",
+      jdbc
     )
 
-    val main = PlayProject(appName, appVersion, appDependencies, mainLang = SCALA).settings(
-      // Add your own project settings here      
+    val main = play.Project(appName, appVersion, appDependencies).settings(
+      scalacOptions += "-feature"
     )
 
 }

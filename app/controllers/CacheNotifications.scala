@@ -2,7 +2,6 @@ package controllers
 
 import play.api.mvc.{RequestHeader, PlainResult}
 import play.api.i18n.Lang
-import java.util.Date
 
 trait CacheNotifications extends Cache {
   this: Notifications =>

@@ -1,11 +1,12 @@
 package controllers
 
-import play.api.mvc.{Controller, RequestHeader, PlainResult}
+import play.api.mvc.{WithHeaders, Result, Controller, RequestHeader}
 
 case class Notification(message: String, kind: Notification.Kind)
 
-trait Notifications {
-  self: Controller =>
+trait Notifications { self: Controller =>
+
+  import scala.language.implicitConversions
 
   private val NOTIFICATION_KEY = "notification"
   
@@ -13,10 +14,8 @@ trait Notifications {
     for (message <- flash.get(NOTIFICATION_KEY)) yield Notification(message, Notification.Success)
   }
 
-  // TODO I’d like to return a T instead of a PlainResult
-  // TODO Handle notification kind
-  implicit def resultNotifying[T <: PlainResult](result: T) = new {
-    def notifying(message: String, kind: Notification.Kind): PlainResult = {
+  implicit class NotifyingOps[A <: Result](result: WithHeaders[A]) {
+    def notifying(message: String, kind: Notification.Kind): A = {
       result.flashing(NOTIFICATION_KEY -> message)
     }
   }
