@@ -53,28 +53,67 @@
 
   <script type="text/javascript" charset="utf-8">
     (function() {
-      var alternatives = $('.alternatives'),
-          alternativeTmpl = $('.alternative-template');
-      
-      $('form').on('click', '.button.remove-alternative', function (e) {
-        $(this).closest('.alternative').remove()
-        renumber()
-        return false
-      });
-  
-      $('.add-alternative').on('click', function (e) {
-        var alternative = $(alternativeTmpl.html());
-        alternatives.append(alternative);
-        renumber();
-        alternative.find('input').focus();
-        return false
-      })
-  
-      var renumber = function () {
-        alternatives.find('input').each(function (i) {
-          $(this).attr('name', $(this).attr('name').replace(/alternatives\[.+\]/g, 'alternatives[' + i + ']'))
-        })
+      var alternativeTmpl = function (i) {
+        var div = document.createElement('div');
+        div.className = 'alternative';
+        var inner = document.createElement('div');
+        inner.style.display = 'inline-block';
+        inner.style.width = '95%';
+        var input = document.createElement('input');
+        input.type = 'text';
+        input.name = 'alternatives[' + i + ']';
+        input.value = '';
+        input.className = 'required';
+        input.placeholder = @Html(play.api.libs.json.Json.toJson(Messages("poll.alternative")).toString);
+        var span = document.createElement('span');
+        span.className = 'button remove-alternative';
+        span.title = @Html(play.api.libs.json.Json.toJson(Messages("remove")).toString);
+        span.textContent = '×';
+        inner.appendChild(input);
+        div.appendChild(inner);
+        div.appendChild(span);
+        return div
       };
+
+      var form = document.querySelector('form');
+      if (form !== null) {
+        form.addEventListener('click', function (e) {
+          if (e.target.className === 'button remove-alternative') {
+            var a = (function loop (el) {
+              var p = el.parentNode;
+              if (p === null) return null; else {
+                return (p.className === 'alternative') ? p : loop(p)
+              }
+            })(e.target);
+            a.parentNode.removeChild(a);
+            renumber();
+          }
+        });
+      }
+
+      var alternatives = document.querySelector('.alternatives');
+      if (alternatives !== null) {
+
+        var addBtn = document.querySelector('.add-alternative');
+        if (addBtn !== null) {
+          addBtn.addEventListener('click', function () {
+            var alternative = alternativeTmpl(alternatives.querySelectorAll('.alternative').length);
+            alternatives.appendChild(alternative);
+            var input = alternative.querySelector('input');
+            if (input !== null) {
+              input.focus();
+            }
+          });
+        }
+
+        var renumber = function () {
+          var inputs = alternatives.querySelectorAll('input');
+          for (var i = 0, l = inputs.length ; i < l ; i++) {
+            var input = inputs.item(i);
+            input.name = input.name.replace(/alternatives\[.+\]/g, 'alternatives[' + i + ']');
+          }
+        }
+      }
     })();
   </script>
 }

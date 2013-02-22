@@ -1,5 +1,8 @@
 define(function () {
-  $('form.change-locale').change(function () {
-    $(this).submit();
-  });
+  var form = document.querySelector('form.change-locale');
+  if (form !== null) {
+    form.addEventListener('change', function () {
+      form.submit();
+    });
+  }
 });

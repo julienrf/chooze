@@ -41,8 +41,25 @@
   }
   
   <script type="text/javascript">
-    $('form').on('change', '.alternative > input[type=range]', function () {
-      $(this).prev('.name').css('font-weight', (1 + this.value * (9 - 1) / 100) * 100);
-    });
+    (function () {
+      var form = document.querySelector('form');
+      if (form !== null) {
+        form.addEventListener('change', function (e) {
+          var inputs = form.querySelectorAll('.alternative > input[type=range]');
+          for (var i = 0, l = inputs.length ; i < l ; i++) {
+            if (inputs.item(i) === e.target) {
+              var n = (function loop(el) {
+                if (el === null) return null;
+                if (el.className === 'name') return el;
+                return loop(el.previousSibling)
+              })(e.target.previousSibling);
+              if (n !== null) {
+                n.style.fontWeight = (1 + e.target.value * (9 - 1) / 100) * 100;
+              }
+            }
+          }
+        });
+      }
+    })();
   </script>
 }
