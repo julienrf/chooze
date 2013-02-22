@@ -15,7 +15,8 @@ object ApplicationBuild extends Build {
     )
 
     val main = play.Project(appName, appVersion, appDependencies).settings(
-      scalacOptions += "-feature"
+      scalacOptions += "-feature",
+      requireJs += "chooze.js"
     )
 
 }

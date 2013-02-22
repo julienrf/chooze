@@ -1,3 +1,1 @@
-require('notification')
-require('anti-flood')
-require('locale')
+define(['notification', 'anti-flood', 'locale'], function () { });
