@@ -34,6 +34,8 @@
           }
         </footer>
 
-        @helper.requireJs(module = routes.Assets.at("javascripts/chooze").url, core = routes.Assets.at("javascripts/require.js").url)
+        <script type="text/javascript">
+            @Html(javascripts.JavaScripts.chooze)
+        </script>
     </body>
 </html>

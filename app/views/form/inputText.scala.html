@@ -1,2 +1,0 @@
-@(field: Field, placeholder: String)
-<input type="text" name="@field.name" value="@field.value" @if(field.constraints.find(_._1 == "constraint.required")) { class="required" } placeholder="@placeholder" />

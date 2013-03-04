@@ -1,1 +1,0 @@
-define(['notification', 'anti-flood', 'locale'], function () { });

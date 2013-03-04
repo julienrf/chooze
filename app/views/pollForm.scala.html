@@ -4,16 +4,6 @@
   <link rel="stylesheet" href="@routes.Assets.at("stylesheets/create.min.css")" />
 }
 
-@alternativeField(alternative: Field) = {
-  <div class="alternative">
-    <div style="display: inline-block; width: 95%">
-      @form.inputText(alternative, Messages("poll.alternative"))
-    </div>
-    <span class="button remove-alternative" title="@Messages("remove")">&times;</span>
-    @form.errors(alternative)
-  </div>
-}
-
 @main(Messages("create.page.title"), moreHead) {
 
   <h1>@Messages("poll.create")</h1>
@@ -23,28 +13,24 @@
     @AuthenticationToken.hiddenField
 
     @form.field(poll("name"), Messages("poll.name.hint")) { name =>
-      @form.inputText(name, Messages("poll.name"))
-      @form.errors(name)
+      @util.inputText(name, Messages("poll.name"))
+      @forest.form.errors(util.errors(name))
     }
     
     @form.field(poll("description"), Messages("poll.description.hint")) { description =>
       @form.textarea(description, Messages("poll.description"), 'rows->5, 'cols->50)
-      @form.errors(description)
+      @forest.form.errors(util.errors(description))
     }
     
     @form.field(poll("alternatives"), Messages("poll.alternatives.hint")) { alternatives =>
       <div class="alternatives">
         @helper.repeat(alternatives, min = 2) { alternative =>
-          @alternativeField(alternative)
+          @forest.alternativeTmpl(alternative.name, alternative.value.getOrElse(""), true, Messages("poll.alternative"), Messages("remove"), util.errors(alternative))
         }
       </div>
       <button type=button class="add-alternative">@Messages("poll.alternatives.add")</button>
-      @form.errors(alternatives)
+      @forest.form.errors(util.errors(alternatives))
     }
-
-    <div class="alternative-template">
-      @alternativeField(poll("alternatives[x]"))
-    </div>
 
     <div class="submit">
       <input type="submit" value="@Messages("create")">
@@ -53,67 +39,8 @@
 
   <script type="text/javascript" charset="utf-8">
     (function() {
-      var alternativeTmpl = function (i) {
-        var div = document.createElement('div');
-        div.className = 'alternative';
-        var inner = document.createElement('div');
-        inner.style.display = 'inline-block';
-        inner.style.width = '95%';
-        var input = document.createElement('input');
-        input.type = 'text';
-        input.name = 'alternatives[' + i + ']';
-        input.value = '';
-        input.className = 'required';
-        input.placeholder = @Html(play.api.libs.json.Json.toJson(Messages("poll.alternative")).toString);
-        var span = document.createElement('span');
-        span.className = 'button remove-alternative';
-        span.title = @Html(play.api.libs.json.Json.toJson(Messages("remove")).toString);
-        span.textContent = '×';
-        inner.appendChild(input);
-        div.appendChild(inner);
-        div.appendChild(span);
-        return div
-      };
-
-      var form = document.querySelector('form');
-      if (form !== null) {
-        form.addEventListener('click', function (e) {
-          if (e.target.className === 'button remove-alternative') {
-            var a = (function loop (el) {
-              var p = el.parentNode;
-              if (p === null) return null; else {
-                return (p.className === 'alternative') ? p : loop(p)
-              }
-            })(e.target);
-            a.parentNode.removeChild(a);
-            renumber();
-          }
-        });
-      }
-
-      var alternatives = document.querySelector('.alternatives');
-      if (alternatives !== null) {
-
-        var addBtn = document.querySelector('.add-alternative');
-        if (addBtn !== null) {
-          addBtn.addEventListener('click', function () {
-            var alternative = alternativeTmpl(alternatives.querySelectorAll('.alternative').length);
-            alternatives.appendChild(alternative);
-            var input = alternative.querySelector('input');
-            if (input !== null) {
-              input.focus();
-            }
-          });
-        }
-
-        var renumber = function () {
-          var inputs = alternatives.querySelectorAll('input');
-          for (var i = 0, l = inputs.length ; i < l ; i++) {
-            var input = inputs.item(i);
-            input.name = input.name.replace(/alternatives\[.+\]/g, 'alternatives[' + i + ']');
-          }
-        }
-      }
+      @Html(javascripts.JavaScripts.pollForm)
+      pollForm('@Messages("poll.alternative")', '@Messages("remove")');
     })();
   </script>
 }
