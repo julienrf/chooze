@@ -1,3 +1,5 @@
+import com.google.common.collect.Lists
+import com.google.javascript.jscomp.{CommandLineRunner, CompilationLevel, CompilerOptions, JSSourceFile}
 import scala.js._
 import forest._
 import java.io._
@@ -12,6 +14,15 @@ object Generator extends App {
     val str = new StringWriter()
     f(new PrintWriter(str))
     str.toString()
+  }
+
+  def compress(source: String): String = {
+    val compiler = new com.google.javascript.jscomp.Compiler
+    val options = new CompilerOptions
+    CompilationLevel.SIMPLE_OPTIMIZATIONS.setOptionsForCompilationLevel(options)
+
+    compiler.compile(CommandLineRunner.getDefaultExterns(), Lists.newArrayList(JSSourceFile.fromCode("input.js", source)), options)
+    compiler.toSource
   }
 
   import virtualization.lms.internal.GenericCodegen
@@ -34,14 +45,13 @@ object Generator extends App {
       |
       |object JavaScripts {
       |
-      |  val chooze = ${"\"\"\"" + asString(out => gen.emitExecution(jsProg.chooze(), out)) + ";\"\"\""}
+      |  val chooze = ${"\"\"\"" + compress(asString(out => gen.emitExecution(jsProg.chooze(), out))) + "\"\"\""}
       |
-      |  val vote = ${"\"\"\"" + asString(out => gen.emitExecution(jsProg.vote(), out)) + ";\"\"\""}
+      |  val vote = ${"\"\"\"" + compress(asString(out => gen.emitExecution(jsProg.vote(), out))) + "\"\"\""}
       |
-      |  val pollForm = ${"\"\"\"" + asString(out => gen.emitSource2(jsProg.pollForm, "pollForm", out)) + "\"\"\""}
+      |  val pollForm = ${"\"\"\"" + compress(asString(out => gen.emitSource2(jsProg.pollForm, "pollForm", out))) + "\"\"\""}
       |
-      |}
-    """.stripMargin)
+      |}""".stripMargin)
   js.close()
 
   val scalaProg = new Views with ForestExp with JsScalaExpOpt
@@ -62,8 +72,6 @@ object Generator extends App {
       |    object inputText extends generated.InputText
       |    object errors extends generated.Errors
       |  }
-      |}
-      |
-    """.stripMargin)
+      |}""".stripMargin)
   forest.close()
 }

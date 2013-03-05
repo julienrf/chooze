@@ -82,5 +82,3 @@ x42
     object errors extends generated.Errors
   }
 }
-
-    

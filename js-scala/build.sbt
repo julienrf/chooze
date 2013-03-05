@@ -9,5 +9,6 @@ scalacOptions ++= Seq("-feature", "-deprecation", "-unchecked", "-Yvirtualize")
 libraryDependencies ++= Seq(
   "EPFL" %% "js-scala" % "0.3-SNAPSHOT",
   "js-scala" %% "forest" % "0.4-SNAPSHOT",
-  "js-scala" %% "react" % "0.1-SNAPSHOT"
+  "js-scala" %% "react" % "0.1-SNAPSHOT",
+  "com.google.javascript" % "closure-compiler" % "rr2079.1"
 )
