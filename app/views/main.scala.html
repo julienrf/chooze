@@ -1,5 +1,5 @@
-@(title: String, moreHead: Html = Html(""))(content: Html)(implicit n: Option[Notification], l: Lang)
+@(title: String, moreHead: Html = Html(""))(content: Html)(moreScripts: Html = Html(""))(implicit n: Option[Notification], l: Lang)
 
 @layout(title, moreHead) {
   <div class="content">@content</div>
-}
+}(moreScripts)

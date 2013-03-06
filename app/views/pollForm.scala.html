@@ -51,8 +51,10 @@
     </div>
   }
 
+} {
   <script type="text/javascript" charset="utf-8">
-    (function() {
+    require(['dom'], function (dom) {
+
       var alternativeTmpl = function (i) {
         var div = document.createElement('div');
         div.className = 'alternative';
@@ -79,13 +81,8 @@
       if (form !== null) {
         form.addEventListener('click', function (e) {
           if (e.target.className === 'button remove-alternative') {
-            var a = (function loop (el) {
-              var p = el.parentNode;
-              if (p === null) return null; else {
-                return (p.className === 'alternative') ? p : loop(p)
-              }
-            })(e.target);
-            a.parentNode.removeChild(a);
+            var a = dom.closest(e.target, function (_) { return _.className === 'alternative' });
+            dom.remove(a);
             renumber();
           }
         });
@@ -114,7 +111,7 @@
           }
         }
       }
-    })();
+    });
   </script>
   <script src="@routes.Assets.at("javascripts/benchmark.js")"></script>
 }

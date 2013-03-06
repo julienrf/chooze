@@ -1,14 +1,11 @@
-define(function () {
+define(['dom'], function (dom) {
   document.addEventListener('click', function (e) {
     if (e.target.classList.contains('button')) {
-      var notification = (function loop (el) {
-        var p = el.parentNode;
-        if (p === null) return null; else {
-          return p.classList.contains('notification') ? p : loop(p)
-        }
-      })(e.target);
+      var notification = dom.closest(e.target, function (_) {
+        return _.classList.contains('notification')
+      });
       if (notification !== null) {
-        notification.parentNode.removeChild(notification);
+        dom.remove(notification);
       }
     }
   });
