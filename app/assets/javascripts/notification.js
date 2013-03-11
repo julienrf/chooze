@@ -1,5 +1,5 @@
 define(function () {
-  $(document).on('click', '.notification .button', function () {
+  $(document).on('click', '.close-notification', function () {
     $(this).closest('.notification').remove();
   });
 });
