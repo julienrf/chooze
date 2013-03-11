@@ -1,12 +1,11 @@
 package javascripts
 
-import js.{JSDom, JS}
+import js.{DomReact, JSDom, JS}
 
-trait Notification extends JS with JSDom with ReactEvents {
+trait Notification extends JS with JSDom with DomReact {
 
   def handleNotifications() = for {
-    click <- eventsOf(Click, document)
-    if click.target[Element].classList.contains("button")
+    click <- events.filtering(Click, document)(_.target[Element].classList.contains("close-notification"))
     notification <- click.target[Element].closest(_.classList.contains("notification"))
   } notification.remove()
 

@@ -20,7 +20,7 @@ trait Views extends JsScala with Forest {
       else el('div, 'class->"error")(es.mkString2(", "))
   }
 
-  def alternativeTmpl(name: Rep[String], value: Rep[String], required: Rep[Boolean], altMsg: Rep[String], removeMsg: Rep[String], errors: Rep[List[String]]) =
+  def alternativeTmpl(name: Rep[String], value: Rep[String], required: Rep[Boolean], altMsg: Rep[String], removeMsg: Rep[String], errors: Rep[List[String]] = List()) =
     el('div, 'class->'alternative)(
       el('div, 'style->"display: inline-block; width: 95%;")(
         form.inputText(name, value, required, altMsg)

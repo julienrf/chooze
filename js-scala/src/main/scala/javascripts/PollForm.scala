@@ -1,9 +1,9 @@
 package javascripts
 
-import js.{JS, JSDom, Casts}
+import js.{DomReact, JS, JSDom, Casts}
 import shared.Views
 
-trait PollForm extends JS with JSDom with Views with ReactEvents with Casts {
+trait PollForm extends JS with JSDom with Views with DomReact with Casts {
 
   def pollForm(altMsg: Rep[String], removeMsg: Rep[String]) = for {
     form <- document.find("form")
@@ -12,8 +12,7 @@ trait PollForm extends JS with JSDom with Views with ReactEvents with Casts {
   } {
 
     for {
-      click <- eventsOf(Click, form)
-      if click.target[Element].className == "button remove-alternative"
+      click <- events.filtering(Click, form)(_.target[Element].className == "button remove-alternative")
       alternative <- click.target[Element].closest(_.className == "alternative")
     } {
       alternative.remove()
@@ -22,9 +21,9 @@ trait PollForm extends JS with JSDom with Views with ReactEvents with Casts {
       }
     }
 
-    addBtn.on(Click) { _ =>
+    for (click <- events.of(Click, addBtn)) {
       val name = "alternatives[" + alternatives.findAll(".alternative").size + "]"
-      val altEl = alternativeTmpl(name, "", true, altMsg, removeMsg, List()).as[Element]
+      val altEl = alternativeTmpl(name, "", true, altMsg, removeMsg).as[Element]
       alternatives.appendChild(altEl)
       altEl.find[Input]("input").foreach(_.focus())
     }

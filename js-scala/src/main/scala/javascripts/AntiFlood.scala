@@ -1,14 +1,15 @@
 package javascripts
 
-import js.{JSDom, JS}
+import js.{DomReact, JSDom, JS}
 
-trait AntiFlood extends JS with JSDom {
+trait AntiFlood extends JS with JSDom with DomReact {
 
-  def setupAntiFlood() = for (form <- document.find[Element]("form")) {
+  def setupAntiFlood() = for (form <- document.findAll[Element]("form")) {
     val buttons = form.findAll[Input]("input[type=submit], button:not([type=button])")
-    form.on(Submit) { _ =>
-      buttons.foreach(_.disabled_=(true))
-    }
+    for {
+      submit <- events.of(Submit, form)
+      button <- buttons
+    } button.disabled_=(true)
   }
 
 }
