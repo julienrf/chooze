@@ -1,6 +1,6 @@
 define(['dom'], function (dom) {
   document.addEventListener('click', function (e) {
-    if (e.target.classList.contains('button')) {
+    if (e.target.classList.contains('close-notification')) {
       var notification = dom.closest(e.target, function (_) {
         return _.classList.contains('notification')
       });
