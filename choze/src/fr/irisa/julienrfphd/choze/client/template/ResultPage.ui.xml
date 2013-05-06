@@ -1,0 +1,97 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style>
+		
+	</ui:style>
+	<g:HTMLPanel>
+	
+	       <article>
+          
+  <div class="content">
+
+  <div>Share this poll : <a href="/test">http://chooze.herokuapp.com/test</a></div>
+
+  <h1>Test</h1>
+
+  <div class="tab-widget">
+
+    <div class="tabs">
+      <a href="#summary">Summary</a>
+      <a href="#detailed">Detailed results</a>
+    </div>
+
+    <div class="containers">
+
+      <div id="summary">
+        
+          <div style="background: -webkit-linear-gradient(left, #EBEBE8, #36B6BD 61%, #EBEBE8 61%, #EBEBE8);">
+            <div style="font-size: 42px;">un</div>
+          </div>
+        
+          <div style="background: -webkit-linear-gradient(left, #EBEBE8, #36B6BD 50%, #EBEBE8 50%, #EBEBE8);">
+            <div style="font-size: 36px;">trois</div>
+          </div>
+        
+          <div style="background: -webkit-linear-gradient(left, #EBEBE8, #36B6BD 50%, #EBEBE8 50%, #EBEBE8);">
+            <div style="font-size: 36px;">deux</div>
+          </div>
+        
+      </div>
+
+      <div id="detailed">
+        
+          <table>
+            <tr><th>Choozer</th> <th>un</th>  <th>deux</th>  <th>trois</th> </tr>
+            
+              <tr>
+                <td>jb2</td>
+                
+                  <td style="font-weight: 400; background-color: hsla(183, 56%, 80%, 0.4)">38%</td>
+                
+                  <td style="font-weight: 600; background-color: hsla(183, 56%, 65%, 0.4)">67%</td>
+                
+                  <td style="font-weight: 100; background-color: hsla(183, 56%, 100%, 0.4)">0%</td>
+                
+              </tr>
+            
+              <tr>
+                <td>jb</td>
+                
+                  <td style="font-weight: 700; background-color: hsla(183, 56%, 55%, 0.4)">85%</td>
+                
+                  <td style="font-weight: 300; background-color: hsla(183, 56%, 82%, 0.4)">33%</td>
+                
+                  <td style="font-weight: 900; background-color: hsla(183, 56%, 48%, 0.4)">100%</td>
+                
+              </tr>
+            
+            <tr>
+              <td>Average</td>
+              
+                <td style="font-weight: 500; background-color: hsla(183, 56%, 68%, 0.4)">61%</td>
+              
+                <td style="font-weight: 500; background-color: hsla(183, 56%, 74%, 0.4)">50%</td>
+              
+                <td style="font-weight: 500; background-color: hsla(183, 56%, 74%, 0.4)">50%</td>
+              
+            </tr>
+          </table>
+        
+      </div>
+
+    </div>
+
+  </div>
+
+  <script type="text/javascript">
+    if (location.hash === '') {
+      location.hash = 'summary';
+    }
+  </script>
+</div>
+
+        </article>
+	
+	</g:HTMLPanel>
+</ui:UiBinder> 

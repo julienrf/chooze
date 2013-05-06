@@ -1,0 +1,100 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style>
+		
+	</ui:style>
+	<g:HTMLPanel>
+	    <article>
+          
+  <div class="content">
+
+  <div>Share this poll : <a href="/test">/test</a></div>
+
+  <h1>Test</h1>
+
+  <p>test</p>
+
+   
+
+<form action="/test" method="POST" >
+    
+
+    <input type="hidden" name="auth_token" value="e8ea8308-1356-4825-9409-8ab0a4fc9d7b" />
+
+    
+<div class="field">
+  <table>
+    <tbody>
+      <tr>
+        <td class="hint">Move the slider according to your position for each available choice</td>
+        <td class="input">
+
+      
+        <div class="alternative">
+          <span class="name">un</span>
+          <span class="value">no</span>
+          <input type="range" name="notes[0].value" value="50" min="0" max="100" step="1" />
+          <span class="value">yes</span>
+          <input type="hidden" name="notes[0].alternative" value="11" />
+        </div>
+      
+        <div class="alternative">
+          <span class="name">deux</span>
+          <span class="value">no</span>
+          <input type="range" name="notes[1].value" value="50" min="0" max="100" step="1" />
+          <span class="value">yes</span>
+          <input type="hidden" name="notes[1].alternative" value="12" />
+        </div>
+      
+        <div class="alternative">
+          <span class="name">trois</span>
+          <span class="value">no</span>
+          <input type="range" name="notes[2].value" value="50" min="0" max="100" step="1" />
+          <span class="value">yes</span>
+          <input type="hidden" name="notes[2].alternative" value="13" />
+        </div>
+      
+    </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+    
+    
+<div class="field">
+  <table>
+    <tbody>
+      <tr>
+        <td class="hint">Type your name to be able to submit your vote</td>
+        <td class="input">
+      
+<input type="text" name="user" value=""  class="required"  placeholder="Your name" />
+      
+
+
+    </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+    <div class="submit">
+      <input type="submit" value="Vote!"/> or <a href="/test/result">See the current result</a>
+    </div>
+
+  
+</form>
+
+  
+  <script type="text/javascript">
+    $('form').on('change', '.alternative > input[type=range]', function () {
+      $(this).prev('.name').css('font-weight', (1 + this.value * (9 - 1) / 100) * 100);
+    });
+  </script>
+</div>
+
+        </article>
+	
+	</g:HTMLPanel>
+</ui:UiBinder> 

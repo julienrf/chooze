@@ -1,0 +1,10 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder">
+	<span class="notification">
+		-
+		<span class="content success">Poll
+			&ldquo;cdd&rdquo; has been created
+			<span class="button" title="Hide">&times;</span>
+		</span>
+	</span>
+</ui:UiBinder>

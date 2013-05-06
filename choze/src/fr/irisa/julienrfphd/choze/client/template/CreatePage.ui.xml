@@ -1,0 +1,94 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style>
+		
+	</ui:style>
+	<g:HTMLPanel>
+		<article>
+
+			<div class="content">
+
+				<h1>Create a poll</h1>
+
+
+
+				<form >
+
+
+
+					<div class="field">
+						<table>
+							<tbody>
+								<tr>
+									<td class="hint">Enter a name for your poll</td>
+									<td  class="input">
+									<input id="name" type="text" name="name" value=""  class="required"  placeholder="Name" />
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+
+
+					<div class="field">
+						<table>
+							<tbody>
+								<tr>
+									<td class="hint">Give additional information</td>
+									<td class="input">
+										<textarea id="description"  name="description" placeholder="Description"
+											class="required" rows="5" cols="50"></textarea>
+
+
+
+
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+
+
+					<div class="field">
+						<table>
+							<tbody>
+								<tr>
+									<td class="hint">Add as many choices as you want, but there has to
+										be at least two choices!</td>
+									<td class="input">
+										<div id="alternatives" class="alternatives">
+
+
+
+
+										</div>
+										<button id="addAlt" type="button" class="add-alternative">Add another choice</button>
+
+
+
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+
+					<!-- <div class="alternative-template"> <div class="alternative"> <div 
+						style="display: inline-block; width: 95%"> <input type="text" name="alternatives[x]" 
+						value="" placeholder="Choice" /> </div> <span class="button remove-alternative" 
+						title="Remove">&times;</span> </div> </div> -->
+
+					<div class="submit">
+						<button id="submit" type="button" class="add-alternative">Submit</button>
+					</div>
+
+				</form>
+
+
+			</div>
+
+		</article>
+
+
+	</g:HTMLPanel>
+</ui:UiBinder> 
