@@ -32,11 +32,11 @@ public class Poll implements Serializable{
 	 */
 	private static final long serialVersionUID = -3559784661945436560L;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Extension(vendorName = "datanucleus", key = "gae.encoded-pk", value = "true")  
-	protected String key;
+//	@GeneratedValue(strategy = GenerationType.IDENTITY)
+//	@Extension(vendorName = "datanucleus", key = "gae.encoded-pk", value = "true")  
+//	protected String key;
 
+	@Id
 	@NotNull
 	@Size(min = 4, message = "Name must be at least 4 characters long.")
 	String name;
@@ -106,19 +106,11 @@ public class Poll implements Serializable{
 		return null;
 	}
 
-	public String getKey() {
-		return key;
-	}
-
-	public void setKey(String key) {
-		this.key = key;
-	}
-
 	@Override
 	public String toString() {
-		return "Poll [key=" + key + ", name=" + name + ", slug=" + slug
-				+ ", description=" + description + ", alternatives="
-				+ alternatives + ", votes=" + votes + "]";
+		return "Poll [name=" + name + ", slug=" + slug + ", description="
+				+ description + ", alternatives=" + alternatives + ", votes="
+				+ votes + "]";
 	}
 
 	@Override
@@ -129,7 +121,6 @@ public class Poll implements Serializable{
 				+ ((alternatives == null) ? 0 : alternatives.hashCode());
 		result = prime * result
 				+ ((description == null) ? 0 : description.hashCode());
-		result = prime * result + ((key == null) ? 0 : key.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((slug == null) ? 0 : slug.hashCode());
 		result = prime * result + ((votes == null) ? 0 : votes.hashCode());
@@ -155,11 +146,6 @@ public class Poll implements Serializable{
 				return false;
 		} else if (!description.equals(other.description))
 			return false;
-		if (key == null) {
-			if (other.key != null)
-				return false;
-		} else if (!key.equals(other.key))
-			return false;
 		if (name == null) {
 			if (other.name != null)
 				return false;
@@ -177,7 +163,7 @@ public class Poll implements Serializable{
 			return false;
 		return true;
 	}
-	
+
 	
 	
 }

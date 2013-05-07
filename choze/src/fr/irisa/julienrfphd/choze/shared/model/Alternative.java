@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -23,8 +24,11 @@ public class Alternative implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Extension(vendorName = "datanucleus", key = "gae.encoded-pk", value = "true")  
 	protected String key;
-	 
-	 
+	
+	
+	@Transient
+	String htmlid;
+
 	@NotNull
 	@Size(min=1,message="Alternative must have a name")
 	String name;
@@ -42,6 +46,14 @@ public class Alternative implements Serializable{
 	public void setKey(String key) {
 		this.key = key;
 	}
+	
+	public String getHtmlid() {
+		return htmlid;
+	}
+	public void setHtmlid(String htmlid) {
+		this.htmlid = htmlid;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;

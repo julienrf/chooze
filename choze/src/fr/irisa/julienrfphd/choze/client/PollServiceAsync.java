@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import fr.irisa.julienrfphd.choze.shared.exception.ValidatonViolation;
 import fr.irisa.julienrfphd.choze.shared.model.Alternative;
 import fr.irisa.julienrfphd.choze.shared.model.Poll;
 
@@ -12,7 +13,7 @@ import fr.irisa.julienrfphd.choze.shared.model.Poll;
  */
 public interface PollServiceAsync {
 	
-	void createPoll(Poll p, AsyncCallback<Void> callback);
+	void createPoll(Poll p, AsyncCallback<Void> callback)throws ValidatonViolation;
 
 	void getPollByName(String name, AsyncCallback<Poll> callback);
 	

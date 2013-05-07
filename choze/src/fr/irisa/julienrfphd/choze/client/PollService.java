@@ -5,6 +5,7 @@ import java.util.List;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
+import fr.irisa.julienrfphd.choze.shared.exception.ValidatonViolation;
 import fr.irisa.julienrfphd.choze.shared.model.Alternative;
 import fr.irisa.julienrfphd.choze.shared.model.Poll;
 
@@ -13,7 +14,7 @@ import fr.irisa.julienrfphd.choze.shared.model.Poll;
  */
 @RemoteServiceRelativePath("greet")
 public interface PollService extends RemoteService {
-	void createPoll(Poll p) ;
+	void createPoll(Poll p) throws ValidatonViolation ;
 	Poll getPollByName(String name) ;
 
 	List<Alternative> getAlternativeByPollName(String name) ;
