@@ -1,5 +1,0 @@
-#index-teaser{padding:3em 0;text-align:center;}#index-teaser>.teaser{font-size:2.5em;margin:1em 0;display:inline-block;}
-#index-teaser #create-poll{font-size:1.5em;}
-#features{background-color:#8fc7ca;padding:2em;}#features>.feature{margin:2em;}#features>.feature>.content{float:left;}
-#features>.feature>img{float:right;box-shadow:0 0 15px #31302d;border:1px solid #f2f2f0;}
-#features>.feature::after{content:' ';clear:both;display:block;}

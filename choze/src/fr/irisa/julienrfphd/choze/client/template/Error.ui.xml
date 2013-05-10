@@ -1,6 +1,0 @@
-<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
-<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder">
- <div class="error" ui:field="div">
-
-  </div>  
-  </ui:UiBinder>
