@@ -24,6 +24,7 @@ public class Choze implements EntryPoint {
       RootPanel.get().add(res);
     } else if ( url.contains("#") ){
       PollPage app = PollPage.getInstance();
+
       RootPanel.get().add(app);
     }
     else {

@@ -5,7 +5,7 @@
 		
 	</ui:style>
 	<g:HTMLPanel>
-		<article>
+		<article id="front">
 
 			<div class="content">
 

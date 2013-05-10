@@ -32,12 +32,9 @@ import fr.irisa.julienrfphd.choze.shared.model.Alternative;
 import fr.irisa.julienrfphd.choze.shared.model.Poll;
 
 public class Create extends FlowPanel {
-
 	PollServiceAsync serv = GWT.create(PollService.class);
-
 	/** Singleton stuff - to access Main from all subclasses! */
 	private static Create singelton;
-
 	private final PollServiceAsync crudService = GWT.create(PollService.class);
 
 	public static Create getInstance() {
@@ -89,6 +86,7 @@ public class Create extends FlowPanel {
 				for (Element e : toRemove) {
 					e.removeFromParent();
 				}
+				toRemove.clear();
 				Poll poll = new Poll();
 				poll.setName(name.getText());
 				poll.setDescription(desc.getText());
@@ -110,52 +108,55 @@ public class Create extends FlowPanel {
 					alts.add(alt);
 				}
 				p.setAlternatives(alts);
-				try {
-					serv.createPoll(p, new AsyncCallback<Void>() {
+				serv.createPoll(p, new AsyncCallback<String>() {
 
-						@Override
-						public void onFailure(Throwable caught) {
+					@Override
+					public void onFailure(Throwable caught) {
 
-							if (caught instanceof ValidatonViolation) {
-								Element e1 = new NotificationsError()
-								.getElement();
-								toRemove.add(e1);
-								DOM.getElementById("header")
-										.appendChild(
-												e1);
-								ValidatonViolation er = (ValidatonViolation) caught;
-								for (String[] s : er.getErrors()) {
-									if (s[0].startsWith("alternatives")) {
-										DivElement div = DivElement
-												.as(new fr.irisa.julienrfphd.choze.client.template.Error(
-														s[1]).getElement());
-										toRemove.add(div);
-										DOM.getElementById(s[0])
-												.getParentElement().getParentElement()
-												.appendChild(div);
-									} else {
-										Element e = new fr.irisa.julienrfphd.choze.client.template.Error(
-												s[1]).getElement();
-										toRemove.add(e);
-										DOM.getElementById(s[0])
-												.getParentElement()
-												.appendChild(e);
-									}
+						if (caught instanceof ValidatonViolation) {
+							Element e1 = new NotificationsError()
+							.getElement();
+							toRemove.add(e1);
+							DOM.getElementById("header")
+									.appendChild(
+											e1);
+							ValidatonViolation er = (ValidatonViolation) caught;
+							for (String[] s : er.getErrors()) {
+								if (s[0].startsWith("alternatives")) {
+									DivElement div = DivElement
+											.as(new fr.irisa.julienrfphd.choze.client.template.Error(
+													s[1]).getElement());
+									toRemove.add(div);
+									DOM.getElementById(s[0])
+											.getParentElement().getParentElement()
+											.appendChild(div);
+								} else {
+									Element e = new fr.irisa.julienrfphd.choze.client.template.Error(
+											s[1]).getElement();
+									toRemove.add(e);
+									DOM.getElementById(s[0])
+											.getParentElement()
+											.appendChild(e);
 								}
-
 							}
 
 						}
 
-						@Override
-						public void onSuccess(Void result) {
+					}
 
-						}
-					});
-				} catch (ValidatonViolation e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+					@Override
+					public void onSuccess(String result) {
+						
+				        com.google.gwt.user.client.Window.Location.replace("http://127.0.0.1:8888/Choze.html?gwt.codesvr=127.0.0.1:9997#Test");
+				       DOM.getElementById("front").removeFromParent();
+				       DOM.getElementById("footer").removeFromParent();
+				        //RootPanel.get().remove(Create.getInstance());
+				        //Create.getInstance().removeFromParent();
+				        RootPanel.get().add( PollPage.getInstance());
+				        PollPage.getInstance().getPart().setContent(result);
+				        
+					}
+				});
 
 			}
 		});

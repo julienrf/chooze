@@ -13,7 +13,7 @@ import fr.irisa.julienrfphd.choze.shared.model.Poll;
  */
 public interface PollServiceAsync {
 	
-	void createPoll(Poll p, AsyncCallback<Void> callback)throws ValidatonViolation;
+	void createPoll(Poll p, AsyncCallback<String> callback);
 
 	void getPollByName(String name, AsyncCallback<Poll> callback);
 	

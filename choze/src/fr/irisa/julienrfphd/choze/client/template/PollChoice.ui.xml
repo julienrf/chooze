@@ -1,0 +1,13 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder">
+	<ui:style>
+	</ui:style>
+
+										<div class="alternative">
+											<span ui:field="name" class="name"></span>
+											<span  ui:field="valuemin" class="value"></span>
+											<input type="range" ui:field="value" value="50"
+												min="0" max="100" step="1" />
+											<span  ui:field="valuemax" class="value"></span>
+										</div>									
+</ui:UiBinder>

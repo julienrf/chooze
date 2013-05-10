@@ -56,7 +56,7 @@ public class Poll implements Serializable{
 	
 	@OneToMany(cascade=CascadeType.ALL)
 	@JoinColumn(name="pollId")
-	List<Vote> votes;//
+	List<Vote> votes = new ArrayList<Vote>();//
 
 	public String getName() {
 		return name;

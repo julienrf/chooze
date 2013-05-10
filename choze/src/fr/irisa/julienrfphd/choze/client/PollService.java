@@ -14,7 +14,7 @@ import fr.irisa.julienrfphd.choze.shared.model.Poll;
  */
 @RemoteServiceRelativePath("greet")
 public interface PollService extends RemoteService {
-	void createPoll(Poll p) throws ValidatonViolation ;
+	String createPoll(Poll p) throws ValidatonViolation ;
 	Poll getPollByName(String name) ;
 
 	List<Alternative> getAlternativeByPollName(String name) ;

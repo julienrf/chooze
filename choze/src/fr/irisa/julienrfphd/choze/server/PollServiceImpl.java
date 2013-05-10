@@ -3,18 +3,12 @@ package fr.irisa.julienrfphd.choze.server;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
 import javax.servlet.ServletException;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
-import fr.irisa.julienrfphd.choze.client.PollPage;
 import fr.irisa.julienrfphd.choze.client.PollService;
 import fr.irisa.julienrfphd.choze.shared.exception.ValidatonViolation;
 import fr.irisa.julienrfphd.choze.shared.model.Alternative;
@@ -35,7 +29,7 @@ public class PollServiceImpl extends RemoteServiceServlet implements
 	}
 	
 	@Override
-	public void createPoll(Poll p) throws ValidatonViolation {
+	public String createPoll(Poll p) throws ValidatonViolation {
 		
 		validatePoll(p);
 		
@@ -48,6 +42,8 @@ public class PollServiceImpl extends RemoteServiceServlet implements
 		manager.persist(p);
 		
 		t.commit();
+		
+		return p.getName();
 		
 	}
 
@@ -99,8 +95,10 @@ public class PollServiceImpl extends RemoteServiceServlet implements
 
 	@Override
 	public Poll getPollByName(String name) {
-		Poll poll = manager.find(Poll.class, name);
-		return poll;
+		Poll poll = manager.find(Poll.class, name);		
+		List<Alternative> alts = new ArrayList<Alternative>();//poll.getAlternatives());
+		poll.setAlternatives(alts);
+		return null;
 
 	}
 
@@ -108,7 +106,10 @@ public class PollServiceImpl extends RemoteServiceServlet implements
 	public List<Alternative> getAlternativeByPollName(String name) {
 		Poll poll = manager.find(Poll.class, name);
 		if (poll!= null)
-			return poll.getAlternatives();
+		{
+			List<Alternative> alts = new ArrayList<Alternative>();//poll.getAlternatives());
+			return alts;
+		}
 		else
 			return new ArrayList<Alternative>();
 	
