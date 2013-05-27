@@ -42,39 +42,13 @@
       @form.errors(alternatives)
     }
 
-    <div class="alternative-template">
-      @alternativeField(poll("alternatives[x]"))
-    </div>
-
     <div class="submit">
       <input type="submit" value="@Messages("create")">
     </div>
   }
 
-  <script type="text/javascript" charset="utf-8">
-    (function() {
-      var alternatives = $('.alternatives'),
-          alternativeTmpl = $('.alternative-template');
-      
-      $('form').on('click', '.button.remove-alternative', function (e) {
-        $(this).closest('.alternative').remove()
-        renumber()
-        return false
-      });
-  
-      $('.add-alternative').on('click', function (e) {
-        var alternative = $(alternativeTmpl.html());
-        alternatives.append(alternative);
-        renumber();
-        alternative.find('input').focus();
-        return false
-      })
-  
-      var renumber = function () {
-        alternatives.find('input').each(function (i) {
-          $(this).attr('name', $(this).attr('name').replace(/alternatives\[.+\]/g, 'alternatives[' + i + ']'))
-        })
-      };
-    })();
+  <script type="text/javascript" src="@routes.Assets.at("javascripts/pollform.js")"></script>
+  <script>
+      window.PollForm.main('@Messages("poll.alternative")', '@Messages("remove")');
   </script>
 }
