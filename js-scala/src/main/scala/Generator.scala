@@ -23,6 +23,7 @@ object Generator extends App {
 
     compiler.compile(CommandLineRunner.getDefaultExterns(), Lists.newArrayList(JSSourceFile.fromCode("input.js", source)), options)
     compiler.toSource
+    source
   }
 
   import virtualization.lms.internal.GenericCodegen
