@@ -79,35 +79,35 @@
 
       var form = document.querySelector('form');
       if (form !== null) {
-        form.addEventListener('click', function (e) {
-          if (e.target.className === 'button remove-alternative') {
-            var a = dom.closest(e.target, function (_) { return _.className === 'alternative' });
-            dom.remove(a);
-            renumber();
-          }
-        });
-      }
+        var alternatives = document.querySelector('.alternatives');
+        if (alternatives !== null) {
 
-      var alternatives = document.querySelector('.alternatives');
-      if (alternatives !== null) {
-
-        var addBtn = document.querySelector('.add-alternative');
-        if (addBtn !== null) {
-          addBtn.addEventListener('click', function () {
-            var alternative = alternativeTmpl(alternatives.querySelectorAll('.alternative').length);
-            alternatives.appendChild(alternative);
-            var input = alternative.querySelector('input');
-            if (input !== null) {
-              input.focus();
+          form.addEventListener('click', function (e) {
+            if (e.target.className === 'button remove-alternative') {
+              var a = dom.closest(e.target, function (_) { return _.className === 'alternative' });
+              dom.remove(a);
+              renumber();
             }
           });
-        }
 
-        var renumber = function () {
-          var inputs = alternatives.querySelectorAll('input');
-          for (var i = 0, l = inputs.length ; i < l ; i++) {
-            var input = inputs.item(i);
-            input.name = input.name.replace(/alternatives\[.+\]/g, 'alternatives[' + i + ']');
+          var addBtn = document.querySelector('.add-alternative');
+          if (addBtn !== null) {
+            addBtn.addEventListener('click', function () {
+              var alternative = alternativeTmpl(alternatives.querySelectorAll('.alternative').length);
+              alternatives.appendChild(alternative);
+              var input = alternative.querySelector('input');
+              if (input !== null) {
+                input.focus();
+              }
+            });
+          }
+
+          var renumber = function () {
+            var inputs = alternatives.querySelectorAll('input');
+            for (var i = 0, l = inputs.length ; i < l ; i++) {
+              var input = inputs.item(i);
+              input.name = input.name.replace(/alternatives\[.+\]/g, 'alternatives[' + i + ']');
+            }
           }
         }
       }
