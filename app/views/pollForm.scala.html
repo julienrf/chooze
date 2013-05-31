@@ -57,22 +57,23 @@
           alternativeTmpl = $('.alternative-template');
       
       $('form').on('click', '.button.remove-alternative', function (e) {
-        $(this).closest('.alternative').remove()
-        renumber()
+        $(this).closest('.alternative').remove();
+        renumber();
         return false
       });
   
       $('.add-alternative').on('click', function (e) {
         var alternative = $(alternativeTmpl.html());
         alternatives.append(alternative);
-        renumber();
-        alternative.find('input').focus();
+        var input = alternative.find('input');
+        input.attr('name', 'alternatives[' + alternatives.find('.alternative').length + ']');
+        input.focus();
         return false
-      })
+      });
   
       var renumber = function () {
         alternatives.find('input').each(function (i) {
-          $(this).attr('name', $(this).attr('name').replace(/alternatives\[.+\]/g, 'alternatives[' + i + ']'))
+          $(this).attr('name', $(this).attr('name').replace(/alternatives\[.+\]/g, 'alternatives[' + i + ']'));
         })
       };
     })();
