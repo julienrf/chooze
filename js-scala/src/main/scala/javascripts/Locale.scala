@@ -1,8 +1,9 @@
 package javascripts
 
-import js.{DomReact, JS, JSDom}
+import scala.js.language.dom.DomReact
+import scala.js.language.JS
 
-trait Locale extends JS with JSDom with DomReact {
+trait Locale extends JS with DomReact {
 
   def handleLocaleChange() = for {
     form <- document.find[Form]("form.change-locale")

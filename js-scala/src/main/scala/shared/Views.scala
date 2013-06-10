@@ -1,6 +1,6 @@
 package shared
 
-import scala.js.JsScala
+import scala.js.language.JsScala
 import forest.Forest
 
 trait Views extends JsScala with Forest {

@@ -1,8 +1,9 @@
 package javascripts
 
-import js.{DomReact, JS, JSDom}
+import scala.js.language.dom.DomReact
+import scala.js.language.JS
 
-trait Vote extends JS with JSDom with DomReact {
+trait Vote extends JS with DomReact {
 
   def vote() = for (form <- document.find("form")) {
     val inputs = form.findAll[Input](".alternative > input[type=range]")

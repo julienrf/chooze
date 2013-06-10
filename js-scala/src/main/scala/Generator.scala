@@ -1,14 +1,15 @@
 import com.google.common.collect.Lists
 import com.google.javascript.jscomp.{CommandLineRunner, CompilationLevel, CompilerOptions, JSSourceFile}
-import scala.js._
+import scala.js.exp._
+import scala.js.gen.js.{GenJS, GenCastChecked}
 import forest._
 import java.io._
 import javascripts._
 import shared._
 
 object Generator extends App {
-  val jsProg = new Chooze with PollForm with Vote with Views with JSDomExp with CastsCheckedExp with ForestExp with JSExpOpt
-  val gen = new JSGen with JSGenDom with GenCastChecked with JSGenForest { val IR: jsProg.type = jsProg }
+  val jsProg = new Chooze with PollForm with Vote with Views with JSExpOpt with dom.DomExp with CastsCheckedExp with ForestExp
+  val gen = new GenJS with scala.js.gen.js.dom.GenDom with GenCastChecked with JSGenForest { val IR: jsProg.type = jsProg }
 
   def asString(f: PrintWriter => Unit) = {
     val str = new StringWriter()
@@ -56,7 +57,7 @@ object Generator extends App {
   js.close()
 
   val scalaProg = new Views with ForestExp with JsScalaExpOpt
-  val scalaGen = new ScalaGenForest with ScalaGenJsScala { val IR: scalaProg.type = scalaProg }
+  val scalaGen = new ScalaGenForest with scala.js.gen.scala.GenJsScala { val IR: scalaProg.type = scalaProg }
   val forest = new PrintWriter("../app/views/html/Forest.scala")
   forest.println(
     s"""package views.html

@@ -1,9 +1,10 @@
 package javascripts
 
-import js.{DomReact, JS, JSDom, Casts}
+import scala.js.language.dom.DomReact
+import scala.js.language.{JS, Casts}
 import shared.Views
 
-trait PollForm extends JS with JSDom with Views with DomReact with Casts {
+trait PollForm extends JS with Views with DomReact with Casts {
 
   def pollForm(altMsg: Rep[String], removeMsg: Rep[String]) = for {
     form <- document.find("form")

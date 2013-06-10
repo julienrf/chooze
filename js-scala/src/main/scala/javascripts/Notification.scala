@@ -1,8 +1,9 @@
 package javascripts
 
-import js.{DomReact, JSDom, JS}
+import scala.js.language.dom.DomReact
+import scala.js.language.JS
 
-trait Notification extends JS with JSDom with DomReact {
+trait Notification extends JS with DomReact {
 
   def handleNotifications() = for {
     click <- events.filtering(Click, document)(_.target[Element].classList.contains("close-notification"))

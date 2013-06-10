@@ -6,9 +6,9 @@ object JavaScripts {
 var x59 = function(x60,x61) {
 var x62 = x60;
 var x64 = x62.parentNode;
-var x73 = undefined;
+var x75 = null;
+if (x64 !== null) {
 var x65 = x64;
-if (x65 !== null) {
 var x63 = x61;
 var x66 = x63(x65);
 var x71
@@ -19,15 +19,18 @@ x71=x67
 var x69 = x59(x65,x63);
 x71=x69
 }
-x73 = x71;
-} else {
-x73 = null;
+var x73 = null;
+if (x71 !== null) {
+var x72 = x71;
+x73 = x72;
 }
-return x73
+x75 = x73;
+}
+return x75
 };
 var x0 = document.getElementsByTagName("form");
-for (var x96 = 0, x97 = x0.length ; x96 < x97 ; x96++) {
-var x1 = x0.item(x96);
+for (var x98 = 0, x99 = x0.length ; x98 < x99 ; x98++) {
+var x1 = x0.item(x98);
 var x2 = x1.querySelectorAll("input[type=submit], button:not([type=button])");
 var x3 = function(x4) {
 x1.addEventListener('submit', function (x5) {
@@ -35,8 +38,8 @@ var x6 = x4(x5);
 }, false);
 };
 var x10 = function(x11) {
-for (var x98 = 0, x99 = x2.length ; x98 < x99 ; x98++) {
-var x12 = x2.item(x98);
+for (var x100 = 0, x101 = x2.length ; x100 < x101 ; x100++) {
+var x12 = x2.item(x100);
 x12.disabled = true;
 }
 };
@@ -76,118 +79,121 @@ x52=undefined
 };
 var x54 = x36(x45);
 };
-var x75 = function(x76) {
-var x77 = x76.classList;
-var x78 = x77.contains("notification");
-return x78
+var x77 = function(x78) {
+var x79 = x78.classList;
+var x80 = x79.contains("notification");
+return x80
 };
-var x82 = function(x83) {
-var x84 = x83.parentNode;
-var x88 = undefined;
-var x85 = x84;
-if (x85 !== null) {
-var x86 = x85.removeChild(x83);
-x88 = x86;
+var x84 = function(x85) {
+var x86 = x85.parentNode;
+var x90 = undefined;
+if (x86 !== null) {
+var x87 = x86;
+var x88 = x87.removeChild(x85);
+x90 = x88;
 } else {
-x88 = undefined;
+x90 = undefined;
 }
 };
 var x56 = function(x57) {
 var x58 = x57.target;
-var x80 = x59(x58,x75);
-if (x80 !== null) {
-var x81 = x80;
-var x90 = x82(x81);
+var x82 = x59(x58,x77);
+if (x82 !== null) {
+var x83 = x82;
+var x92 = x84(x83);
 }
-var x92 = undefined;
+var x94 = undefined;
 };
-var x94 = x43(x56);
+var x96 = x43(x56);
 }
 )()
 """
 
   val vote = """(function () {
-var x100 = document.querySelector("form");
-if (x100 !== null) {
-var x101 = x100;
-var x117 = function(x118,x119) {
-var x120 = x118;
-var x122 = x120.previousSibling;
-var x131 = undefined;
-var x123 = x122;
-if (x123 !== null) {
-var x121 = x119;
-var x124 = x121(x123);
-var x129
-if (x124) {
-var x125 = x123;
-x129=x125
+var x102 = document.querySelector("form");
+if (x102 !== null) {
+var x103 = x102;
+var x119 = function(x120,x121) {
+var x122 = x120;
+var x124 = x122.previousSibling;
+var x135 = null;
+if (x124 !== null) {
+var x125 = x124;
+var x123 = x121;
+var x126 = x123(x125);
+var x131
+if (x126) {
+var x127 = x125;
+x131=x127
 } else {
-var x127 = x117(x123,x121);
-x129=x127
+var x129 = x119(x125,x123);
+x131=x129
 }
-x131 = x129;
-} else {
-x131 = null;
+var x133 = null;
+if (x131 !== null) {
+var x132 = x131;
+x133 = x132;
 }
-return x131
+x135 = x133;
+}
+return x135
 };
-var x102 = x101.querySelectorAll(".alternative > input[type=range]");
-var x103 = function(x104) {
-x101.addEventListener('change', function (x105) {
-var x106 = x104(x105);
+var x104 = x103.querySelectorAll(".alternative > input[type=range]");
+var x105 = function(x106) {
+x103.addEventListener('change', function (x107) {
+var x108 = x106(x107);
 }, false);
 };
-var x133 = function(x134) {
-var x135 = x134.className;
-var x136 = x135=="name";
-return x136
+var x137 = function(x138) {
+var x139 = x138.className;
+var x140 = x139=="name";
+return x140
 };
-var x110 = function(x111) {
-var x113 = x111.target;
-var x115 = [];
-for (var x155 = 0, x156 = x102.length ; x155 < x156 ; x155++) {
-var x112 = x102.item(x155);
-var x114 = x112==x113;
-if (x114) x115.push(x112);
+var x112 = function(x113) {
+var x115 = x113.target;
+var x117 = [];
+for (var x159 = 0, x160 = x104.length ; x159 < x160 ; x159++) {
+var x114 = x104.item(x159);
+var x116 = x114==x115;
+if (x116) x117.push(x114);
 }
-x115.forEach(function (x116) {
-var x138 = x117(x116,x133);
-if (x138 !== null) {
-var x139 = x138;
-var x141 = x116.value;
-var x140 = x139.style;
-var x142 = parseInt(x141, 10);
-var x143 = x142 * 8;
-var x144 = 100 + x143;
-x140.fontWeight = x144;
+x117.forEach(function (x118) {
+var x142 = x119(x118,x137);
+if (x142 !== null) {
+var x143 = x142;
+var x145 = x118.value;
+var x144 = x143.style;
+var x146 = parseInt(x145, 10);
+var x147 = x146 * 8;
+var x148 = 100 + x147;
+x144.fontWeight = x148;
 }
-var x147 = undefined;
+var x151 = undefined;
 });
 };
-var x151 = x103(x110);
+var x155 = x105(x112);
 }
-var x153 = undefined;
+var x157 = undefined;
 }
 )()
 """
 
-  val pollForm = """function pollForm(x157, x158) {
-var x159 = document.querySelector("form");
-if (x159 !== null) {
-var x160 = x159;
-var x161 = document.querySelector(".alternatives");
-if (x161 !== null) {
-var x162 = x161;
-var x163 = document.querySelector(".add-alternative");
+  val pollForm = """function pollForm(x161, x162) {
+var x163 = document.querySelector("form");
 if (x163 !== null) {
 var x164 = x163;
+var x165 = document.querySelector(".alternatives");
+if (x165 !== null) {
+var x166 = x165;
+var x167 = document.querySelector(".add-alternative");
+if (x167 !== null) {
+var x168 = x167;
 var x59 = function(x60,x61) {
 var x62 = x60;
 var x64 = x62.parentNode;
-var x73 = undefined;
+var x75 = null;
+if (x64 !== null) {
 var x65 = x64;
-if (x65 !== null) {
 var x63 = x61;
 var x66 = x63(x65);
 var x71
@@ -198,124 +204,127 @@ x71=x67
 var x69 = x59(x65,x63);
 x71=x69
 }
-x73 = x71;
-} else {
-x73 = null;
+var x73 = null;
+if (x71 !== null) {
+var x72 = x71;
+x73 = x72;
 }
-return x73
+x75 = x73;
+}
+return x75
 };
-var x165 = function(x166) {
-x160.addEventListener('click', function (x167) {
-var x168 = x166(x167);
+var x169 = function(x170) {
+x164.addEventListener('click', function (x171) {
+var x172 = x170(x171);
 }, false);
 };
-var x172 = function(x173) {
-var x174 = function(x175) {
-var x176 = x175.target;
-var x177 = x176.className;
-var x178 = x177=="button remove-alternative";
-var x181
-if (x178) {
-var x179 = x173(x175);
-x181=x179
+var x176 = function(x177) {
+var x178 = function(x179) {
+var x180 = x179.target;
+var x181 = x180.className;
+var x182 = x181=="button remove-alternative";
+var x185
+if (x182) {
+var x183 = x177(x179);
+x185=x183
 } else {
-x181=undefined
+x185=undefined
 }
 };
-var x183 = x165(x174);
+var x187 = x169(x178);
 };
-var x188 = function(x189) {
-var x190 = x189.className;
-var x191 = x190=="alternative";
-return x191
+var x192 = function(x193) {
+var x194 = x193.className;
+var x195 = x194=="alternative";
+return x195
 };
-var x82 = function(x83) {
-var x84 = x83.parentNode;
-var x88 = undefined;
-var x85 = x84;
-if (x85 !== null) {
-var x86 = x85.removeChild(x83);
-x88 = x86;
+var x84 = function(x85) {
+var x86 = x85.parentNode;
+var x90 = undefined;
+if (x86 !== null) {
+var x87 = x86;
+var x88 = x87.removeChild(x85);
+x90 = x88;
 } else {
-x88 = undefined;
+x90 = undefined;
 }
 };
-var x185 = function(x186) {
-var x187 = x186.target;
-var x193 = x59(x187,x188);
-if (x193 !== null) {
-var x194 = x193;
-var x195 = x82(x194);
-var x196 = x162.getElementsByTagName("input");
-for (var x198 = 0, x255 = x196.length ; x198 < x255 ; x198++) {
-var x197 = x196.item(x198);
-var x199 = "alternatives["+x198;
-var x200 = x199+"]";
-x197.name = x200;
+var x189 = function(x190) {
+var x191 = x190.target;
+var x197 = x59(x191,x192);
+if (x197 !== null) {
+var x198 = x197;
+var x199 = x84(x198);
+var x200 = x166.getElementsByTagName("input");
+for (var x202 = 0, x259 = x200.length ; x202 < x259 ; x202++) {
+var x201 = x200.item(x202);
+var x203 = "alternatives["+x202;
+var x204 = x203+"]";
+x201.name = x204;
 }
 }
-var x205 = undefined;
+var x209 = undefined;
 };
-var x207 = x172(x185);
-var x208 = function(x209) {
-x164.addEventListener('click', function (x210) {
-var x211 = x209(x210);
+var x211 = x176(x189);
+var x212 = function(x213) {
+x168.addEventListener('click', function (x214) {
+var x215 = x213(x214);
 }, false);
 };
-var x221 = [];
-var x228 = x221.length == 0;
-var x231 = x221.join(", ");
-var x215 = function(x216) {
-var x217 = x162.getElementsByClassName("alternative");
-var x218 = x217.length;
-var x219 = "alternatives["+x218;
-var x220 = x219+"]";
-var x222 = document.createElementNS('http://www.w3.org/1999/xhtml', 'input');
-x222.setAttribute('name', x220);
-x222.setAttribute('placeholder', x157);
-x222.setAttribute('class', "required");
-x222.setAttribute('type', "text");
-x222.setAttribute('value', "");
-var x224 = document.createElementNS('http://www.w3.org/1999/xhtml', 'div');
-x224.setAttribute('style', "display: inline-block; width: 95%;");
-x224.appendChild(x222);
-var x225 = document.createTextNode("×");
-var x227 = document.createElementNS('http://www.w3.org/1999/xhtml', 'span');
-x227.setAttribute('class', "button remove-alternative");
-x227.setAttribute('title', x158);
-x227.appendChild(x225);
-var x236
-if (x228) {
-var x229 = document.createElementNS('http://www.w3.org/1999/xhtml', 'span');
-x236=x229
+var x225 = [];
+var x232 = x225.length == 0;
+var x235 = x225.join(", ");
+var x219 = function(x220) {
+var x221 = x166.getElementsByClassName("alternative");
+var x222 = x221.length;
+var x223 = "alternatives["+x222;
+var x224 = x223+"]";
+var x226 = document.createElementNS('http://www.w3.org/1999/xhtml', 'input');
+x226.setAttribute('name', x224);
+x226.setAttribute('placeholder', x161);
+x226.setAttribute('class', "required");
+x226.setAttribute('type', "text");
+x226.setAttribute('value', "");
+var x228 = document.createElementNS('http://www.w3.org/1999/xhtml', 'div');
+x228.setAttribute('style', "display: inline-block; width: 95%;");
+x228.appendChild(x226);
+var x229 = document.createTextNode("×");
+var x231 = document.createElementNS('http://www.w3.org/1999/xhtml', 'span');
+x231.setAttribute('class', "button remove-alternative");
+x231.setAttribute('title', x162);
+x231.appendChild(x229);
+var x240
+if (x232) {
+var x233 = document.createElementNS('http://www.w3.org/1999/xhtml', 'span');
+x240=x233
 } else {
-var x232 = document.createTextNode(x231);
-var x234 = document.createElementNS('http://www.w3.org/1999/xhtml', 'div');
-x234.setAttribute('class', "error");
-x234.appendChild(x232);
-x236=x234
-}
+var x236 = document.createTextNode(x235);
 var x238 = document.createElementNS('http://www.w3.org/1999/xhtml', 'div');
-x238.setAttribute('class', "alternative");
-x238.appendChild(x224);
-x238.appendChild(x227);
+x238.setAttribute('class', "error");
 x238.appendChild(x236);
-var x239 = x238;
-var x240 = x162.appendChild(x239);
-var x241 = x239.querySelector("input");
-if (x241 !== null) {
-var x242 = x241;
-var x243 = x242.focus();
+x240=x238
 }
-var x245 = undefined;
-};
-var x247 = x208(x215);
+var x242 = document.createElementNS('http://www.w3.org/1999/xhtml', 'div');
+x242.setAttribute('class', "alternative");
+x242.appendChild(x228);
+x242.appendChild(x231);
+x242.appendChild(x240);
+var x243 = x242;
+var x244 = x166.appendChild(x243);
+var x245 = x243.querySelector("input");
+if (x245 !== null) {
+var x246 = x245;
+var x247 = x246.focus();
 }
 var x249 = undefined;
-}
-var x251 = undefined;
+};
+var x251 = x212(x219);
 }
 var x253 = undefined;
+}
+var x255 = undefined;
+}
+var x257 = undefined;
 }
 """
 
