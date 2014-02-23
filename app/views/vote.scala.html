@@ -10,7 +10,7 @@
 
   <h1>@poll.name</h1>
 
-  <p>@poll.description</p>
+  <p>@Html(poll.description)</p>
 
   @helper.form(action = routes.Chooze.vote(poll.slug)) {
 

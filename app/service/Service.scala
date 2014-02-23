@@ -4,11 +4,14 @@ import db.Db
 import models._
 import util.Util
 import java.util.Date
+import org.pegdown.PegDownProcessor
 
 object Service {
 
+  val pegdown = new PegDownProcessor
+
   def createPoll(name: String, description: String, alternatives: Seq[String]): Option[Long] = {
-    Db.Poll.create(name, Util.generateUniqueSlug(Util.slugify(name.take(42)), Db.Poll.slugs), description, alternatives)
+    Db.Poll.create(name, Util.generateUniqueSlug(Util.slugify(name.take(42)), Db.Poll.slugs), pegdown.markdownToHtml(description), alternatives)
   }
   
   def findPoll(slug: String): Option[Poll] = Db.Poll.find(slug)
